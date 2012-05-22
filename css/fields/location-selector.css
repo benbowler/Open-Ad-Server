@@ -1,0 +1,132 @@
+@CHARSET "UTF-8";
+
+.select-category-btn {
+	cursor: pointer;
+	font-weight: normal;
+	border-bottom: 1px dotted #1A487B;
+}
+
+.selected-locations {
+	list-style-type: none;
+	width: 400px;
+}
+.selected-locations li {
+	padding: 5px;
+}
+
+.selected-locations li:hover {
+	background-color: white;
+}
+
+.selected-locations li a{
+   text-decoration: none;
+   color: black;
+}
+
+.selected-locations li a.remove-link {
+	cursor: pointer;
+    color: red;
+	text-decoration: underline;	
+}
+
+div.category-selector-dialog {
+	text-align: left;	
+}
+
+div.category-selector-dialog div.ui-dialog-titlebar {
+	display: none;
+}
+
+div.category-selector-dialog div.ui-dialog-content {
+	padding: 10px 10px 50px 10px;
+}
+
+div.category-selector-dialog div.ui-dialog-buttonpane {
+	text-align: right;
+}
+
+div.category-selector-dialog div.ui-dialog-buttonpane button {
+   margin-right: 15px;
+}
+
+ul.tree {
+   width: 450px;
+}
+ul.tree li {
+   width: 100%;
+}
+
+.tree .ltr ins {
+   display: none;
+}
+
+ul.tree-default li {
+	color: black;
+}
+
+ul.tree-default li.selected,
+ul.tree-default li.open.selected,
+ul.tree-default li.closed.selected {
+	color: #777;
+}
+
+ul.tree-default li.open,
+ul.tree-default li.closed {
+	color: #1A487B;
+}
+
+ul.tree-default li.closed {
+   background: url("../../images/ui/888888_11x11_icon_plus.gif") left 3px no-repeat;
+}
+
+ul.tree-default li.open {
+   background: url("../../images/ui/888888_11x11_icon_minus.gif") left 2px no-repeat;
+}
+
+ul.tree-default li a,
+ul.tree-default li a:hover {
+   color: inherit;
+	background: none;
+	border: none;
+	padding: 1px 4px;
+}
+
+ul.tree-default li span {
+	display: block;
+	width: auto;
+	position: absolute;
+	left: 400px;
+	border: none;
+	background: none;
+}
+
+ul.tree-default li span.action-link {
+	border-bottom: 1px dashed #674EA7;
+	color: #674EA7;
+	cursor: pointer;
+	font-size: 12px;
+	display: block;
+	float: right;
+	position: relative;
+	left: 0px;	
+	margin: 0;
+	padding: 0;
+	width: auto;
+	margin-right: 20px; 
+}
+
+ul.tree-default li span.add-link {
+   background: none;
+   border: none;
+   color: #674EA7;
+   border-bottom: 1px dashed #674EA7;
+   cursor: pointer;
+}
+
+ul.tree-default li span.remove-link {
+   background: none;
+   border: none;
+   color: red;
+   border-bottom: 1px dashed red;
+   cursor: pointer;
+}

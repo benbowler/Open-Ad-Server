@@ -1,0 +1,16 @@
+<?php
+/**
+ * @file
+ * Install file of the orbitscriptsads_managed module
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function orbitscriptsads_managed_uninstall() {
+  variable_del('orbitscriptsads_managed_number_blocks');
+  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'orbitscriptsads\_managed\_ad\_block\_%'");
+  while ($variable = db_fetch_object($settings)) {
+    variable_del($variable->name);
+  }
+}

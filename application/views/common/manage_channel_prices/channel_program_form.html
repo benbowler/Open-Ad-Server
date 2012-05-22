@@ -1,0 +1,228 @@
+<script type="text/javascript">
+//<!--
+var money_format = '<%MONEYFORMAT%>';
+var number_format = '<%NUMBERFORMAT%>';
+var dec_digits = new Number(number_format.charAt(0));
+var dot_char = number_format.charAt(1);
+var thousand_separator = number_format.charAt(2);
+
+function str_to_float(float_str){
+    chars = '0123456789'+dot_char+thousand_separator;
+    len = float_str.length;
+    if (len == 0) {
+       return Number.NaN;
+    }
+    digits = 0;
+    dec_part = true;
+    for (i = len-1; i >= 0; i--) {         
+       pos = chars.indexOf(float_str.charAt(i));
+       if (pos == -1) {
+          return Number.NaN;        
+       } else if (pos < 10) {
+          digits ++;
+       } else if (pos == 10) {
+          if (!dec_part) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       } else {
+          if (digits != 3) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       }
+    }
+    float_str = float_str.replace(dot_char, '.');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    return new Number(float_str);
+ }
+
+function float_to_str(float_number){      
+    num_string = float_number.toFixed(dec_digits);
+    num_string =  num_string.replace('.', dot_char);
+    pos = num_string.indexOf(dot_char);
+    len = num_string.length;
+    if (pos == -1) {
+       pos = len; 
+    }
+    pos--;
+    digits = 0;
+    num_str = '';      
+    for (i = pos; i >= 0; i-=3) {
+       if (num_str != '') {
+          num_str = thousand_separator+num_str;
+       }
+       start = i-2;
+       if (start < 0) {
+          start = 0;
+       }
+       num_str = num_string.substring(start,i+1)+num_str;
+    }
+    if (pos+1 != len) {
+       num_str = num_str+num_string.substring(pos+1,len);
+    }         
+    return num_str;     
+ }
+
+function money(value) {
+    return money_format.replace("%", float_to_str(value)); 
+ }
+
+function onChangeTextAdCost() {
+	var text_cost_val = $('#cost_text').val();
+	var text_cost_float = str_to_float(text_cost_val);
+	if(!isNaN(text_cost_float) & (text_cost_float > 0)) {
+		  var imageCost = float_to_str(<%MAX_AD_SLOTS%>*text_cost_float); 
+		  $('#cost_image').val(imageCost);
+	} else {
+		$('#cost_image').val('');
+	}
+}
+
+function onChangeImageAdCost() {
+	var image_cost_val = $('#cost_image').val();
+	var image_cost_float = str_to_float(image_cost_val);
+}
+
+$(function() {
+	 var ad_type = <%AD_TYPE%>;
+	 var img_prefix = 'txt';
+
+	 var textAllowed = (-1 != ad_type.indexOf('text')) ? true : false; 
+	 var imageAllowed = (-1 != ad_type.indexOf('image')) ? true : false;
+
+	 if (textAllowed) {
+		 $('#text_cost_row').removeClass('hide');
+		 
+		 if (imageAllowed) {
+			$('#cost_text').keyup(onChangeTextAdCost);
+			
+			img_prefix = 'txt_and_img_';
+		 } else {
+			img_prefix = 'txt_';
+		 }
+	 } else {
+		 $('#text_cost_row').remove();
+	 }
+
+	 if (imageAllowed) {
+		 $('#image_cost_row').removeClass('hide');
+
+		 if (textAllowed) {
+			$('#cost_image').attr('disabled', 'disabled');
+	        $('#cost_image').addClass('disabled');
+			img_prefix = 'txt_and_img_';
+		 } else {
+			 img_prefix = 'img_';
+			 $('#cost_image').keyup(onChangeImageAdCost);
+		 }
+	 } else {
+		 $('#image_cost_row').remove();
+	 }
+
+     $('#trigger_preview').attr('href','<%SITEURL%>images/dimensions_preview/'+img_prefix+'<%ID_DIMENSION%>.png');
+     $('#trigger_preview').attr('title','<%DIMENSION_NAME%>');
+     
+     $("a[rel^='lightbox']").slimbox({/* Put custom options here */}, null, function(el) {
+          return (this == el) || ((this.rel.length > 8) && (this.rel == el.rel));
+       });
+});
+//-->
+</script>
+<form name="channel_program_form" method="post">
+<input type="hidden" name="id_channel" id="id_channel">
+<input type="hidden" name="type" id="program_type">
+	<h1><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; <a href="<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_channel_prices/index/<%ID_CHANNEL%>">{@Manage prices@}</a> &rarr; {@<%FORM_TITLE%>@}:&nbsp;<span class="green i">&bdquo;<%CHANNEL_NAME%>&ldquo;</span></h1>
+<div class="frame p10 mb10">
+	<h2 class='underline'>{@Parameters of channel@}: <span class="green i">&bdquo;<%CHANNEL_NAME%>&ldquo;</span></h2>
+	<table>
+		<tr>
+			<td class="w150"><label>{@Ad Type@}:</label></td>
+			<td><div class="inlet p3"><%AD_TYPE_STRING%></div></td>
+			<td class="pl5" rowspan="3">
+				<div id='slots_preview_container'>
+              <table class='table w100p frame p10 mt5'><tr><td align='center'><img src='<%SITEURL%>images/slots_preview/<%SLOTS_PREVIEW%>.gif'></td></tr></table>
+            </div>
+			</td>
+			<td class="pl5" rowspan="3">
+				<input id="format_preview" class="button"  type="button"  value="{@Preview Ad@}" onclick="$('#trigger_preview').click();"/>
+            <a id="trigger_preview" rel="lightbox" style="display:none;" href="#"></a>
+			</td>
+		</tr>
+		<tr>
+			<td class="w150"><label>{@Format@}:</label></td>
+			<td><div class="inlet p3"><%CHANNEL_DIMENSIONS%> (<%DIMENSION_NAME%>)</div></td>
+		</tr>
+		<tr>
+			<td class="w150"><label>{@Max Ad Slots@}:</label></td>
+			<td><div class="inlet p3"><%MAX_AD_SLOTS%></div></td>
+		</tr>
+	</table>
+</div>
+	<div id="error_message_div"></div>
+	<div class="frame p10  mb10">
+	   <table class="w100p">
+	      <tr>
+	         <td class="w150">
+	            <label for="title">
+	               <span class="required">{@Title@}:</span>
+	            </label>
+	         </td>
+	         <td class="pt10">
+	            <input type="text" id="title" name="title" class="w250 text">
+	         </td>
+	      </tr>
+	      <tr class="pt10">
+            <td class="pt10">
+               <label for="volume">
+                  <span class="required">{@<%VOLUME_TITLE%>@}:</span>
+               </label>
+            </td>
+            <td class="pt10">
+               <input  type="text" id="volume" name="volume" class="w250 text">
+            </td>
+         </tr>
+         <tr id="text_cost_row" class="hide">
+            <td class="pt10">
+               <label for="cost_text">
+                  <span class="required">{@Cost Text Ad@} ({@$@}):</span>
+               </label>
+            </td>
+            <td class="pt10">
+               <input type="text" id="cost_text" name="cost_text" class="w250 text">
+            </td>
+         </tr>
+         <tr id="image_cost_row" class="hide">
+            <td class="pt10">
+               <label for="cost_image">
+                  <span class="required" id="cost_image_span">{@Image Ads Price@} ({@$@}):</span>
+               </label>
+            </td>
+            <td class="pt10">
+               <input type="text" id="cost_image" name="cost_image" class="w250 text"><br>
+            </td>
+            
+         </tr>
+         <tr class="pt10">
+         	<td class="pt10">&nbsp;</td>
+         	<td class="pt10  left">
+         		
+				<button class="button" type="submit"  title="{@<%APPLY_BTN_CAPTION%>@}">
+					<span class="ico ico-confirm">{@<%APPLY_BTN_CAPTION%>@}</span>
+				</button>
+				<button class="button w100 ml5" type="button"  title="{@Cancel@}"  onclick="location.href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_channel_prices/index/<%ID_CHANNEL%>'" value="{@Cancel@}">
+					<span class="ico ico-cancel">{@Cancel@}</span>
+				</button>
+         	</td>
+         </tr>
+	      
+	   </table>
+</div>
+<div class="mt10 mb10 hintBox">
+		<span class="required">&nbsp;</span>&nbsp;&nbsp;&nbsp;- {@required fields@}.
+</div>
+</form>

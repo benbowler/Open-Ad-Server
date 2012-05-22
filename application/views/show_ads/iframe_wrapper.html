@@ -1,0 +1,10 @@
+var load_{ident} = false;
+function func_{ident}() {
+   if (!load_{ident}) {
+      (document.frames || window.frames)['name-{ident}'].location.href = '{base_url}show?id_site={id_site}&id_channel={id_channel}&id={id}&ident={ident}';
+   } else {
+      document.getElementById('id-{ident}').style.visibility = 'visible';
+   }
+   load_{ident} = true;
+}
+document.write(unescape("%3Ciframe onload='func_{ident}()' name='name-{ident}' id='id-{ident}' scrolling='no' allowtransparency='true' style='background-color: transparent; visibility: hidden;' frameborder='0' width='{width}' height='{height}'%3E%3C/iframe%3E"));

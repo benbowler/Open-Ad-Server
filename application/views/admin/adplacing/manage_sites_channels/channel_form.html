@@ -1,0 +1,520 @@
+<script type='text/javascript'>
+//<!--
+ var max_ad_slots_info = <%MAX_AD_SLOTS_INFO%>;
+ var color_picker_object;
+ var old_color;
+ var script_example = '//{@Script example@}: \n\<script type="text/javascript"><--\n\client_id = "1";\n\ad_format = "468x60";\n\//--><\/script>\n\<script type="text/javascript" src="http://examlpe.com/show_ads.js"\/>';
+ var channel_id = '<%CHANNEL_ID%>';
+ var STDialog = null;
+ 
+ $(function() {
+	 var channel_category_id = $('#category').val();
+
+	 if (channel_category_id) {
+		   tree_selected_category_id = channel_category_id;
+		   $('#selected_category_name').val($('#categories_tree_'+tree_selected_category_id).text());
+		 } else {
+		   tree_selected_category_id = 1;
+		 }
+
+		 $('#categories_tree').treeview({animated: "fast", persist: "id", persist_id: "categories_tree_"+tree_selected_category_id});
+		 $('#categories_tree_'+tree_selected_category_id).addClass('selected_item');
+	 
+	 $("a[rel^='lightbox']").slimbox({/* Put custom options here */}, null, function(el) {
+	    return (this == el) || ((this.rel.length > 8) && (this.rel == el.rel));
+	 });
+	 
+	 //initLightbox();
+	 fixBlankColorPicker();
+	 color_picker_object = $.farbtastic('#colorpicker','#blank_color');
+	 changeFormatOptions();
+	 changeBlankSettings();
+	 onScriptBlur();
+	 $('#ad_format_display').text($('#format option:selected').text());
+	 $('tr.feed_row').each(function(){feed_change($(this));});	 
+
+     $("#selected_category_name").removeClass('disabled');
+
+    $(document.body).click(function(x){
+       //console.log($(x.target).parents().filter('#color_picker_div').length);
+       if (($('#color_picker_div:visible').length == 1) && (x.target.id != 'color_picker_show_btn')) {
+          //console.log($(x.target).parents().filter('#color_picker_div').length);
+          if ($(x.target).parents().filter('#color_picker_div').length == 0) {
+             $('#color_picker_div').hide();
+          }
+       }
+    });
+
+    switch_category_selector(true);
+    jQuery('#useOwnCategoriesNo').click(function(){switch_category_selector(false);});
+    jQuery('#useOwnCategoriesYes').click(function(){switch_category_selector(false);});
+
+ });
+
+ function feed_change(row){
+	 var status = $('.feed_status', row).attr('checked');
+	 if (status) {	
+		 $('.feed_affcb', row).removeAttr('disabled');
+       $('.feed_commcb', row).removeAttr('disabled');
+       if ($('.feed_affcb', row).attr('checked')) {
+    	    $('.feed_aff', row).removeAttr('disabled').removeClass('disabled');
+       } else {
+	       $('.feed_aff', row).attr('disabled', 'disabled').addClass('disabled');
+       }
+       if ($('.feed_commcb', row).attr('checked')) {
+          $('.feed_comm', row).removeAttr('disabled').removeClass('disabled');
+       } else {
+          $('.feed_comm', row).attr('disabled', 'disabled').addClass('disabled');
+       }
+	 } else {
+       $('.feed_affcb', row).attr('disabled', 'disabled');
+       $('.feed_commcb', row).attr('disabled', 'disabled');
+       $('.feed_aff', row).attr('disabled', 'disabled').addClass('disabled');
+       $('.feed_comm', row).attr('disabled', 'disabled').addClass('disabled');
+	 }
+	 modified = $('.feed_aff', row).val()!=$('.feedaff1', row).val() ||
+       $('.feed_comm', row).val()!=$('.feedcomm', row).val() ||
+       (status?'active':'')!=$('.feedstatus', row).val();     
+    if (!modified) { 
+       $('#feed_button>table', row).hide(); 
+       row.removeClass('modified');
+    }
+	 if (modified) {
+	    $('#feed_button>table', row).show();
+	    row.addClass('modified');
+	    return;
+	 }
+ }
+
+ function SetDefault(id) {
+	 row = $('tr#'+id+'.feed_row');
+	 $('.feed_comm', row).val($('.feedcomm', row).val());  
+	 $('.feed_aff', row).val($('.feedaff1', row).val());
+    $('.feed_affcb', row).removeAttr('checked');
+    $('.feed_commcb', row).removeAttr('checked');
+    if ($('.feedstatus', row).val() == 'active') {    
+       $('.feed_status', row).attr('checked', 'checked');
+    } else {
+    	 $('.feed_status', row).removeAttr('checked');
+    }  
+    feed_change(row);
+ }
+ 
+   function feed_status_change(id_feed) {
+	   row = $('tr#'+id_feed+'.feed_row');
+	   feed_change(row);
+	}
+ 
+   function onScriptFocus() {
+	   if ($('#tag_code').val() == script_example) {
+		   $('#tag_code').val('');
+		}
+	}
+
+	function onScriptBlur() {
+	}
+ 
+   function changeFormatOptions() {
+	 if ($('#format').val() != '') {
+		 $('#format').children('option[value=""]').remove();
+		 
+		 var id_dimensioin = $('#format').val();
+       	 var img_prefix = 'txt_';
+
+       	 var textAllowed = ($('#ad_type_text').attr('checked')) ? true : false; 
+   	 	 var imageAllowed = ($('#ad_type_image').attr('checked')) ? true : false;
+
+   	 	 if (textAllowed) {
+   		 	if (imageAllowed) {
+   				img_prefix = 'txt_and_img_';
+   		 	} else {
+   				img_prefix = 'txt_';
+   		 	}
+   	 	 }
+
+   	 	 if (imageAllowed) {
+   	   	 	 if (textAllowed) {
+   	   	   	 	 img_prefix = 'txt_and_img_';
+   		 	 } else {
+   			 	 img_prefix = 'img_';
+   			 
+   		 	 }
+   	 	 }
+
+		 $('#trigger_preview').attr('href','<%SITEURL%>images/dimensions_preview/'+img_prefix+id_dimensioin+'.png');
+		 $('#trigger_preview').attr('title',$('#format option[selected]').text());
+
+		 var preview_file;
+		 if (('txt_' == img_prefix) || ('txt_and_img_' == img_prefix)) {
+			 var preview_file = '<%SITEURL%>images/slots_preview/slots_' + id_dimensioin + '.gif';
+		 } else {
+			 var preview_file = '<%SITEURL%>images/slots_preview/slots_' + id_dimensioin + '_1.gif';
+		 }
+		 
+		 $('#format_preview').attr('disabled',false);
+		 if ($('#slots_preview').length) {
+		 	var img = $('#slots_preview img')[0];
+			img.src = preview_file;
+		 } else {
+			var img = document.createElement('div');
+			$(img).attr('id', 'slots_preview');
+			$(img).attr('class', 'frame p10 mt5');
+			img.innerHTML= "<table class='table' align='center'><tr><td align='center' class='w120'><img src='" + preview_file + "'></td><td class='pl10'><span id='slots_count' class='b f14px'></span>&nbsp;{@slot(s) available@}</td></tr></table>";
+			$('#slots_preview_container').append(img);
+		 }
+
+		 if ('img_' == img_prefix) {
+		 	 var slotsCount = 1;
+		 } else {
+			 var slotsCount = max_ad_slots_info[id_dimensioin];
+		 }
+		 
+		 $('#slots_count').text(slotsCount);
+	 } else {
+		 $('#format_preview').attr('disabled',true);
+	 }
+ }
+
+ function changeBlankSettings() {
+ 	    if(!$('#tag_settings').attr('checked')) {
+	       $('#tag_code').addClass('readonly');
+	       $('#tag_code').attr('disabled',true);
+	    } else {
+	       $('#tag_code').removeClass('readonly');
+	       $('#tag_code').attr('disabled',false);
+	    }
+	    if(!$('#blank_color_settings').attr('checked')) {
+	       $('#color_picker_div').hide();
+	       $('#blank_color').addClass('readonly');
+	       $('#blank_color').attr('readonly',true);
+	       $('#color_picker_show_btn').attr('disabled',true);
+	    } else {
+	       $('#blank_color').removeClass('readonly');
+	       $('#blank_color').removeAttr('readonly');
+	       $('#color_picker_show_btn').attr('disabled',false);
+	    }
+
+	    //update_tag_controls();
+  }
+ 
+ function onColorPickerShow() {
+	 $('#color_picker_div').show();
+	 old_color = color_picker_object.color;
+ }
+ 
+ function onCancelColor() {
+	 $('#color_picker_div').hide();
+	 color_picker_object.setColor(old_color);
+ }
+
+ function fixBlankColorPicker() {
+	 if ('' == $('#blank_color').val()) {
+		 $('#blank_color').val('#FFFFFF');
+	 }
+ }
+
+function switch_category_selector(init) {
+	jQuery('p.errorP', parent).remove();
+	if (jQuery('#useOwnCategoriesNo').attr('checked')) {
+		jQuery('#selected_categories').hide();
+		jQuery('#select_category_btn').hide();
+		jQuery('#siteCategories').show();
+		if (init == false) {
+		   jQuery('p.errorP', jQuery('#channel_categories_field')).remove();
+		}
+	} else {
+		jQuery('#siteCategories').hide();
+		jQuery('#selected_categories').show();
+	   jQuery('#select_category_btn').show();
+	}
+}
+
+ function onShowCategoriesTree() {
+	   var channel_category_id = $('#category').val();
+	   if (channel_category_id) {
+	      tree_selected_category_id = channel_category_id;
+	   } else {
+	      tree_selected_category_id = 1;
+	   }
+	   set_active_category(tree_selected_category_id);
+	}
+   
+   function getCategoryDescription(id) {
+	    $('#info_category_description_container').addClass('loading').text('');
+	    $.post("<%SITEURL%><%INDEXPAGE%>admin/manage_categories/ajax_get_description",
+	           {id_category: id},
+	           function(data) {
+	           if (!checkAjaxLogin(data)) {
+	              setCategoryDescription(data);
+                 
+	           }
+	    });
+	}
+   
+   function setCategoryDescription(server_response) {
+	    try {
+	      var response = JSON.parse(server_response);
+	    } catch (e) {
+	        alert('{@Invalid server reply!@}');
+	        return;
+	    }
+	          if (response.result == "ok") {
+	            $("#info_category_description_container").text(response.description);
+	          } else {
+	              alert('{@Error getting category description@}')
+	          };
+	          
+	    $('#info_category_description_container').removeClass('loading');
+	}
+
+	function set_active_category(id) {
+	   var eItem = $('#categories_tree_'+id);
+	   $('#categories_tree span').removeClass('selected_item');
+	   $(eItem).addClass('selected_item');
+      tree_selected_category_id = id;
+	   getCategoryDescription(id);
+	}
+
+	function save_active_category() {
+	   tb_remove();
+	   var active_category_name = $('#categories_tree_'+tree_selected_category_id).text();
+	   $('#category').val(tree_selected_category_id);
+	   $('#selected_category_name').val(active_category_name);
+	}
+
+
+//-->
+</script>
+
+<%CATEGORY_SELECTOR%>
+
+<h1><a href='<%SITEURL%><%INDEXPAGE%>admin/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; <%FORM_TITLE%><span class="green i"> <%CURRENT_CHANNEL_NAME%> </span></h1>
+
+<form name="channel_form" id="channel_form" method="post">
+	<input type="hidden" name="id_site">
+	<input type="hidden" name="id_channel">
+	<input type="hidden" name="redirect_after_save" id="redirect_after_save" value="">
+	<div id="error_message_div"></div>
+	<div class="frame p10 mb10">
+		<table class="table w730">
+			<tr class="pt10 top">
+				<td class="w200 pt10 top">
+					<label for="name">
+						<span class="required">{@Channel Name@}:</span>
+					</label>
+				</td>
+				<td class="pt10 top">
+					<input type="text" id="name" name="name" class="w300 text">
+				</td>
+			</tr>
+			<tr class="pt10 top">
+				<td class="pt10 top">
+					<label for="description">
+						<span class="required">{@Channel Description@}:</span>
+					</label>
+				</td>
+				<td class="pt10 top">
+					<textarea rows="3" cols="20" id="description" name="description" class="w300 text"></textarea>
+				</td>
+			</tr>
+			<tr class="pt10 top">
+				<td colspan="2"  class="pt10 top">
+					<h2 class="underline mt20">{@Ad Settings@}</h1>
+				</td>
+			</tr>
+			<tr class="pt10 top">
+				<td class="pt10 top">
+					<label>
+						<span class="required">{@Ad Type@}:</span>
+					</label>
+				</td>
+				<td class="pt10 top">
+					<div <%HIDE_AD_TYPE_CHANGE%>>
+						
+						<input class="radio" type="checkbox" id="ad_type_text" name="ad_type_text" value="text" onclick="changeFormatOptions();" onchange="changeFormatOptions();">
+                  <label for="ad_type_text" style="display: inline;">
+							{@Text@}
+						</label>
+					</div>
+					<div <%HIDE_AD_TYPE_CHANGE%>>
+                  <input class="radio" type="checkbox" id="ad_type_image" name="ad_type_image" value="image" onclick="changeFormatOptions();" onchange="changeFormatOptions();">
+                  <label for="ad_type_image" style="display: inline;">                     
+                     {@Image@}
+                  </label>
+               </div>
+					<div <%HIDE_AD_TYPE_DISPLAY%>>
+	                    <input class="w250 readonly text" disabled="disabled" type="text" value="<%CURRENT_CHANNEL_AD_TYPE%>" />
+	                </div>
+				</td>
+			</tr>
+			<tr class="pt10 top">
+				<td class="pt10 top">
+					<label for="format">
+						<span class="required">{@Format@}:</span>
+					</label>
+				</td>
+				<td class="pt10 top">			
+					<table class="table">
+						<tr>
+							<td>
+								<select class="w190" id="format" name="format" onchange="changeFormatOptions();" <%HIDE_AD_TYPE_CHANGE%>></select>
+								<h1 class="w250 readonly" <%HIDE_AD_TYPE_DISPLAY%> id="ad_format_display"></h1> 
+							</td>
+							<td class="pl10">
+								<input id="format_preview" class="button"  type="button"  value="{@Preview Ad@}" onclick="$('#trigger_preview').click();"/>
+								<a id="trigger_preview" rel="lightbox" style="display:none;" href="#"></a>
+							</td>
+						</tr>
+					</table>
+					<div id='slots_preview_container'></div>
+				</td>
+			</tr>
+			
+			<tr class="pt10 top">
+            <td class="w200 pt10 top">
+               <label for="category">
+                  <span class="required">{@Channel Category@}:</span>
+               </label>
+            </td>
+            <td class="pt10 top">
+               <input type="text" class="text" id="selected_category_name" disabled="disabled">
+               <input type="hidden" name="category" id="category">
+               <input title="{@Choose@}" onclick="onShowCategoriesTree();" class="button thickbox w150 ml5 ffFix" type="button" value="{@Choose@}" alt="#TB_inline?height=330&width=550&inlineId=categories_tree_div&modal=true">
+            </td>
+         </tr>
+         
+			<tr class="pt10 top">
+				<td class="pt10 top">
+					<label>
+						<span class="required">{@Ad Sources@}:</span>
+					</label>
+				</td>
+				<td class="pt10 top">
+					<div>
+						<input type="checkbox" name="ad_sources_advertisers" id="ad_sources_advertisers" value="true" />
+		            <label for="ad_sources_advertisers" style="display: inline;">
+                     {@Advertisers@}
+						</label>
+					</div>
+					<div>
+                  <input type="checkbox" name="ad_sources_xml_feeds" id="ad_sources_xml_feeds" value="true" />
+                  <label for="ad_sources_xml_feeds" style="display: inline;">
+                     {@XML Feeds@}
+                  </label>
+               </div>
+				</td>
+			</tr>
+      <tr  class="pt10 top">
+			<td colspan="2"  class="pt10 top">
+				<h2 class="underline mt20">{@Ad Settings (If there is no Ads in system and feeds)@}</h2>
+			</td>
+		</tr>
+		<tr class="pt10 top">
+			<td class="pt10 top">
+				<label>
+					<input class="radio" onclick="changeBlankSettings();" onchange="changeBlankSettings();" type="radio" name="ad_settings" id="blank_settings" value="blank">
+					{@Show blank ad@}
+				</label>
+			</td>
+			<td class="pt10 top">&nbsp;</td>
+		</tr>
+		<tr  class="pt10 top">
+			<td  class="pt10 top">
+					<label for="tag_settings">
+						<input class="radio" onclick="changeBlankSettings();" onchange="changeBlankSettings();" type="radio" name="ad_settings" id="tag_settings" value="tag">
+						{@Show tag@}
+					</label>
+			</td>
+         <td  class="pt10 top">
+				<textarea rows="3" cols="20" id="tag_code" name="tag_code" class="w300 text" onfocus="onScriptFocus();" onblur="onScriptBlur();"></textarea>
+			</td>
+		</tr>
+		<tr class="pt10 top">
+			<td class="pt10 top">
+				<label>
+					<input class="radio" onclick="changeBlankSettings();" onchange="changeBlankSettings();" type="radio" name="ad_settings" id="blank_color_settings" value="blank_color">
+					{@Show blank ad with color@}&nbsp;
+				</label>
+			</td>
+			<td class="pt10 top">
+				<table class="table">
+					<tr>
+						<td>
+							<input class="h20 w190 inlet2 center p3" type="text" name="blank_color" id="blank_color" value="#FF0000" onchange="fixBlankColorPicker();">
+						</td>
+						<td class="pl10">
+							<input type="button" id="color_picker_show_btn" title="{@Choose@}" onclick="onColorPickerShow();" class="button" style1="top: 4px;" value="{@Choose@}">
+						</td>
+					</tr>
+				</table>
+								
+				
+				
+				<div id="color_picker_div" class="w200 h250 hide frame p10">
+					<table border="0">
+						<tr>
+							<td>
+								<div id="colorpicker"></div>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+								<div><input class="button" title="{@Close Color Picker@}" type="button" value="{@Close Color Picker@}" onclick="$('#color_picker_div').hide();"></div>
+							</td>
+						</tr> 
+					</table>
+				</div> 
+			</td>
+		</tr>
+		<tr class="pt10 top">
+			<td class="pt10 top">&nbsp;</td>
+			<td class="pt10 top">
+				<div class='pt10 pb10'>
+					<button class="button"  title="{@<%APPLY_BTN_CAPTION%>@}" type="submit">
+						<span class="ico ico-confirm">{@<%APPLY_BTN_CAPTION%>@}</span>
+					</button>
+					<button class="button ml5" title="{@Cancel@}" type="button"  onclick="location.href='<%SITEURL%><%INDEXPAGE%>admin/manage_sites_channels'" value="{@Cancel@}">
+						<span class="ico ico-cancel">{@Cancel@}</span>
+					</button>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="mt10 mb10 hintBox">
+<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+</div>
+
+<div id="categories_tree_div" style="display:none" class="frameBorderless">
+	<div class='p20 frameBorderless h270'>
+		<table class="w100p">
+			<tr class="top">
+				<td class="w200">
+					<h2>{@Categories@}</h2>
+					<div class='ofa inlet h200'>
+						<%CATEGORIES_TREE%>
+					</div>
+				</td>
+				<td class="pl10 w345">
+					<h2>{@Description@}</h2>
+	                <div class="inlet h200" id="info_category_description_container">
+	                </div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="right pt10">
+							<button class="button w100"  type="button" value="{@OK@}" onclick="save_active_category();">
+								<span class="ico ico-confirm">{@OK@}</span>
+							</button>
+							<button class="button ml10"  type="button" value="{@Cancel@}" onclick="tb_remove();">
+								<span class="ico ico-cancel">{@Cancel@}</span>
+							</button>
+					   </div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+</form>

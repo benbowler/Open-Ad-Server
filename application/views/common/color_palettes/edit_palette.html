@@ -1,0 +1,18 @@
+<div class="p5">
+	<table class="table w100p">
+		<tr class="pt10">
+			<td class="w100"><label for="palettes_list">{@Palette@}:</label></td>
+			<td class="pl5 w100p"><select id="palettes_list" class='w100p' style="min-width:100px;" name="palettes_list" onchange="getPaletteParams();"></select></td>
+		</tr>
+		<tr>
+			<td class="pt5 right" colspan="2">
+				<button class="button wauto" type="button" title="{@Refresh Preview@}" onclick="getPaletteParams();">
+					<span class="ico ico-confirm">{@Refresh Preview@}</span>
+				</button>
+				<button class="button ml5" type="button"  title="{@Delete@}" onclick="deletePalette();">
+					<span class="ico ico-cancel">{@Delete@}</span>
+				</button>
+			</td>
+		</tr>
+	</table>
+</div>

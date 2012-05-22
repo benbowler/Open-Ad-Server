@@ -1,0 +1,22 @@
+<div class='xTbar'>
+<table class="table">
+   <tr>
+      <td>
+         <input type="button" class="guibutton floatl mr3 ico ico-plusgreen" value='{@Create tag@}' title='{@Create tag@}' onclick="return create();">
+      </td>
+      <td>
+         <div class="vsplitter"></div>
+      </td>
+      <td>
+         <input type="button" class="guibutton floatl mr3 ico ico-unlock" value='{@tag_Unsuspend@}' title='{@tag_Unsuspend@}' onclick="return do_action('manage_tags', 'unsuspend', '', '{@Please select at least one record in the table@}')">
+         <input type="button" class="guibutton floatl mr3 ico ico-lock" value='{@tag_Suspend@}' title='{@tag_Suspend@}' onclick="return do_action('manage_tags', 'suspend', '', '{@Please select at least one record in the table@}')">
+      </td>
+      <td>
+         <div class="vsplitter"></div>
+      </td>
+      <td>
+         <input type="button" class="guibutton floatl ico ico-delete" value='{@tag_Delete@}' title='{@tag_Delete@}' onclick="return do_action('manage_tags', 'delete', '{@Delete selected tags?@}', '{@Please select at least one record in the table@}')">
+      </td>
+   </tr>
+</table>
+</div>

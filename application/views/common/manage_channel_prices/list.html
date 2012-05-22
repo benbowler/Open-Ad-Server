@@ -1,0 +1,24 @@
+<h2><%FORM_TITLE%></h2>
+<form id="manage_channel_<%PROGRAM_TYPE%>_programs_form" name="manage_channel_<%PROGRAM_TYPE%>_programs_form" method="post">
+	<input type="hidden" id="<%PROGRAM_TYPE%>_program_sort_field" name="manage_channel_<%PROGRAM_TYPE%>_programs_sort_field">
+	<input type="hidden" id="<%PROGRAM_TYPE%>_program_sort_direction" name="manage_channel_<%PROGRAM_TYPE%>_programs_sort_direction">
+	<input type="hidden" id="manage_channel_<%PROGRAM_TYPE%>_programs_action" name="action">
+	
+	<div class="frame p5">
+		<table class="w100p table">
+			<tr class="top">
+				<td>
+					<div class="inlet">
+						<%TABLE%>
+					</div>
+				</td>
+				<td class="pl10 w80">
+               <div <%HIDE%>>
+					<input type="button" class="guibutton floatl ico ico-plusgreen w80" value="{@Create@}" title="{@Create@}" onclick="return do_action('manage_channel_<%PROGRAM_TYPE%>_programs', 'create_<%PROGRAM_TYPE%>', '')">
+					<div class="pt5"><input type="button" class="guibutton floatl ico ico-delete w80" value="{@Delete@}" title="{@Delete@}" onclick="return do_action('manage_channel_<%PROGRAM_TYPE%>_programs', 'delete', '{@Delete selected programs?@}', '{@Please select at least one record in the table@}')"></div>
+               </div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>

@@ -1,0 +1,53 @@
+<script type="text/javascript">
+//<!--  
+ $(function() {
+    $('#ajax_table_site<%ID_SITE%>').find('.tooltip').each(function() {
+       var title = $(this).attr('title');
+       $(this).tooltip({ 
+             delay: 0, 
+             showURL: false,
+             track: true, 
+             bodyHandler: function() {
+                 var tooltip_content = $("<div/>");
+                 var caption = $("<div/>").text(title);
+                 var image = $("<img/>").attr("src", $(this).attr('href'));
+                 $(caption).addClass('tooltipCaption');
+                 $(tooltip_content).append(caption);
+                 $(tooltip_content).append(image);
+                 return tooltip_content; 
+             }
+       });
+     });
+ }); 
+//-->
+</script>
+
+<form id="manage_sites_channels_channel_<%ID_SITE%>_form" action="<%JFRAME_ACTION%>" name="manage_sites_channels_channel_form" method="post">
+	<input type="hidden" id="manage_sites_channels_channel_<%ID_SITE%>_action" name="manage_action">
+	<input type="hidden" id="id_site" name="id_site" value="<%ID_SITE%>">
+	<input type="hidden" id="active_tab" name="active_tab" value="channels_to_sites_frame">
+	
+	<input type="submit" style="display:none;">
+   
+	<div class="pt5 pb5 pl20 frameBorderless">
+		<table class='w100p table noborder'>
+			<tr class='top'>
+				<td class="noborder top">
+               <div style="float:right;"><%COLUMNS%></div>
+               <div class="xTbar"></div>
+					<div class="inlet">
+						<%CHANNELS_TABLE%>
+					</div>
+				</td>
+				<td class='pl10 w150 noborder top'>
+                 <a name="chan_buttons_begin"></a>            
+                 <input jframe="no" type="button" class='guibutton floatl ico ico-unlock w180' value='{@Resume Channel@}' onclick="return do_action('manage_sites_channels_channel_<%ID_SITE%>', 'resume', '', '{@Please select at least one record in the table@}')">
+                 <input jframe="no" type="button" class='guibutton floatl ico ico-lock w180 mt3' value='{@Pause Channel@}' onclick="return do_action('manage_sites_channels_channel_<%ID_SITE%>', 'pause', '', '{@Please select at least one record in the table@}')">
+                 <input jframe="no" type="button" class='guibutton floatl ico ico-delete w180 mt3' value='{@Delete Channel@}' onclick="return do_action('manage_sites_channels_channel_<%ID_SITE%>', 'delete', '{@Delete selected channels? Warning notification@}', '{@Please select at least one record in the table@}')">
+                 <a name="chan_buttons_end"></a>
+              </td>
+			</tr>
+		</table>
+	</div>
+</form>
+

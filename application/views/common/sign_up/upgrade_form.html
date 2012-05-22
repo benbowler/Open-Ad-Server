@@ -1,0 +1,52 @@
+<form name="upgrade_form" method="post">
+   <table class="w100p" cellpadding="0" cellspacing="0" id="upgrade_form" style="display: none;">
+      <tr valign="top">
+         <td class="w100p">
+            <div id="error_message_div" class="hide"></div>
+            <div class="frame">
+               <table cellspacing="10" cellpadding="0" class="">
+                  <tr>
+                     <td>
+                        <label for="uml">
+                           <span class="required">{@E-mail@}:</span>
+                        </label>
+                     </td>
+                     <td>
+                        <input id="uml" type="text" name="upgrade_mail" class="text w200">
+                     </td>
+                  <tr>
+                     <td>
+                        <label for="upw">
+                           <span class="required">{@Password@}:</span>
+                        </label>
+                     </td>
+                     <td>
+                        <input id="upw" type="password" name="upgrade_password" class="text w200">
+                     </td>
+                  </tr>
+                  <%COUPONS_SETTINGS%>
+                  <tr>
+                     <td>
+                     </td>
+                     <td>
+                        <nobr>
+                           <button class="button w140" type="submit" title="{@Ceate@}" value="<%BUTTONNAME%>">
+                              <span class="ico ico-confirm"><%BUTTONNAME%></span>
+                           </button>&nbsp;
+                           <a name="cancel_button_begin"></a>
+                           <button class="button w100 ml5" type="button" value="{@Cancel@}" title="{@Cancel@}" onclick="location='<%CANCEL%>'">
+                              <span class="ico ico-cancel">{@Cancel@}</span>
+                           </button>
+                           <a name="cancel_button_end"></a>
+                        </nobr>
+                     </td>
+                  </tr>
+               </table>
+            </div>
+            <div class="mt10 mb10 hintBox">
+               <span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+            </div>
+         </td>
+      </tr>   
+   </table>
+</form>

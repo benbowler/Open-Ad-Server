@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install method="upgrade" type="module" version="1.5.0">
+	<name><%SITE_NAME%></name>
+	<author>OrbitScripts LLC</author>
+	<creationDate>28/10/2007</creationDate>
+	<copyright>OrbitScripts LLC</copyright>
+	<license>GNU/GPL</license>
+	<authorEmail>info@orbitscripts.com</authorEmail>
+	<authorUrl>orbitscripts.com</authorUrl>
+	<version>1.0</version>
+	<description>You CMS system will communicate with <%SITE_NAME%> system thru API, so always will have updated information about channels, their positions and color scheme.</description>
+	<files>
+		<filename module="mod_orbitscripts_ads">mod_orbitscripts_ads.php</filename>
+		<filename module="mod_orbitscripts_ads">index.html</filename>
+	</files>
+	<params>
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		<param name="module_css_style" type="text" default="" label="Module CSS Style" description="Module CSS Style DESC" />
+		<param name="keys" type="hidden"/>
+	</params>
+</install>

@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+   <head>
+      <title><%SITENAME%> - <%TITLE%></title>
+      <link rel="icon" type="image/ico" href="<%SITEURL%>/images/favicon-e.ico">
+      <%CSS%>
+      <%JAVASCRIPT%>
+
+      <script type="text/javascript">
+      //<!--
+         function change_role() {
+            new_role = document.getElementById("roles").value; if (new_role == '<%ROLE%>') return;
+            location.href='<%SITEURL%><%INDEXPAGE%>' + new_role + '/dashboard';
+         }
+
+         function openHelpWindow(type) {
+            var width=800; var height=600;
+            if (screen.width<=width) { width=640; height=480; }
+            var leftvar = (screen.width-width)/2; var topvar = (screen.height-height)/2;
+            var helpCat = '<%ROLE%>';
+            if ('undefined' != typeof(type)) {
+               helpCat += '_' + type;
+            }
+            window.open("<%SITEURL%>help/" + helpCat + "/Index.htm", "help", "width="+screen.width+",height="+screen.height+",left=0,top=0,status=no,toolbar=no,menubar=no");
+         }
+      //-->
+      </script>
+   </head>
+   <body>
+	  <div class='minwidth'>
+		 <div class='container'>
+			<table class='w100p table'>
+				<tr valign="bottom">
+					<td>
+					   <%HEADER%>
+					</td>
+					<td width="1"></td>
+               <%USERPANEL%>
+   					<td width="270" id='menuRole'>
+                     <%COMMUNITY_TOP%>
+   						<div class='wrapper' style="height:auto;margin-top:50px;">
+   						<div class='wrapper2' style="display:<%SHOWROLE%>">
+   							<span class='roleTitle'>{@Role@}:</span>
+   							<span class='roleSelector'><%ROLES%></span>
+   						</div>
+   						</div>
+   					</td>
+              <%/USERPANEL%>
+				</tr>
+				<tr valign="top">
+					<td>
+					<div>
+						<%BYTECITY_LINK_TOP%>
+					</div>
+		            <%MENU%>
+					</td>
+					<td width="2"></td>
+                  <%USERPANEL2%>
+   					<td width="270" id='menuUser'>
+   		            <%UPANEL%>
+   					</td>
+                  <%/USERPANEL2%>
+				</tr>
+			</table>
+		<%BODY%>
+		<%FOOTER%>
+	  </div>
+  </div>
+  
+	</body>
+</html>

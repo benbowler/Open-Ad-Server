@@ -1,0 +1,40 @@
+<script type="text/javascript">
+//<!--  
+ $(function() {
+    $('#manage_channels_form').find('.tooltip').each(function() {
+             var title = $(this).attr('title');
+             $(this).tooltip({ 
+                   delay: 0, 
+                   showURL: false,
+                   track: true, 
+                   bodyHandler: function() {
+                       var tooltip_content = $("<div/>");
+                       var caption = $("<div/>").text(title);
+                       var image = $("<img/>").attr("src", $(this).attr('href'));
+                       $(caption).addClass('tooltipCaption');
+                       $(tooltip_content).append(caption);
+                       $(tooltip_content).append(image);
+                       return tooltip_content; 
+                   }
+             });
+         });
+ }); 
+//-->
+</script>
+
+<input type="hidden" id="active_tab" name="active_tab" value="channels_to_sites">
+
+<div class="w100p tabdiv mb10">
+	<div class="outlet p5">
+      <%COLUMNS%>
+		<div class="xTbar">
+			<input type="button" class='guibutton floatl mr3 ico ico-unlock' value='{@Resume Channel@}' title='{@Resume Channel@}' onclick="return do_action('manage_channels', 'resume_channel', '', '{@Please select at least one record in the table@}')">
+			<input type="button" class='guibutton floatl mr3 ico ico-lock' value='{@Pause Channel@}' title='{@Pause Channel@}' onclick="return do_action('manage_channels', 'pause_channel', '', '{@Please select at least one record in the table@}')">
+			<input type="button" class='guibutton floatl ico ico-delete' value='{@Delete Channel@}' title='{@Delete Channel@}' onclick="return do_action('manage_channels', 'delete_channel', '{@Delete selected channels? Warning notification@}', '{@Please select at least one record in the table@}')">
+		</div>
+		<div class="inlet">
+			<%CHANNELS_TABLE%>
+		</div>
+		<%PAGINATION%>
+	</div>
+</div>

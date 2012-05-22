@@ -1,0 +1,36 @@
+<h1 class="smaller"><a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads">{@Manage Ads@}</a> &rarr; <%TITLE%> &rarr; {@Resolve@}</h1>
+
+<form id="resolve_form" name="resolve_form" method="post">
+   <input type="hidden" name="group_site_channel">
+   <input type="hidden" name="min_bid">
+   <input type="hidden" name="min_bid_image">
+   <input type="hidden" name="campaign_type">
+   <div id="error_message_div"></div>
+   <div class="frame p10 mb10">
+   <table class="mt10" cellspacing="10px">
+   	<tr>
+   		<td><label for="pl">{@New Bid@} ,{@$@}:</label></td>
+   		<td class="pl10"><input type="text" id="pl" name="new_bid"><%TOOLOW%></td>
+  		</tr>
+      <tr>
+         <td><label for="ib">{@New Bid for Image ads@} ,{@$@}:</label></td>
+         <td class="pl10"><input type="text" id="ib" name="new_image_bid"><%TOOLOWIMAGE%></td>
+      </tr>
+  	</table>
+  	<br>
+   <div class="hintBox2 p10 mb10"><div class="ico ico-infored">
+   {@Administrator has set a new minimal bids for this site.@}<br>
+   {@The new minimal bid for text ads is @}<b><%MINBID%></b>. {@Your bid is @}<b><%BID%></b>.<br>
+   {@The new minimal bid for image ads is @}<b><%MINBIDIMAGE%></b>. {@Your bid is @}<b><%BIDIMAGE%></b>.<br> 
+   {@Please set your new bid equal or higher than minimal.@} 
+   </div></div>
+   <a name="submit_begin"></a>
+   <button class="button w100" title="{@Submit@}" id="okButton" value="{@Submit@}" type="submit">
+      <span class="ico ico-confirm">{@Submit@}</span>
+   </button>
+   <a name="submit_end"></a>   
+   <button class="button w100" title="{@Cancel@}" id="cancelButton" onclick="document.location='<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/group/<%CODE%>/channels'" value="{@Cancel@}" type="button">
+      <span class="ico ico-cancel">{@Cancel@}</span>
+   </button>
+   </div>
+</form>

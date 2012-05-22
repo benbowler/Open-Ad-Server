@@ -1,0 +1,49 @@
+<form id="manage_gateways_form" name="manage_gateways_form" method="post">
+   <input type="hidden" id="manage_gateways_action" name="manage_gateways_action">
+   <h1>{@Manage Payment Gateways@}</h1>
+   <%NOTIFICATION%>
+	<table class="w100p table" border="0">
+		<tr class="top">
+			<td class="top">
+				
+				<div class="filterBox">
+					<table class="table" border="0">
+						<tr>
+							<td class="pl5 bottom">
+								<label for="manage_gateways_status_filter">
+					            	{@Filter by status@}:
+					            </label>
+		            		</td>
+		            		<td class="pl5 bottom">
+		            			<select name="manage_gateways_status_filter" class="w200"></select> 
+		            		</td>
+		            		<td class="pl10 bottom">
+				              <input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#manage_gateways_form').submit();"/>
+				            </td>
+	            		</tr>     
+					</table>
+				</div>
+				
+				<div class="frame mb10 p5">
+               <%COLUMNS%>
+					<div class="xTbar">
+						<input class="guibutton floatl ico ico-ok" type="button" onclick="return do_action('manage_gateways', 'enable', '','{@Please select at least one record in the table@}')" value="{@Enable@}" title="{@Enable@}">
+						<input class="guibutton floatl ico ico-stop" type="button" onclick="return do_action('manage_gateways', 'disable', '','{@Please select at least one record in the table@}')" value="{@Disable@}" title="{@Disable@}">
+					</div>
+
+					<div class="inlet">
+						<%TABLE%>
+					</div>
+					
+					<div class="xTbar">
+						<%PAGINATION%>
+					</div>
+					
+				</div>
+			</td>
+			<td class="w270 pl20 top">
+				<%INFOBOX%>
+			</td>
+		</tr>
+	</table>
+</form>

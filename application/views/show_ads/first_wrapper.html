@@ -1,0 +1,32 @@
+if (typeof(sppc_cookie) == 'undefined') {
+   var sppc_cookie = Math.round(Math.random() * 1000);
+}
+if (typeof(sppc_use_flash) == 'undefined') {
+   var sppc_use_flash = 0;
+   if (navigator.plugins && navigator.plugins.length) {
+      if (navigator.plugins['Shockwave Flash'] || navigator.plugins['Shockwave Flash 2.0']) {
+         sppc_use_flash = 1;
+      }
+   } else if (navigator.mimeTypes && navigator.mimeTypes.length) {
+      x = navigator.mimeTypes['application/x-shockwave-flash'];
+      if (x && x.enabledPlugin) {
+         sppc_use_flash = 1;
+      }
+   } else if (navigator.userAgent && navigator.userAgent.indexOf('MSIE') >= 0 && (navigator.appVersion.indexOf('Win') != -1)) {
+      // MSIE
+      var flash_latest_version = 12;
+      try {
+         for (i = 3; i <= flash_latest_version; i++) {
+            if (eval('new ActiveXObject("ShockwaveFlash.ShockwaveFlash.'+i+'")')) {
+               sppc_use_flash = 1;
+               break;
+            }
+         }
+      } catch(e) {}
+   } else {
+      // Unknown
+      sppc_use_flash = -1;
+   }
+}
+var first_url = escape('{base_url}show?id_site='+sppc_site+'&id_channel='+sppc_channel+'&id_dimension='+sppc_dimension+'&width='+sppc_width+'&height='+sppc_height+'&id_palette='+sppc_palette+'&id_user='+sppc_user+'&ident='+Math.round(Math.random() * 10000)+'&ref='+escape(document.URL)+'&sr='+escape(document.referrer)+'&ck='+sppc_cookie+'&uf='+sppc_use_flash);
+document.write(unescape("%3Cscript src='" + first_url + "' type='text/javascript'%3E%3C/script%3E"));

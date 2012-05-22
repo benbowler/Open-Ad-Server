@@ -1,0 +1,206 @@
+<script type="text/javascript">
+//<!--
+var siteLayoutJson;
+var siteChannelsList;
+var current_site_code='<%SITE_CODE%>';
+
+function parseX(){
+	if (typeof(siteLayoutJson) !='undefined' && siteLayoutJson !='') {
+		var config = JSON.parse(siteLayoutJson);
+		config.formatTable = false;
+		config.resizeCells = false;
+		config.scaledWidth = 600;
+		config.scaledHeight = 600;
+		config.showSizes = false;
+		config.showChannels = true;
+		config.callbackChannels = true;
+		config.manageChannels = false;
+		config.onChannelClick = function(){
+			for (var i = 0; i < siteChannelsList.length; i++) {
+				if (parseInt(siteChannelsList[i].id_channel) == parseInt(this.id)) {
+					$('#channel_link_' + siteChannelsList[i].channel_code).trigger('click');
+				}
+			}
+		};
+		config.onRebuild = function(){
+			$('#wizardHere').parent().css('height', Math.round(this.height * this.scaleRatio) + 'px');
+		};
+		$('#wizardHere').gridWizard(config);
+	} else {
+		$('#wizardHere').next().hide().remove();
+		$('#wizardHere').after('<table class=w100p table><tr><td class=empty>Макет сайта не создан</td></tr></table>');
+	}
+	parseSitesInformation();
+}
+
+$(function() {
+	parseX();
+});
+
+function init() {
+   <%JSCODE%>
+   current_site_code = '<%SITE_CODE%>';
+   parseX();
+}
+
+
+function parseSitesInformation() {
+	try {
+	   siteChannelsList = JSON.parse('<%SITE_CHANNELS_LIST%>');
+	} catch (e) {
+	   alert('{@Invalid channels list information@}');
+	   return false;
+	}
+
+	try {
+		var LayoutChannels = JSON.parse(siteLayoutJson);
+		LayoutChannels = LayoutChannels.channels;
+	} catch (e) {}
+	
+	var channels_list = $('#channels_list');
+	var default_list_item;
+	var first_item;
+	var changed = false;
+	//console.log('len=', siteChannelsList.length);
+	$.each(siteChannelsList, function(i, v) {
+		channels_list.append('<li id="channel_link_'+v.channel_code+'"><a></a></li>');
+		var list_item = $('#channel_link_'+v.channel_code);
+		var link = list_item.find('a');
+		link.text(v.channel_name);
+		
+		if (typeof(first_item) == 'undefined') {
+			first_item = list_item;
+		}
+
+		if (typeof(default_list_item) == 'undefined') {
+			if (typeof(LayoutChannels) != 'undefined' && LayoutChannels.length > 0) {
+				for (var i = 0; i < LayoutChannels.length; i++) {
+					if (parseInt(LayoutChannels[i].id) == parseInt(v.id_channel)) {
+						default_list_item = list_item;
+						changed = true;
+					}
+				}
+			}
+		}
+		list_item.click(function() {
+			$('#channels_list li').removeClass('active2');
+			$('.ui-channel').removeClass('active');
+			$(this).addClass('active2');
+
+			if ($('#channel' + v.id_channel).length == 1) {
+				$('#wizardHere').next().hide().remove();
+				$('#wizardHere').show();
+				$('#channel' + v.id_channel).addClass('active');
+			} else {
+				$('#wizardHere').hide();
+				if ($('#wizardHere').next().length == 0)
+					if (typeof(LayoutChannels) != 'undefined') {
+						$('#wizardHere').next().hide().remove();
+						$('#wizardHere').after('<table class=w100p table><tr><td class=empty>{@Selected channel is not listed on layout@}</td></tr></table>');
+					}
+			}
+			
+			getChannelInfo(v.channel_code);
+		});
+		
+	});
+
+	if (!changed) {
+		default_list_item = first_item;
+	}
+
+	if (default_list_item) {
+		default_list_item.click();
+	}
+	
+	return true;
+}
+
+function getChannelInfo(channel_code) {
+	clearChannelInfo();
+	$("#channel_information_loading").show();
+	$.post('<%SITEURL%>guest/site_information/get_channel_details',{channel_code: channel_code, site_code: current_site_code}, function(data) {
+		responseChannelInfo(data);
+		$("#channel_information_loading").hide();
+	});
+}
+
+function responseChannelInfo(response) {
+	try {
+		var response_object = JSON.parse(response);
+	} catch (e) {
+		alert('{@Invalid server reply@}');
+		return;
+	}
+
+	if (response_object.error_flag) {
+		alert(response_object.error_message);
+		return;
+	}
+
+	var channel = response_object.channel;
+	$('#channel_name').text(channel.name);
+	$('#channel_type').text(channel.type);
+	$('#channel_format').html(channel.format);
+	$('#channel_slots_count').text(channel.slots);
+	$('#channel_cost_models').text(channel.cost_models);
+}
+
+function clearChannelInfo() {
+	$('#channel_name').text('');
+	$('#channel_type').text('');
+	$('#channel_format').html('');
+	$('#channel_slots_count').text('');
+	$('#channel_cost_models').text('');
+}
+//-->
+</script>
+<div class="p10">
+	<table class="w100p">
+		<tr class="top">
+			<td class="w620">
+				<h2 class="pt0">Layout</h2>
+				<div class="w620 h640 inlet p10">
+					<div id="wizardHere"></div>
+				</div>
+			</td>
+			<td class="w10"></td>
+			<td >
+				<h2 class="pt0">{@General Information@}</h2>
+				<div class="inlet p5 mb10">
+	            <table class="mb10 smplTable w100p">
+				      <tr class="top"><td class="w150"><label>{@Traffic Volume@}:</label></td><td><%SITE_VIEWS_COUNT%></td></tr>
+	               <tr class="top"><td><label>{@AdMarket since@}:</label></td><td><%SITE_CREATION_DATE%></td></tr>
+	               <tr class="top"><td><label>{@Category@}:</label></td><td><%SITE_CATEGORY%></td></tr>
+	               <tr class="top"><td><label>{@Description@}:</label></td><td><%SITE_DESCRIPTION%></td></tr>
+				   </table>
+				</div>
+				<div class="filterBox2">
+					<table class="table w100p">
+						<tr>
+							<td><h2 class="">{@Channels@}</h2></td>
+							<td>
+								<img id="channel_information_loading" class="hide floatr pr10 pt10" src="<%SITEURL%>images/loading.gif"/>
+								<h2 class="">{@Channel information@}</h2>
+							</td>
+						</tr>
+						<tr class="top">
+							<td class="w200">
+							   <ul class="channels_list_sd" id="channels_list"></ul>									
+							</td>
+							<td class="inlet p10">
+					    		<table class="w100p smplTable">
+			                  <tr><td class="w50p"><label>{@Channel Name@}:</label></td><td><span id="channel_name"></span></td></tr>
+			                  <tr><td><label>{@Channel Type@}:</label></td><td><span id="channel_type"></span></td></tr>
+			                  <tr><td><label>{@Format@}:</label></td><td><span id="channel_format"></span></td></tr>
+			                  <tr><td><label>{@Max Ad Slots@}:</label></td><td><span id="channel_slots_count"></span></td></tr>
+			                  <tr><td><label>{@Cost Model@}:</label></td><td><span id="channel_cost_models"></span></td></tr>
+			               </table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,127 @@
+<script type="text/javascript">
+	//<!--
+	/*function setRangeType(type) {
+	   if (document.getElementById("types").checked) {
+	      document.getElementById("cld").disabled = false;
+         document.getElementById("from").disabled = true;
+         document.getElementById("to").disabled = true;
+ 	   } else {
+         document.getElementById("cld").disabled = true;
+         document.getElementById("from").disabled = false;
+         document.getElementById("to").disabled = false;
+	   }
+	}*/
+
+	function deleteAlert(id) {
+		req.open("POST", '<%SITEURL%><%INDEXPAGE%>advertiser/dashboard/dismiss_alert', true);
+		req.onreadystatechange = deleteResponse;
+		req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		req.send('id_alert=' + encodeURIComponent(id));
+	}
+
+	function deleteResponse() {
+      if (req.readyState != 4) return;
+      if (req.status == 200) {
+         var id_alert = req.responseText;
+         if (checkAjaxLogin(id_alert)) return;
+         if (id_alert != '') {
+            var alertcount = document.getElementById("alertscount").value - 1;
+            if (alertcount == 0) {
+               document.getElementById("alerts").style.display = 'none';
+            } else {
+               document.getElementById("alert"+id_alert).style.display = 'none';
+               document.getElementById("alertscount").value = alertcount;
+               var lastalert=document.getElementById("lastalert").value;
+               if (lastalert=id_alert) {
+                  do {
+                     var prev = document.getElementById("alertprev"+id_alert).value;
+                     if (prev == 0) break;
+                     if (document.getElementById("alert"+prev).style.display != 'none') {
+                        document.getElementById("alertdivider"+prev).style.display = 'none';
+                        break;
+                     }
+                     id_alert=prev;
+                  } while (true);
+               }
+            }
+         }
+      }
+	}
+
+	function createMail(code){
+      $('#adv_code').val(code);
+      $('#send_mail').submit();
+      return false;
+	}
+	
+	//$('.xTable').css('border','5px solid red');
+	
+	//-->
+</script>
+
+<h1>{@Dashboard@}</h1>
+<%ALERTS%>
+<table class="table w100p  vtop">
+   <tr class="top">
+      <td class="w450 top">
+		<h2>{@Today's Earnings:@} <span class='green'><%EARNING%></span></h2>
+			<%FORM%>
+         <div class="pb10">
+            <table class="table w100p">
+               <tr>
+                  <td>
+			            <h2>{@Total changes for the period@}:</h2>
+			         </td>
+			         <td align="right">
+			            <a class='more' href="<%SITEURL%><%INDEXPAGE%>admin/reports_center">{@more features...@}</a>
+			         </td>
+			      </tr>
+			   </table>
+            <table class="w100p smplTable" border="0" rules="rows">
+               <tr>
+                  <td class="" style="width:80%;">
+                     {@Total Earnings@}:
+                  </td>
+                  <td>
+                     <%TOTALREVENUE%>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     {@Total Impressions@}:
+                  </td>
+                  <td>
+                     <%TOTALIMPRESSIONS%>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     {@Total Clicks@}:
+                  </td>
+                  <td>
+                     <%TOTALCLICKS%>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     {@CTR@}:
+                  </td>
+                  <td>
+                     <%CTR%>
+                  </td>
+               </tr>
+            </table>
+         </div>
+		<h2>{@Graphs for the period@}:</h2>
+        <%TABS%>
+        <%MESSAGES%>
+      </div>
+      </td>
+      <td class="pl20 top">
+         <%TOPSITES%>
+         <%TOPFEEDS%>
+         <%TOPADVERTISERS%>
+         <%NEWS%>
+      </td>
+   </tr>
+</table>

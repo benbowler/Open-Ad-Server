@@ -1,0 +1,43 @@
+<form id="edit_category_form" name="edit_category_form" method="post">
+	<input type="hidden" name="manage_categories_action" value="edit">
+	<input type="hidden" name="id_category" id="id_edit_category">
+	<h2>{@Edit category@}: <span class='green i'>&bdquo;<span id="edit_current_title"><%CURRENT_TITLE%></span>&ldquo;</span></h2>
+	<div id="error_message_div"></div>
+	
+	<div class="frame inlet">
+		<div class="p10">
+			<table class="table w100p">
+				<tr>
+					<td class='w200'>
+						<label for="edit_category_title"><span class="required">{@Category Name@}:</span></label>
+					</td>
+					<td class="pr10">
+						<input class="text w100p" type="text" id="edit_category_title" name="category_title">
+					</td>
+				</tr>
+				<tr class="top">
+					<td class="pt10">
+						<label for="edit_category_description"><span class="required">{@Description@}:</span></label>
+						<img id="loading_category_description" src="<%SITEURL%>images/loading.gif" style="display:none">
+					</td>
+					<td class="pt10 pr10">
+						<textarea class="text w100p" id="edit_category_description" rows="10" name="category_description"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="pt10">&nbsp;
+						<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+					</td>
+					<td class="pt10">
+						<button id="edit_submit_btn" title="{@OK@}"class="button"   type="submit">
+							<span class="ico ico-confirm">{@OK@}</span>
+						</button>&nbsp;&nbsp;
+						<button class="button pl5" title="{@Cancel@}"  type="button" onclick="show_category();">
+							<span class="ico ico-cancel">{@Cancel@}</span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</form>

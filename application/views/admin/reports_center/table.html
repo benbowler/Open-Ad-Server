@@ -1,0 +1,90 @@
+<script type="text/javascript">
+//<!--
+   function viewReport(code) {
+      document.getElementById('view_code').value = code;
+      document.getElementById('view_form').submit();
+   }
+
+   function cloneReport(code) {
+      document.getElementById('create_table').style.visibility = 'hidden';
+      req.open("POST", '<%SITEURL%><%INDEXPAGE%>advertiser/reports_center/clone_report', true);
+      req.onreadystatechange = cloneResponse;
+      req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      req.send('&code='+encodeURIComponent(code));
+   }
+
+   function cloneResponse() {
+      if (req.readyState != 4) return;
+      if (req.status == 200) {
+         var vrs = req.responseText;
+         if (checkAjaxLogin(vrs)) report;
+         if (vrs == '') {
+            return;
+         }
+
+         var vr = vrs.split('`');
+         //alert(vr[1]);
+
+         document.getElementById('rep_n').value = vr[0];
+         document.getElementById('rep_type').value = vr[1];
+         setColumns();
+         document.getElementById('email').value = vr[2];
+         document.getElementById('send').checked = (vr[2] != '');
+         setEMail();
+         document.getElementById('repcreate_typer').checked = true;
+         repcreate_setRange();
+         document.getElementById('repcreate_from').value = vr[4];
+         document.getElementById('repcreate_to').value = vr[5];
+         document.getElementById('onc').checked = true;
+
+			cur_vis = document.getElementById("vis_report_type_"+vr[1]).value;
+         document.getElementById("vis_report_type_"+vr[1]).value = vr[3];
+         restoreDefs();
+         document.getElementById("vis_report_type_"+vr[1]).value = cur_vis;
+         document.getElementById('create_table').style.visibility = 'visible';
+      }
+   }
+//-->
+</script>
+<form method="post" id="admreqreports_form" name="admreqreports_form">
+   <div class="filterBox">
+	<table class="table">
+      <tr>
+      	<td class="w100 right"><label>{@Select date range@}:</label></td>
+         <td class="pl5">
+            <%DATEFILTER%>
+         </td>
+			<td class="pl10">
+				<label for="filt" class="mb5">
+					{@Filter by status@}:
+				</label>
+				<select name="filt" id="filt" class="w200">
+				</select>
+			</td>
+			<td class="pl5">
+				<label for="type_filt" class="mb5">{@Filter by Report Type@}:</label>
+				<select name="type_filt" id="type_filt" class="">
+				</select>
+			</td>
+			<td class="pl10 bottom">
+				<input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#admreqreports_form').submit();"/>
+			</td>
+		</tr>
+	</table>
+	</div>
+   <input type="hidden" id="admreqreports_action" name="admreqreports_action"/>
+	<div class='frame p5'>
+      <%COLUMNS%>
+		<div class="xTbar">
+			<%BUTTONST%>
+		</div>
+		<div class="inlet">
+			<%REPORTS%>
+		</div>
+		<%PAGINATION%>
+	</div>
+</form>
+<form method="post" id="view_form" action="<%SITEURL%><%INDEXPAGE%>admin/view_report">
+   <input type="hidden" id="view_code" name="view_code">
+   <input type="hidden" name="on_start" value="true">
+</form>

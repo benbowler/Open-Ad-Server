@@ -1,0 +1,30 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+   body,html{margin:0; padding:0px; height: 100%;width: 100%;}
+   #banner{font:normal 11px Arial, sans-serif;position:absolute;z-index:100;background-color:#{background_color};border: 1px #{border_color} solid;}
+   .item{width:{item_width}px;text-align:left;}
+   .p{padding: 0 5px;}
+   .clr{clear:both;}
+   .title{font-size:{title_font_size}px;font-style:{title_font_style};font-weight:{title_font_weight};font-family:{title_font};color:#{title_color}}
+   .text{font-size:{text_font_size}px;font-style:{text_font_style};font-weight:{text_font_weight};font-family:{text_font};color:#{text_color}}
+   /*.text span{ line-height: 12px; overflow:hidden; height: 12px;display: block;}*/
+   .url{font-size:{url_font_size}px;overflow:hidden;white-space:pre; text-decoration: underline;font-style:{url_font_style};font-weight:{url_font_weight};font-family:{url_font};color:#{url_color};}
+   a{text-decoration: none;}
+</style>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" border="0" id="banner">
+   {results}
+	<tr valign="middle"><td height="{item_height}">
+   <div class="item"><div class="p">
+      <div><a target="_blank" href="{click_url}" class="title">{title}</a></div>
+      <div><a target="_blank" href="{click_url}" class="text">{description}</a></div>
+      <div><a target="_blank" href="{click_url}" class="url">{display_url}</a></div>
+   </div></div>
+   {extra}
+   </td></tr>
+   {/results}
+   </table></body>
+</html>

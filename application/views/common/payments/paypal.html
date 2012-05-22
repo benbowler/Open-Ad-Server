@@ -1,0 +1,24 @@
+<html>
+   <head>
+   </head>
+   <body>
+		<form method="post" name="adminpay" action="https://www.paypal.com/cgi-bin/webscr">
+		   <input type="hidden" name="cmd" value="_xclick">
+		   <input type="hidden" name="amount" value="<%AMOUNT%>">
+		   <input type="hidden" name="business" value="<%EMAIL%>">
+		   <input type="hidden" name="item_name" value="<%ITEMNAME%>">
+		   <input type="hidden" name="invoice" value="<%TIME%>">
+		   <input type="hidden" name="return" value="<%RETURN%>">
+		   <input type="hidden" name="cancel_return" value="<%CANCEL%>">
+		   <input type="hidden" name="rm" value="2">
+		   <input type="hidden" name="notify_url" value="<%NOTIFY%>">
+		   <input type="hidden" name="no_shipping" value="1">
+		   <input type="hidden" name="custom" value="<%TRANSID%>">
+		</form>
+		<script type='text/javascript'>
+		//<!--
+		   document.forms['adminpay'].submit();
+		//-->
+		</script>
+	</body>
+</html>

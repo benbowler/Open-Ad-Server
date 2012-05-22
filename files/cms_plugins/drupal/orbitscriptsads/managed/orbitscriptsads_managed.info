@@ -1,0 +1,7 @@
+; Copyright 2010      OrbitScripts, LLC      http://orbitscripts.com
+
+name = Managed Ads
+description = Ad ads generator module using the ads available in the <%SITE_NAME%> site.
+dependencies[] = orbitscriptsads
+package = <%SITE_NAME%> Ads
+core = 6.x

@@ -1,0 +1,1030 @@
+<script type="text/javascript">
+//<!--
+$(function(){
+
+	   $('#tab_'+old_tab).parent().addClass('sel');
+	   $('#tab_'+old_tab).addClass('sel');
+	   $('#tab_div_'+old_tab).show();
+
+	   setSceldueFormat(<%TIME_HOURS_FORMAT%>);
+
+	   for (day = 0; day < 7; day++) {
+	      for (hour = 0; hour < 24; hour++) {
+	         $('#chk_'+day+'_'+hour).bind('click', setChecks);
+	      }
+	      
+	   }
+
+	   $('#schedule tr:eq(0) td:gt(0) input').each(function(i){
+	      $(this).click(function(){
+	         $('#schedule tr:gt(0) td:nth-child(' + (i+3) + ') input').attr('checked', $(this).attr('checked'));
+	         setChecks();                     
+	      });
+	   })
+	   
+	   $('#schedule tr:gt(2) td:nth-child(1) input').each(function(i){
+	      $(this).click(function(){
+	         $('#schedule tr:eq(' + (i + 3) + ') td:gt(0) input').attr('checked', $(this).attr('checked'));
+	         setChecks();                     
+	      });
+	   })
+
+
+	   $('#schedule tr:eq(0) td:eq(0) input').click(function(){
+	      val = $(this).attr('checked') ? 'checked' : '';
+	      $('#schedule tr td input[id]:checkbox').attr('checked', val);
+	   });
+	   
+	   fillTargeting();
+	   fillSchedule();
+	   setChecks();
+
+	   $("#countries_search_result").addOption(targeting_all_list.countries);
+
+	   $("#selected_countries_list option").each(function(){
+	      $("#countries_search_result").removeOption($(this).val());
+	   });
+
+	   $("#countries_search_result").copyOptions("#countries_search_result_old", "all");
+
+	   targeting_is_changed = false;
+
+	   $('#campaigns_select').addOption(campaigns_list);
+	   $('#campaigns_select').val('');
+	});
+
+ function fillSchedule() {
+	   var encoded = loaded_schedule;
+	      var schedule = null;
+
+	      try {
+	         schedule = JSON.parse(encoded);
+	      } catch (e) {
+	         alert(e);
+	      }
+
+	      if (schedule != null) {
+
+	         schedule_is_set = schedule.schedule_is_set;
+	         
+	         if (true == schedule_is_set) {
+	            $('#edit_schedule_btn').val('{@Edit@}');
+	         } else {
+	            $('#edit_schedule_btn').val('{@Turn on scheduling@}');
+	         }
+	         
+	         if ((schedule.schedule != null) && (schedule_is_set)) {
+	            for (day = 0; day < 7; day++) {
+	               for (hour = 0; hour < 24; hour++) {
+	                  if (schedule.schedule[day*24 + hour]) {
+	                     $('#chk_'+day+'_'+hour).attr('checked',true);
+	                  } else {
+	                     $('#chk_'+day+'_'+hour).removeAttr('checked');
+	                  }
+	                  old_schedule[day*24 + hour] = schedule.schedule[day*24 + hour];
+	               }
+	            }     
+	         } else {
+	            for (day = 0; day < 7; day++) {
+	               for (hour = 0; hour < 24; hour++) {
+	                  $('#chk_'+day+'_'+hour).attr('checked',true);
+	                  old_schedule[day*24 + hour] = true;
+	               }
+	            }
+	         }
+	         RedrawSchedule();
+	      }
+	}
+
+var number_format = '<%NUMBERFORMAT%>';
+var targeting_to_apply = <%TARGETING_INFO%>;
+var dec_digits = new Number(number_format.charAt(0));
+var dot_char = number_format.charAt(1);
+var thousand_separator = number_format.charAt(2);
+var schedule_is_set = false;
+var targeting_is_changed = false;
+var targeting_all_list = <%TARGETING_ALL_LIST%>;
+var campaigns_list = <%CAMPAIGNS_LIST%>;
+var loaded_schedule = '<%SCHEDULE%>';
+var schedule_coverage = 0;
+var old_tab = '<%ACTIVE_TARGETING_TYPE%>_targeting';
+
+	function sync_targeting_basic_to_advanced(save_changes) {
+
+	      save_changes = save_changes || false;
+
+	      var countries_list = '';
+	      var countries_denied_count = $('option','#countries_search_result_old').size();
+	      $('option','#selected_countries_list_old').each(
+	         function() {
+	            if (countries_list != '') {
+	             countries_list+=',';
+	            }
+	            countries_list+=this.value;
+	         }
+	      );
+	      
+	      $.post('<%SITEURL%><%INDEXPAGE%>advertiser/targeting_list/set_values', 
+	         {
+	            values: countries_list, 
+	            denied: countries_denied_count, 
+	            targeting_group_code: '<%TARGETING_GROUP_ID_ENCODED%>', 
+	            group: 'countries'
+	         },
+	         function () {
+                 if (save_changes) {
+                 	 SaveTargetingAndSubmit();
+                 }           	                                   
+	         });
+	   }
+
+function RedrawSchedule() {
+   var hours_counter = 0;
+
+   for (day = 0; day < 7; day++) {
+      for (hour = 0; hour < 24; hour++) {
+         if (old_schedule[day*24 + hour]) {
+            hours_counter++;
+         }
+      }
+   }
+
+   try {
+      if (schedule_is_set) {
+         $('#schedule_flag')[0].innerHTML = '{@defined@}';
+         $('#edit_schedule_btn').val('{@Edit@}');
+         schedule_coverage = float_to_str(100*hours_counter/(24*7));
+         $('#schedule_coverage')[0].innerHTML = '{@Run at select times only. Running time@}: ' + schedule_coverage+'% {@of week@}';
+      } else {
+         document.getElementById('schedule_flag').innerHTML = '{@undefined@}';
+         $('#edit_schedule_btn').val('{@Turn on scheduling@}');
+         schedule_coverage = 100;
+         $('#schedule_coverage')[0].innerHTML = '{@Ads running at all times.@}'; 
+      }
+   } catch(e) {
+      alert(e);
+   }
+}
+function PostScheduleChange() {
+   var post_schedule = new Array();
+
+   if (schedule_is_set) {
+	   post_schedule = old_schedule;
+   }
+	
+	var schedule_params = {
+			  schedule : post_schedule,
+	        schedule_is_set: schedule_is_set
+	};
+
+	$.post("<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_review_selections/schedule_change",{schedule_params : JSON.stringify(schedule_params)},function (data) {replyPostScheduleChange(data);});
+}
+
+function replyPostScheduleChange(data) {
+	  /*if (req.readyState != 4) return;
+      if (req.status == 200) {*/
+         checkAjaxLogin(data);
+      //}    
+}
+
+function float_to_str(float_number){      
+
+   num_string = float_number.toFixed(dec_digits);
+   num_string =  num_string.replace('.', dot_char);
+   pos = num_string.indexOf(dot_char);
+   len = num_string.length;
+
+   if (pos == -1) pos = len;
+
+   pos--;
+   digits = 0;
+   num_str = '';      
+   for (i = pos; i >= 0; i-=3) {
+      if (num_str != '') {
+         num_str = thousand_separator+num_str;
+      }
+      start = i-2;
+      if (start < 0) {
+         start = 0;
+      }
+      num_str = num_string.substring(start,i+1)+num_str;
+   }
+   if (pos+1 != len) {
+      num_str = num_str+num_string.substring(pos+1,len);
+   }
+   return num_str;
+}
+
+
+function setChecks() {
+   var rowChecked = new Array(true,true,true,true,true,true,true);
+   var colChecked = new Array(true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true);
+   for (day = 0; day < 7; day++) {
+      for (hour = 0; hour < 24; hour++) {
+         x = $('#chk_'+day+'_'+hour).attr('checked'); 
+         rowChecked[day] = rowChecked[day] && x;
+         colChecked[hour] = colChecked[hour] && x;
+      }
+   }
+   globalCheck = true;
+   for (day = 0; day < 7; day++) {
+      $('#day_' + day).attr('checked', rowChecked[day]);
+      globalCheck = globalCheck && rowChecked[day];
+   }
+   
+   for (hour = 0; hour < 24; hour++) {
+
+      $('#hour_' + hour).attr('checked', colChecked[hour]);
+      globalCheck = globalCheck && colChecked[hour];
+   }
+
+   $('#schedule tr:eq(0) td:eq(0) input').attr('checked', globalCheck);
+   
+}
+
+
+function fillTargeting() {
+   var targeting = targeting_to_apply;
+
+   if (targeting != null) {
+      if (targeting.countries != null) {
+          $.each(targeting.countries, function(i,n) {
+        	   $("#selected_countries_list").addOption(n,targeting_all_list.countries[n]);   
+          });
+        onApplyCountries();
+      }
+
+      schedule_is_set = targeting.schedule_is_set;
+      
+      if (true == schedule_is_set) {
+         $('#edit_schedule_btn').val('{@Edit@}');
+      } else {
+         $('#edit_schedule_btn').val('{@Turn on scheduling@}');
+      }
+      
+      if ((targeting.schedule != null) && (targeting.schedule_is_set)) {
+         for (day = 0; day < 7; day++) {
+            for (hour = 0; hour < 24; hour++) {
+               if (targeting.schedule[day*24 + hour]) {
+                  $('#chk_'+day+'_'+hour).attr('checked',true);
+               } else {
+                  $('#chk_'+day+'_'+hour).removeAttr('checked');
+               }
+               old_schedule[day*24 + hour] = targeting.schedule[day*24 + hour];
+            }
+         }     
+      } else {
+         for (day = 0; day < 7; day++) {
+            for (hour = 0; hour < 24; hour++) {
+            	$('#chk_'+day+'_'+hour).attr('checked',true);
+               old_schedule[day*24 + hour] = true;
+            }
+         }
+      }
+      RedrawSchedule();
+   }
+}
+
+function sync_schedule_box_content() {
+	   for (day = 0; day < 7; day++) {
+	      for (hour = 0; hour < 24; hour++) {
+	         $('#chk_'+day+'_'+hour).attr('checked', old_schedule[day*24 + hour]);
+	      }
+	   }
+	   setChecks();
+	}
+
+	function sync_countries_box_content() {
+	   $("#countries_search_result").removeOption(/./);
+	   $("#countries_search_result_old").copyOptions("#countries_search_result", "all");
+
+	   $("#selected_countries_list").removeOption(/./);
+	   $("#selected_countries_list_old").copyOptions("#selected_countries_list", "all");
+	}
+
+	function setSceldueFormat(code) {
+	   if (code == 24) {
+	      $('#time_24').show();
+	      $('#time_12').hide();
+	      $('#24h_format').attr('checked',true);
+	   } else {
+	      $('#time_12').show();
+	      $('#time_24').hide();
+	      $('#12h_format').attr('checked',true);
+	   }
+	}
+
+	function addToTargetCountries(){
+	   var selected_countries = $("#countries_search_result").selectedOptions();
+	   if (selected_countries.length > 0) {
+	      for (i = 0; i < selected_countries.length; i++) {
+	         if ($("#selected_countries_list").containsOption(selected_countries[i].value) == false) {
+	            $("#selected_countries_list").addOption(selected_countries[i].value,selected_countries[i].text);
+	         }
+	      }
+	      $("#selected_countries_list").sortOptions();
+	      $("#selected_countries_list").find('option[selected]').removeAttr('selected');
+	      $("#countries_search_result").removeOption(/./, true); // remove all options that have been selected
+	   }
+	}
+
+	function addToTargetCountriesAll(){
+	   $("#countries_search_result").copyOptions($("#selected_countries_list"), 'all');
+	   $("#selected_countries_list").sortOptions().selectOptions(/./,true);
+	   $("#countries_search_result").removeOption(/./);
+	}
+
+	function removeFromTargetCountries(){
+	   var selected_countries = $("#selected_countries_list").selectedOptions();
+	   if (selected_countries.length > 0) {
+	      for (i = 0; i < selected_countries.length; i++) {
+	         if ($("#countries_search_result").containsOption(selected_countries[i].value) == false) {
+	            $("#countries_search_result").addOption(selected_countries[i].value, selected_countries[i].text);
+	         }  
+	      }
+	      $("#countries_search_result").sortOptions();
+	      $("#countries_search_result").find('option[selected]').removeAttr('selected');
+	      $("#selected_countries_list").removeOption(/./, true); // remove all options that have been selected
+	   }
+	}
+
+	function removeFromTargetCountriesAll(){
+	   $("#selected_countries_list").copyOptions($("#countries_search_result"), 'all');
+	   $("#countries_search_result").sortOptions().selectOptions(/./,true);
+	   $("#selected_countries_list").removeOption(/./);
+	}
+
+
+	function onApplyCountries() {
+	   var countries_count = $("#selected_countries_list option").size();
+	   if (0 == countries_count) {
+	         alert('{@Please select at least one location.@}');
+	         return false;
+	   }
+	   tb_remove();
+	   var targeted_countries_text = '';
+	   var text_items_counter = 0;
+	   $("#selected_countries_list").children().each(function() {
+	      if (targeted_countries_text != '') {
+	         targeted_countries_text = targeted_countries_text + ', ';
+	      }
+	      targeted_countries_text = targeted_countries_text + $(this).text();
+	      text_items_counter++;
+	      if (text_items_counter > 4) {
+	         if (text_items_counter < countries_count) {
+	               targeted_countries_text = targeted_countries_text + ', ...';
+	         }
+	         return false; //break the each() iteration
+	      }
+	   });
+
+	   $('#targeted_countries').text(targeted_countries_text);
+	   $("#countries_count").text(countries_count);
+
+	   $("#countries_search_result_old").removeOption(/./);
+	   $("#countries_search_result").copyOptions("#countries_search_result_old", "all");
+	      
+	   $("#selected_countries_list_old").removeOption(/./);
+	   $("#selected_countries_list").copyOptions("#selected_countries_list_old", "all");
+
+	   targeting_is_changed = true;
+	   return true;
+	}
+
+	function onCancelCountries() {
+	   tb_remove();
+	}
+
+	var old_schedule = new Array(7*24);
+
+
+	function onApplySchedule() {
+	   var schedule_coverage;
+	   var hours_counter = 0;
+
+	   tb_remove();
+	   
+	   for (day = 0; day < 7; day++) {
+	      for (hour = 0; hour < 24; hour++) {
+	         if ($('#chk_'+day+'_'+hour).attr('checked')) {
+	            hours_counter++;
+	         }
+	      }
+	   }
+
+	   schedule_is_set = (0 < hours_counter);
+	   
+	   if (schedule_is_set) {
+	      for (day = 0; day < 7; day++) {
+	         for (hour = 0; hour < 24; hour++) {
+	            old_schedule[day*24 + hour] = $('#chk_'+day+'_'+hour).attr('checked');
+	         }
+	      }
+	   } else {
+	      for (day = 0; day < 7; day++) {
+	         for (hour = 0; hour < 24; hour++) {
+	            old_schedule[day*24 + hour] = true;
+	         }
+	      }
+	   }
+
+	   RedrawSchedule();
+
+	   targeting_is_changed = true;
+	}
+
+	function onCancelSchedule() {
+	   tb_remove();
+	}
+
+
+function SaveTargetingAndSubmit() {
+	$.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_review_selections/save_targeting',
+            {}, 
+            function() {
+               $('#action_form').submit();
+            });
+}
+
+function EditCampaignMain() {
+	$('#action_form').attr("action","<%SITEURL%><%EDIT_CAMP_MAIN_URL%>");
+	$('#action_form').html('<input type="hidden" name="review_mode" value="true">');
+	var targeting_type;
+    if(old_tab=="basic_targeting") {
+     targeting_type = "basic";
+    } else {
+     targeting_type = "advanced";
+    }
+    $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_review_selections/set_targeting_type',{ targeting_type: targeting_type},
+            function () {
+        if (targeting_type == 'basic') {
+              sync_targeting_basic_to_advanced(true);
+         } else {
+        	     SaveTargetingAndSubmit();
+         }
+      });
+	return false;
+}
+
+function EditSitesChannels() {
+    $('#action_form').attr("action","<%SITEURL%><%INDEXPAGE%><%EDIT_SITES_CHANNELS_URL%>");
+    $('#action_form').html('<input type="hidden" name="review_mode" value="true">');
+    var targeting_type;
+    if(old_tab=="basic_targeting") {
+     targeting_type = "basic";
+    } else {
+     targeting_type = "advanced";
+    }
+    $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_review_selections/set_targeting_type',{ targeting_type: targeting_type},
+            function () {
+        if (targeting_type == 'basic') {
+              sync_targeting_basic_to_advanced(true);
+         } else {
+        	     SaveTargetingAndSubmit();
+         }
+      });
+    return false;
+}
+
+function EditSetPricing() {
+	   $('#action_form').attr("action","<%SITEURL%><%INDEXPAGE%><%EDIT_SET_PRICING_URL%>");
+	   $('#action_form').html('<input type="hidden" name="review_mode" value="true">');
+	   var targeting_type;
+	    if(old_tab=="basic_targeting") {
+	     targeting_type = "basic";
+	    } else {
+	     targeting_type = "advanced";
+	    }
+	    $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_review_selections/set_targeting_type',{ targeting_type: targeting_type},
+	             function () {
+	         if (targeting_type == 'basic') {
+	               sync_targeting_basic_to_advanced(true);
+	          } else {
+	        	      SaveTargetingAndSubmit();
+	          }
+	       });
+	   return false;
+}
+
+function EditGroupMain() {
+	   $('#action_form').attr("action","<%SITEURL%><%INDEXPAGE%><%EDIT_GROUP_MAIN_URL%>");
+	   $('#action_form').html('<input type="hidden" name="review_mode" value="true">');
+	   var targeting_type;
+	    if(old_tab=="basic_targeting") {
+	     targeting_type = "basic";
+	    } else {
+	     targeting_type = "advanced";
+	    }
+	    $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_review_selections/set_targeting_type',{ targeting_type: targeting_type},
+	    	    function () {
+	    	if (targeting_type == 'basic') {
+	            sync_targeting_basic_to_advanced(true);
+	       } else {
+	    	      SaveTargetingAndSubmit();
+	       }
+	    });
+	   return false;
+	}
+
+function EditAd(id) {
+	$('#action_form').attr("action","<%SITEURL%><%INDEXPAGE%><%EDIT_AD_URL%>");
+	$('#action_form').html('<input type="hidden" name="review_mode" value="true"><input type="hidden" name="id" value="'+id+'">');
+	var targeting_type;
+    if(old_tab=="basic_targeting") {
+     targeting_type = "basic";
+    } else {
+     targeting_type = "advanced";
+    }
+    $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_review_selections/set_targeting_type',{ targeting_type: targeting_type},
+            function () {
+        if (targeting_type == 'basic') {
+              sync_targeting_basic_to_advanced(true);
+         } else {
+        	    SaveTargetingAndSubmit();
+         }
+      });
+	return false;
+}
+
+function onCreateCampaign() {
+  $('#action_form').html('<input type="hidden" name="confirm_creation" value="true">');
+  
+  if("basic_targeting" == old_tab) {
+    $('#targeting_type').val('basic');
+    sync_targeting_basic_to_advanced(true);
+  } else {
+    $('#targeting_type').val('advanced');
+    $('#action_form').removeAttr("action");
+    
+    var targeting_type;
+    if(old_tab=="basic_targeting") {
+     targeting_type = "basic";
+    } else {
+     targeting_type = "advanced";
+    }
+    $('#action_form').append('<input type="hidden" name="targeting_type" value="'+targeting_type+'">');
+    $('#action_form').submit();
+  }
+}
+//-->
+</script>
+<%PROGRESS_BAR%>
+<%ERROR_MESSAGE%>
+
+<table class="w100p table" border="0">
+	<tr class="top">
+		<td>
+			<div class="frame mb10 p10 choosing">
+				<table class="table w100p pr10" border="0">
+					<tr class="pt10">
+						  <td class="pt10 pr10 w130 border"><label for="camp_name">{@Campaign Name@}:</label></td>
+						  <td class="pt10">
+		                  	<table class="table w100p">
+		                  		<tr>
+									<td class="inlet p5"><span id="camp_name"><%CAMPAIGN_NAME%></span></td>
+									<td class="w200 pr10 pl10"><button class="button w100p" title="{@Edit@}" value="{@Edit@}" onclick="EditCampaignMain();"><span class="">{@Edit@}</span></button></td>
+		                  		</tr>
+		                  	</table>
+		                  </td>
+					</tr>
+					<tr class="pt10">
+                 		 <td class="pt10"><label>{@Schedule@}<br />(<span id="schedule_flag">-{@undefined@}-</span>):</label></td>
+		                 <td class="pt10" >
+		                  	<table class="table w100p">
+		                  		<tr>
+		                  			<td class="inlet p5">
+		                  				<span id="schedule_coverage" style="dislpay:none;">% {@days of week@}</span>
+									</td>
+		                  			<td class="w200 pr10 pl10"><button id="edit_schedule_btn" type="button" class="button w100p" onclick="sync_schedule_box_content(); $('#edit_schedule_btn_hidden').click();" title="{@Edit@}" value="{@Edit@}"><span class="">{@Edit@}</span></button><input id="edit_schedule_btn_hidden" type="button" class="thickbox" style="display:none;" alt="#TB_inline?height=590&width=980&inlineId=schedule_div&modal=true"></td>
+		                  		</tr>
+		                  	</table>
+		                 </td>
+               		</tr>
+<!--************************************************************-->						
+					<tr class="pt10">
+					   <td class="pt10"><label for="">{@Targeting@}:</label></td>
+		               <td class="pt10">
+			               <div class="hide" id="tab_div_basic_targeting">
+			                  <div class="">
+				                  <table class="table w100p">
+				                    <tr>
+				                        <td class="p10">
+				                           <label>{@Countries@} (<span id="countries_count">0</span>):</label>
+				                        </td>
+				                        <td class="">
+				                           <div class='inlet p3'><span id="targeted_countries"></span></div>
+				                        </td>
+				                        <td class="w200 pt10 pr10 pl10">
+				                           <input type="button" class="button w100p thickbox" title="{@Edit@}" value="{@Edit@}" onclick="sync_countries_box_content();"  alt="#TB_inline?height=350&width=550&inlineId=geo_targeting_div&modal=true">
+				                        </td>
+				                     </tr>
+				                     
+				                  </table>
+			                  </div>
+			                </div>
+			             </td>
+		            </tr>
+<!--************************************************************-->						
+					
+					
+					<tr class="pt10">
+						<td class="pt10"><label for="group_name">{@Group Name@}:</label></td>
+						<td class="pt10">
+		                  	<table class="table w100p">
+		                  		<tr>
+									<td class="inlet p5"><span id="group_name"><%GROUP_NAME%></span></td>
+									<td class="w200 pr10 pl10"><button type="button" class="button w100p" title="{@Edit@}" value="{@Edit@}" onclick="EditGroupMain();"><span class="">{@Edit@}</span></button></td>
+		                  		</tr>
+		                  	</table>
+		                 </td>						
+					</tr>
+					<tr class="pt10">
+						<td class="pt10"><label for="sites_channels">{@Sites/Channels@}:</label></td>
+						<td class="pt10">
+		                  	<table class="table w100p">
+		                  		<tr>
+									<td class=""><%CHANNELS_PREVIEW%></td>
+									<td class="w200 pr10 pl10"><button class="button w100p" title="{@Edit@}" value="{@Edit@}" onclick="EditSitesChannels();"><span class="">{@Edit@}</span></button></td>
+		                  		</tr>
+		                  	</table>
+		                 </td>	
+					</tr>
+					<tr class="pt10">
+	                    <td class="pt10"><label for="sites_channels">{@Campaign Cost@}:</label></td>
+						<td class="pt10">
+		                  	<table class="table w100p">
+		                  		<tr>
+				                  <td class="inlet p5"><%CAMPAIGN_COST%></td>
+				                  <td class="w200 pr10 pl10"></td>
+		                  		</tr>
+		                  	</table>
+		                 </td>						  
+               		</tr>
+					<tr class="pt10">
+						<td class="pt10"><label for="ads">{@Ads@}:</label></td>
+						<td class="pt10"><div class="frame p10"><%ADS_PREVIEW%></div></td>
+					</tr>
+				</table>
+				
+			</div>
+			<%NAVIGATION_BAR%>
+		</td>
+	</tr>
+</table>
+
+<div id="geo_targeting_div" style="display:none;">
+   <div class="p10">
+   <h2 class="underline">{@Geo Targeting@}</h2>
+      <div class="mt10 p5">
+         <table class="w100p">
+            <tr>
+               <td class="w50p">
+                  <label>{@Allowed@}:</label>
+               </td>
+               <td></td>
+               <td class="w50p">
+                  <label>{@Denied@}:</label>
+               </td>
+            </tr>
+            <tr>
+               <td>
+                  <select class="w100p h200" id="selected_countries_list" name="selected_countries_list" multiple="multiple"></select>
+                  <select id="selected_countries_list_old" style="display:none;"></select>
+               </td>
+               <td class='w30 center'>
+                  <div><input class="guibutton floatl ico ico-right2" type="button" value="" title="{@Add all@}" onclick="removeFromTargetCountriesAll();"></div>
+                  <div><input class="guibutton floatl mt3 ico ico-arrowright" type="button" value="" title="{@Add@}" onclick="removeFromTargetCountries();"></div>
+                  <div><input class="guibutton floatl mt3 ico ico-arrowleft" type="button" value="" title="{@Remove@}" onclick="addToTargetCountries();"></div>
+                  <div><input class="guibutton floatl mt3 ico ico-left2" type="button" value="" title="{@Remove all@}" onclick="addToTargetCountriesAll();"></div>
+               </td>
+               <td class="vtop right">
+               <select class="w100p h200" id="countries_search_result" multiple="multiple">
+                  </select>
+                  <select id="countries_search_result_old" style="display:none;">
+                  </select>
+                  
+               </td>
+            </tr>
+        </table>
+      </div>
+      <div  class="right pt10">
+          <button class="button w100" type="button" title="{@OK@}" onclick="onApplyCountries();">
+              <span class="ico ico-confirm">{@OK@}</span>
+          </button>
+          <button class="button w100" type="button" title="{@Cancel@}" onclick="onCancelCountries();">
+            <span class="ico ico-cancel">{@Cancel@}</span>
+         </button>
+     </div>
+     </div><!-- class="frame p10" -->
+</div>
+
+<div id="schedule_div" style="display:none;">
+<div id="center" class="p10">
+   <h2 class="underline">{@Schedule@}</h2>
+      <table class="p10">
+         <tr>
+            <td><input type="radio" id="24h_format" class=radio name="time_format" value="24" onclick="setSceldueFormat(24);" checked></td>
+            <td><label for="24h_format">{@24 hours time format@}</label></td>
+            <td class="pl10"><input type="radio" id="12h_format" class=radio name="time_format" value="12" onclick="setSceldueFormat(12);"></td>
+            <td><label for="12h_format">{@12 hours time format@}</label></td>
+         </tr>
+      </table>
+      
+      <table border="0" id="schedule" class="xTable center w100p">
+         <tr class="skip th" align="center">
+            <td colspan=2><input type="checkbox"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_0"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_1"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_2"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_3"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_4"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_5"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_6"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_7"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_8"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_9"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_10"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_11"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_12"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_13"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_14"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_15"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_16"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_17"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_18"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_19"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_20"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_21"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_22"/></td>
+            <td class="simpleTitle"><input type="checkbox" id="hour_23"/></td>
+      </tr>
+      <tr id="time_24" class="skip"  align="center" style="background-color:#efefef;">
+         <td/>
+         <th/>
+         <th><img src="<%SITEURL%>images/schedule/1.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/2.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/3.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/4.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/5.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/6.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/7.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/8.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/9.jpg"  /></th>
+         <th><img src="<%SITEURL%>images/schedule/10.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/11.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/12.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/13.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/14.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/15.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/16.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/17.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/18.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/19.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/20.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/21.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/22.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/23.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/24.jpg" /></th>
+      </tr>
+      <tr id="time_12" class="skip"  align="center"  style="background-color:#efefef;">
+         <td/>
+         <th/>
+         <th><img src="<%SITEURL%>images/schedule/1_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/2_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/3_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/4_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/5_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/6_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/7_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/8_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/9_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/10_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/11_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/12_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/13_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/14_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/15_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/16_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/17_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/18_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/19_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/20_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/21_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/22_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/23_ampm.jpg" /></th>
+         <th><img src="<%SITEURL%>images/schedule/24_ampm.jpg" /></th>
+      </tr>
+     <tr class="skip"  align="center">
+          <td><input type="checkbox" id="day_0"/></td>
+          <th class="w50">{@Mon@}</th>
+          <td><input type="checkbox" id="chk_0_0" checked /></td>
+          <td><input type="checkbox" id="chk_0_1" checked /></td>
+          <td><input type="checkbox" id="chk_0_2" checked /></td>
+          <td><input type="checkbox" id="chk_0_3" checked /></td>
+          <td><input type="checkbox" id="chk_0_4" checked /></td>
+          <td><input type="checkbox" id="chk_0_5" checked /></td>
+          <td><input type="checkbox" id="chk_0_6" checked /></td>
+          <td><input type="checkbox" id="chk_0_7" checked /></td>
+          <td><input type="checkbox" id="chk_0_8" checked /></td>
+          <td><input type="checkbox" id="chk_0_9" checked /></td>
+          <td><input type="checkbox" id="chk_0_10" checked /></td>
+          <td><input type="checkbox" id="chk_0_11" checked /></td>
+          <td><input type="checkbox" id="chk_0_12" checked /></td>
+          <td><input type="checkbox" id="chk_0_13" checked /></td>
+          <td><input type="checkbox" id="chk_0_14" checked /></td>
+          <td><input type="checkbox" id="chk_0_15" checked /></td>
+          <td><input type="checkbox" id="chk_0_16" checked /></td>
+          <td><input type="checkbox" id="chk_0_17" checked /></td>
+          <td><input type="checkbox" id="chk_0_18" checked /></td>
+          <td><input type="checkbox" id="chk_0_19" checked /></td>
+          <td><input type="checkbox" id="chk_0_20" checked /></td>
+          <td><input type="checkbox" id="chk_0_21" checked /></td>
+          <td><input type="checkbox" id="chk_0_22" checked /></td>
+          <td><input type="checkbox" id="chk_0_23" checked /></td>
+      </tr>
+     <tr class="skip"  align="center">
+         <td><input type="checkbox" id="day_1"/></td>
+         <th>{@Tue@}</th>
+         <td><input type="checkbox" id="chk_1_0" checked /></td>
+          <td><input type="checkbox" id="chk_1_1" checked /></td>
+          <td><input type="checkbox" id="chk_1_2" checked /></td>
+          <td><input type="checkbox" id="chk_1_3" checked /></td>
+          <td><input type="checkbox" id="chk_1_4" checked /></td>
+          <td><input type="checkbox" id="chk_1_5" checked /></td>
+          <td><input type="checkbox" id="chk_1_6" checked /></td>
+          <td><input type="checkbox" id="chk_1_7" checked /></td>
+          <td><input type="checkbox" id="chk_1_8" checked /></td>
+          <td><input type="checkbox" id="chk_1_9" checked /></td>
+          <td><input type="checkbox" id="chk_1_10" checked /></td>
+          <td><input type="checkbox" id="chk_1_11" checked /></td>
+          <td><input type="checkbox" id="chk_1_12" checked /></td>
+          <td><input type="checkbox" id="chk_1_13" checked /></td>
+          <td><input type="checkbox" id="chk_1_14" checked /></td>
+          <td><input type="checkbox" id="chk_1_15" checked /></td>
+          <td><input type="checkbox" id="chk_1_16" checked /></td>
+          <td><input type="checkbox" id="chk_1_17" checked /></td>
+          <td><input type="checkbox" id="chk_1_18" checked /></td>
+          <td><input type="checkbox" id="chk_1_19" checked /></td>
+          <td><input type="checkbox" id="chk_1_20" checked /></td>
+          <td><input type="checkbox" id="chk_1_21" checked /></td>
+          <td><input type="checkbox" id="chk_1_22" checked /></td>
+          <td><input type="checkbox" id="chk_1_23" checked /></td>
+      </tr>
+     <tr class="skip"  align="center">
+         <td><input type="checkbox" id="day_2"/></td>
+         <th>{@Wed@}</th>
+          <td><input type="checkbox" id="chk_2_0" checked /></td>
+         <td><input type="checkbox" id="chk_2_1" checked /></td>
+          <td><input type="checkbox" id="chk_2_2" checked /></td>
+          <td><input type="checkbox" id="chk_2_3" checked /></td>
+          <td><input type="checkbox" id="chk_2_4" checked /></td>
+          <td><input type="checkbox" id="chk_2_5" checked /></td>
+          <td><input type="checkbox" id="chk_2_6" checked /></td>
+          <td><input type="checkbox" id="chk_2_7" checked /></td>
+          <td><input type="checkbox" id="chk_2_8" checked /></td>
+          <td><input type="checkbox" id="chk_2_9" checked /></td>
+          <td><input type="checkbox" id="chk_2_10" checked /></td>
+          <td><input type="checkbox" id="chk_2_11" checked /></td>
+          <td><input type="checkbox" id="chk_2_12" checked /></td>
+          <td><input type="checkbox" id="chk_2_13" checked /></td>
+          <td><input type="checkbox" id="chk_2_14" checked /></td>
+          <td><input type="checkbox" id="chk_2_15" checked /></td>
+          <td><input type="checkbox" id="chk_2_16" checked /></td>
+          <td><input type="checkbox" id="chk_2_17" checked /></td>
+          <td><input type="checkbox" id="chk_2_18" checked /></td>
+          <td><input type="checkbox" id="chk_2_19" checked /></td>
+          <td><input type="checkbox" id="chk_2_20" checked /></td>
+          <td><input type="checkbox" id="chk_2_21" checked /></td>
+          <td><input type="checkbox" id="chk_2_22" checked /></td>
+          <td><input type="checkbox" id="chk_2_23" checked /></td>
+      </tr>
+     <tr class="skip"  align="center">
+         <td><input type="checkbox" id="day_3"/></td>
+         <th>{@Thu@}</th>
+         <td><input type="checkbox" id="chk_3_0" checked /></td>
+         <td><input type="checkbox" id="chk_3_1" checked /></td>
+          <td><input type="checkbox" id="chk_3_2" checked /></td>
+          <td><input type="checkbox" id="chk_3_3" checked /></td>
+          <td><input type="checkbox" id="chk_3_4" checked /></td>
+          <td><input type="checkbox" id="chk_3_5" checked /></td>
+          <td><input type="checkbox" id="chk_3_6" checked /></td>
+          <td><input type="checkbox" id="chk_3_7" checked /></td>
+          <td><input type="checkbox" id="chk_3_8" checked /></td>
+          <td><input type="checkbox" id="chk_3_9" checked /></td>
+          <td><input type="checkbox" id="chk_3_10" checked /></td>
+          <td><input type="checkbox" id="chk_3_11" checked /></td>
+          <td><input type="checkbox" id="chk_3_12" checked /></td>
+          <td><input type="checkbox" id="chk_3_13" checked /></td>
+          <td><input type="checkbox" id="chk_3_14" checked /></td>
+          <td><input type="checkbox" id="chk_3_15" checked /></td>
+          <td><input type="checkbox" id="chk_3_16" checked /></td>
+          <td><input type="checkbox" id="chk_3_17" checked /></td>
+          <td><input type="checkbox" id="chk_3_18" checked /></td>
+          <td><input type="checkbox" id="chk_3_19" checked /></td>
+          <td><input type="checkbox" id="chk_3_20" checked /></td>
+          <td><input type="checkbox" id="chk_3_21" checked /></td>
+          <td><input type="checkbox" id="chk_3_22" checked /></td>
+          <td><input type="checkbox" id="chk_3_23" checked /></td>
+      </tr>
+     <tr class="skip"  align="center">
+         <td><input type="checkbox" id="day_4"/></td>
+         <th>{@Fri@}</th>
+         <td><input type="checkbox" id="chk_4_0" checked /></td>
+         <td><input type="checkbox" id="chk_4_1" checked /></td>
+          <td><input type="checkbox" id="chk_4_2" checked /></td>
+          <td><input type="checkbox" id="chk_4_3" checked /></td>
+          <td><input type="checkbox" id="chk_4_4" checked /></td>
+          <td><input type="checkbox" id="chk_4_5" checked /></td>
+          <td><input type="checkbox" id="chk_4_6" checked /></td>
+          <td><input type="checkbox" id="chk_4_7" checked /></td>
+          <td><input type="checkbox" id="chk_4_8" checked /></td>
+          <td><input type="checkbox" id="chk_4_9" checked /></td>
+          <td><input type="checkbox" id="chk_4_10" checked /></td>
+          <td><input type="checkbox" id="chk_4_11" checked /></td>
+          <td><input type="checkbox" id="chk_4_12" checked /></td>
+          <td><input type="checkbox" id="chk_4_13" checked /></td>
+          <td><input type="checkbox" id="chk_4_14" checked /></td>
+          <td><input type="checkbox" id="chk_4_15" checked /></td>
+          <td><input type="checkbox" id="chk_4_16" checked /></td>
+          <td><input type="checkbox" id="chk_4_17" checked /></td>
+          <td><input type="checkbox" id="chk_4_18" checked /></td>
+          <td><input type="checkbox" id="chk_4_19" checked /></td>
+          <td><input type="checkbox" id="chk_4_20" checked /></td>
+          <td><input type="checkbox" id="chk_4_21" checked /></td>
+          <td><input type="checkbox" id="chk_4_22" checked /></td>
+          <td><input type="checkbox" id="chk_4_23" checked /></td>
+      </tr>
+     <tr class="skip"  align="center">
+         <td><input type="checkbox" id="day_5"/></td>
+         <th>{@Sat@}</th>
+         <td><input type="checkbox" id="chk_5_0" checked /></td>
+         <td><input type="checkbox" id="chk_5_1" checked /></td>
+          <td><input type="checkbox" id="chk_5_2" checked /></td>
+          <td><input type="checkbox" id="chk_5_3" checked /></td>
+          <td><input type="checkbox" id="chk_5_4" checked /></td>
+          <td><input type="checkbox" id="chk_5_5" checked /></td>
+          <td><input type="checkbox" id="chk_5_6" checked /></td>
+          <td><input type="checkbox" id="chk_5_7" checked /></td>
+          <td><input type="checkbox" id="chk_5_8" checked /></td>
+          <td><input type="checkbox" id="chk_5_9" checked /></td>
+          <td><input type="checkbox" id="chk_5_10" checked /></td>
+          <td><input type="checkbox" id="chk_5_11" checked /></td>
+          <td><input type="checkbox" id="chk_5_12" checked /></td>
+          <td><input type="checkbox" id="chk_5_13" checked /></td>
+          <td><input type="checkbox" id="chk_5_14" checked /></td>
+          <td><input type="checkbox" id="chk_5_15" checked /></td>
+          <td><input type="checkbox" id="chk_5_16" checked /></td>
+          <td><input type="checkbox" id="chk_5_17" checked /></td>
+          <td><input type="checkbox" id="chk_5_18" checked /></td>
+          <td><input type="checkbox" id="chk_5_19" checked /></td>
+          <td><input type="checkbox" id="chk_5_20" checked /></td>
+          <td><input type="checkbox" id="chk_5_21" checked /></td>
+          <td><input type="checkbox" id="chk_5_22" checked /></td>
+          <td><input type="checkbox" id="chk_5_23" checked /></td>
+      </tr>
+     <tr class="skip"  align="center">
+         <td><input type="checkbox" id="day_6"/></td>
+         <th>{@Sun@}</th>
+         <td><input type="checkbox" id="chk_6_0" checked /></td>
+         <td><input type="checkbox" id="chk_6_1" checked /></td>
+          <td><input type="checkbox" id="chk_6_2" checked /></td>
+          <td><input type="checkbox" id="chk_6_3" checked /></td>
+          <td><input type="checkbox" id="chk_6_4" checked /></td>
+          <td><input type="checkbox" id="chk_6_5" checked /></td>
+          <td><input type="checkbox" id="chk_6_6" checked /></td>
+          <td><input type="checkbox" id="chk_6_7" checked /></td>
+          <td><input type="checkbox" id="chk_6_8" checked /></td>
+          <td><input type="checkbox" id="chk_6_9" checked /></td>
+          <td><input type="checkbox" id="chk_6_10" checked /></td>
+          <td><input type="checkbox" id="chk_6_11" checked /></td>
+          <td><input type="checkbox" id="chk_6_12" checked /></td>
+          <td><input type="checkbox" id="chk_6_13" checked /></td>
+          <td><input type="checkbox" id="chk_6_14" checked /></td>
+          <td><input type="checkbox" id="chk_6_15" checked /></td>
+          <td><input type="checkbox" id="chk_6_16" checked /></td>
+          <td><input type="checkbox" id="chk_6_17" checked /></td>
+          <td><input type="checkbox" id="chk_6_18" checked /></td>
+          <td><input type="checkbox" id="chk_6_19" checked /></td>
+          <td><input type="checkbox" id="chk_6_20" checked /></td>
+          <td><input type="checkbox" id="chk_6_21" checked /></td>
+          <td><input type="checkbox" id="chk_6_22" checked /></td>
+          <td><input type="checkbox" id="chk_6_23" checked /></td>
+      </tr>
+   </table>
+           <div  class="right pt10">
+          <button class="button w100" title="{@OK@}" onclick="onApplySchedule(); PostScheduleChange();">
+              <span class="ico ico-confirm">{@OK@}</span>
+          </button>
+          <button class="button w100" title="{@Cancel@}" onclick="onCancelSchedule();">
+            <span class="ico ico-cancel">{@Cancel@}</span>
+         </button>
+          
+        </div>
+        <br><div class="pt10 hintBox">
+        <%TIMEZONE%> 
+        </div>
+</div>
+</div>
+
+<form id="action_form" name="action_form" method="post">
+</form>

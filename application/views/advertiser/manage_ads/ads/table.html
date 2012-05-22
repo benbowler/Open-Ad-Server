@@ -1,0 +1,101 @@
+<%BULK_EDITOR_CONTAINER%>
+<form method="post" id="manadsads_form" name="manadsads_form">
+	<input type="hidden" name="tab" value="ads">
+	<div class='filterBox'>
+		<table class="table" border="0">
+			<tr>
+				<td class="w50 right"><label>{@Date range@}:</label></td>
+				<td class="pl5">
+					<%DATEFILTER%>
+				</td>
+				<td class="pl10">
+					<label for="filt" class="mb5">
+						{@Filter by status:@}
+					</label>
+					<select name="filt" class="w200"></select>
+				</td>
+				<td class="pl10 bottom">
+					<input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#manadsads_form').submit();"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<input type="hidden" id="manadsads_action" name="manadsads_action"/>
+	<div class='p5'>
+		<div style="margin-top: -45px;float:right;"><%COLUMNS%></div>
+		<div class="xTbar">
+			
+			<div><%BUTTONST%></div>
+			<div class="clr"></div>
+	   	</div>
+		<div class="inlet">
+			<%ADS%>
+	   	</div>
+		<div class="xTbar clearBoth">
+			<%PAGINATION%>
+	   	</div>
+	</div>                  
+</form>
+<script type="text/javascript">
+//<!--
+   /*$('.cluetip').each(function(){
+      $(this).attr('rel', $(this).attr('href'));
+      $(this).cluetip({
+         width: 'auto',
+         fx: {
+            open: 'fadeIn', // can be 'show' or 'slideDown' or 'fadeIn'
+            openSpeed: '50'
+         }
+      });
+   })*/
+   
+    $(function() {
+       $('#dinamic').find('.tooltip').each(function() {
+             var title = $(this).attr('title');
+             $(this).tooltip({ 
+                   delay: 0, 
+                   showURL: false,
+                   track: false, 
+                   bodyHandler: function() {
+                       var tooltip_content = $("<div/>");
+                       var caption = $("<div/>").text(title);
+                       $(caption).addClass('tooltipCaption');
+                       if($(this).attr('ajx')=="true"){
+                    	   $(tooltip_content).hide();
+                          var body = $('<div/>');
+                          $(tooltip_content).load($(this).attr('href'),{},function(){ 
+                              if (!checkAjaxLogin($(tooltip_content).html())) {
+                            	  $(tooltip_content).show();
+                              };
+                              });
+                          $(body).append(caption);
+                          $(body).append(tooltip_content);
+                          return body;
+                       }else{
+                          var image = $("<img/>").attr("src", $(this).attr('href'));
+                    	
+                          $(tooltip_content).append(caption);
+                          $(tooltip_content).append(image);
+                          return tooltip_content;  
+                       }
+                   }
+             });
+         });
+ 	}); 
+   
+	
+	$('#tab_ads').click(function(){
+		$('#managesubtitle').text("{@Ads@}");	
+	});
+
+	$('#tab_channels').click(function(){
+		$('#managesubtitle').text("{@Sites/Channels@}");
+	});
+
+	$('#tab_summary').click(function(){
+		$('#managesubtitle').text("{@Summary@}");
+	});
+	$('#managesubtitle').text($('#adTabs span.sel').text());
+	
+//-->
+</script>

@@ -1,0 +1,160 @@
+<script type="text/javascript">
+//<!--
+   function cancelBut() {
+      document.location = '<%SITEURL%><%INDEXPAGE%>admin/manage_feeds';
+   }
+   
+   var money_format = '<%MONEYFORMAT%>';
+   var number_format = '<%NUMBERFORMAT%>';
+   var text = "{@Feed Commission Help@}";
+   var dec_digits = new Number(number_format.charAt(0));
+   var dot_char = number_format.charAt(1);
+   var thousand_separator = number_format.charAt(2);
+
+   function float_to_str(float_number){      
+      
+      num_string = float_number.toFixed(dec_digits);
+      num_string =  num_string.replace('.', dot_char);
+      pos = num_string.indexOf(dot_char);
+      len = num_string.length;
+      if (pos == -1) {
+         pos = len; 
+      }
+      pos--;
+      digits = 0;
+      num_str = '';      
+      for (i = pos; i >= 0; i-=3) {
+         if (num_str != '') {
+            num_str = thousand_separator+num_str;
+         }
+         start = i-2;
+         if (start < 0) {
+            start = 0;
+         }
+         num_str = num_string.substring(start,i+1)+num_str;
+      }
+      if (pos+1 != len) {
+         num_str = num_str+num_string.substring(pos+1,len);
+      }         
+      return num_str;     
+   }
+ 
+   function str_to_float(float_str){
+
+      chars = '0123456789'+dot_char+thousand_separator;
+      len = float_str.length;
+      if (len == 0) {
+         return Number.NaN;
+      }
+      digits = 0;
+      dec_part = true;
+      for (i = len-1; i >= 0; i--) {         
+         pos = chars.indexOf(float_str.charAt(i));
+         if (pos == -1) {
+            return Number.NaN;        
+         } else if (pos < 10) {
+            digits ++;
+         } else if (pos == 10) {
+            if (!dec_part) {
+               return Number.NaN;
+            }
+            dec_part = false;
+            digits = 0;
+         } else {
+            if (digits != 3) {
+               return Number.NaN;
+            }
+            dec_part = false;
+            digits = 0;
+         }
+      }
+      float_str = float_str.replace(dot_char, '.');
+      float_str = float_str.replace(thousand_separator, '');
+      float_str = float_str.replace(thousand_separator, '');
+      float_str = float_str.replace(thousand_separator, '');
+      return new Number(float_str);
+   }
+ 
+   function money(value) {
+      return money_format.replace("%", float_to_str(value)); 
+   }
+   
+   function changeCommission() {
+      bid = 1.0;
+      if ($('#com').val()=='') {
+         commission = 0.0;
+      } else {           
+         commission = str_to_float($('#com').val());
+      } 
+      if (!isNaN(commission)) {
+            var new_text = text.replace('{BID}', money(bid));
+            new_text = new_text.replace('{REVENUE}', money(bid*commission/100));
+            new_text = new_text.replace('{PROCENT}', float_to_str(commission));
+            $('#msg_div')[0].innerHTML = new_text;
+            $('#example_div').show();
+      } else {
+         $('#example_div').hide();         
+      }   
+   }
+   
+   $(
+      function() {
+         changeCommission();      
+      }
+   );   
+//-->
+</script>
+<h1><a href="<%SITEURL%><%INDEXPAGE%>admin/manage_feeds">{@Manage Feeds@}</a> &rarr; {@Settings of feed@}: <span class="green i">&bdquo;<%FEEDNAME%>&ldquo;</span></h1>
+<form name="editfeed_form" method='post'>
+			<div id="error_message_div"></div>
+	<div class="frame mb10">
+			<input type="hidden" name="edit_code">
+			<table cellspacing="10" cellpadding="0" border="0">
+				<tbody>
+					<tr>
+						<td>
+							<label for="aid">
+				           <span class="required">{@Affiliate ID@}:</span>
+							</label>
+						</td>
+						<td>
+						      <input id="aid" type="text" name="affiliate_id" value="" class="w150 text">
+						</td>
+				   </tr>
+				   <tr>
+						<td>
+							<label for="com">
+							  	<span class="required">{@Commission, %@}:</span>
+							</label>
+						</td>
+						<td class="">
+							   <input id="com" name="commission" type="text" value="" class="w150 text" onkeyup="changeCommission();">
+						</td>
+				   </tr>
+	            <tr>
+	               <td></td>
+	               <td>
+	                  <div id="example_div" style="display:none;" class='ml5 p5 pl0'>
+	                     <div id="msg_div"></div>
+	                  </div>                  
+	               </td>
+	            </tr>
+				    <tr>
+				    	<td>&nbsp;</td>
+						<td  class="vtop">
+							<button class="button" title="{@Save@}" type="submit" id="updateButton">
+								<span class="ico ico-confirm">{@Save@}</span>
+							</button>
+							<button class="button ml5" title="{@Cansel@}" type="button" id="cancelButton" onclick="cancelBut();">
+								<span class="ico ico-cancel">{@Cancel@}</span>
+							</button>
+						</td>
+				   </tr>
+				   
+				</tbody>
+			</table>
+	</div>
+	<div class="mt10 mb10 hintBox">
+		<span class="required">&nbsp;</span> - {@required fields@}.
+	</div>
+</form>

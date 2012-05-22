@@ -1,0 +1,20 @@
+<form id="search_sites_cpc_form" name="search_sites_cpc_form" method="post">
+	<input type="hidden" id="filter_mode" name="filter_mode">
+	<input type="hidden" id="id_category" name="id_category">
+	<input type="hidden" id="include_subcats" name="include_subcats">
+	<input type="hidden" id="id_site" name="id_site">
+	<input type="hidden" id="price" name="price">
+	<input type="hidden" id="price_program" name="price_program">
+	<input type="hidden" id="ads_type" name="ads_type">
+	<input type="submit" style="display:none;">
+    <div class="floatr" style="margin-top:-25px;">
+	    <a id="add_all_sites_btn" href="#" title="{@Add All Sites@}" class="guibutton floatl ico ico-plusgreen floatr ml5" jframe="no" onclick="return addAllSitesToGroup();">{@Add All Sites@}</a>
+	    <%COLUMNS%>
+    </div>
+    <div class="inlet">
+		<%SITES_TABLE%>
+	</div>
+		<%PAGINATION%>
+</form>
+<div class="clr"></div>
+

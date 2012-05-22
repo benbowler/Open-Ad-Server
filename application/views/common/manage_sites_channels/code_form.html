@@ -1,0 +1,219 @@
+<script type='text/javascript'>
+//<!--
+
+var id_current_color_palette;
+
+   $(function(){
+	   tabs_click('get_js');
+	   getAdsPreview();
+	   var color_scheme_id = $('#palette').val();
+	   var code = $('#xml_code_template').text();
+	   code = code.replace("<%COLOR_SCHEME_ID%>",color_scheme_id);
+	   $('#xml_code').val(code);
+	   $('.xml').text($('#xml_example').text());
+	  
+	});
+	
+   var old_tab = '';
+
+   function tabs_click(tab) {
+      if (old_tab != '') {
+         $('#tab_div_'+old_tab).hide();     
+         $('#tab_'+old_tab).removeClass('sel');               
+         $('#tab_'+old_tab).parent().removeClass('sel');               
+      }
+      $('#tab_div_'+tab).show();        
+      $('#tab_'+tab).addClass('sel');             
+      $('#tab_'+tab).parent().addClass('sel');             
+      old_tab = tab;
+      return false;
+   }
+   
+   function UpdateCodesSource() {
+	   var color_scheme_id = $('#palette').val(); 
+	   var code = $('#java_code_template').text();
+	   code = code.replace("<%COLOR_SCHEME_ID%>",color_scheme_id);
+	   $('#java_code').val(code);
+	}
+
+   function ClearCodesSource() {
+	      $('#java_code').val('');
+	      //$('#xml_code').val('');
+	   }
+
+   function getAdsPreview() {
+	  $("#ads_preview_loading").show();
+	  $("#ads_preview").hide();
+	  ClearCodesSource();
+	  var palette = $('#palette').val();
+	  req.open("POST", "<%SITEURL%><%INDEXPAGE%><%ROLE%>/adplacing_get_code/get_preview", true); 
+     req.onreadystatechange = onGetPreviewHTML;
+     req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+     req.send('palette=' + palette);      
+	}
+
+   function onGetPreviewHTML() {
+	   if (req.readyState != 4) return;
+	      if (req.status == 200) {
+	    	  if(!checkAjaxLogin(req.responseText)) {
+	    		  $("#ads_preview").html(req.responseText);
+	    		  $("#ads_preview_loading").hide();
+	    		  $("#ads_preview").show();
+	    		  UpdateCodesSource();
+	        }
+	    	}  
+	}
+
+   function copyToClipboard(s)
+   {
+      if( window.clipboardData && clipboardData.setData )
+      {
+        s = s.replace(/(\n)/g, '\r\n');
+    	  if(!window.clipboardData.setData("Text", s)) {
+    		   return false;
+        }
+      }
+      else
+      {
+         // You have to sign the code to enable this or allow the action in about:config by changing
+         //user_pref("signed.applets.codebase_principal_support", true);
+    	   try{
+    		   netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+    		   }catch(e){
+    			   alert("{@Your current Internet Security settings do not allow data copying to clipboard.@}");
+    			   return false;
+    		   }
+
+    		try{
+    			var clip = Components.classes['@mozilla.org/widget/clipboard;1'].getService();
+    			clip = clip.QueryInterface(Components.interfaces.nsIClipboard); 
+    		}
+    		catch (e) {
+    			alert('@mozilla.org/widget/clipboard');
+    			   return false;
+        	}
+        	
+         if (!clip) return;
+
+         // create a transferable
+         try {
+        	   var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance();
+        	   trans = trans.QueryInterface(Components.interfaces.nsITransferable);
+         }
+         catch (e) {
+        	 alert('@mozilla.org/widget/transferable');
+             return false;
+         }
+         if (!trans) return;
+
+         // specify the data we wish to handle. Plaintext in this case.
+         trans.addDataFlavor('text/unicode');
+
+         // To get the data from the transferable we need two new objects
+         var str = new Object();
+
+         var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+
+         str.data=s;
+
+         trans.setTransferData("text/unicode",str,s.length*2);
+
+         try{
+        	   var clipid=Components.interfaces.nsIClipboard;
+         }
+         catch (e) {
+             return false;
+         }
+         if (!clip) return false;
+
+         clip.setData(trans,null,clipid.kGlobalClipboard);
+      }
+   }
+
+   function copyCodeToClipboard() {
+	   if ($('#tab_div_get_js').is(':visible')) {
+		   copyToClipboard($('#java_code').val());
+		   return true;
+		}
+
+	   if ($('#tab_div_get_xml').is(':visible')) {
+	      copyToClipboard($('#xml_code').val());
+	      return true;
+	   }
+	}
+
+//-->
+</script> 
+
+<h1><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; {@Get Code for site@}: <span class="green i">&bdquo;<%SITE_NAME%> (<%SITE_URL%>)&ldquo;</span>, {@channel@}: <span class="green i">&bdquo;<%CHANNEL_NAME%>&ldquo;</span></h1>
+
+<form name="channel_code_form" method="post">
+	<input type="hidden" name="id_site">
+	<input type="hidden" name="id_channel">
+	<div id="error_message_div"></div>
+
+			<table class='table w100p'>
+				<tr class="top">
+					<td>
+						<div class="tabsPanel">
+			          <span>
+			            <a id="tab_get_js" href="#" onclick="return tabs_click('get_js');">{@JavaScript Code@}</a>
+			          </span>
+			         </div>
+			         
+			         <div class="tabdiv w100p" id='tab_div_get_js'>
+				          
+							 <div class="frameBorderless p10">
+							 <div class="pb10">
+								 <table class='table w400'>
+					            <tr>
+					               <td class="pl10 pr10">
+					                  <label for="name">
+					                     {@Palette@}:
+					                  </label>          
+					               </td>
+					               <td class="pl5 w100p">
+					                  <select id="palette" name="palette" onchange="getAdsPreview()" class="w100p mw100"></select>
+					               </td>
+					               <td class="pl5">
+					               </td>
+					            </tr>
+								</table>
+							</div>								
+							<table class='table'>
+								<tr class="top">
+									<td class="pl10 pr10">
+									 <label>{@Code@}:</label>
+										<textarea class="h200 text w400" id="java_code" readonly="true"></textarea>
+										
+										<textarea id="java_code_template" style="display:none;"><%JS_CODE_TEMPLATE%></textarea>
+									</td>
+				               <td class="pl5">
+										 <label>{@Preview@}:</label>
+							          <img id="ads_preview_loading" src="<%SITEURL%>images/loading.gif" style="dispaly:none;"/>
+			                      <div id="ads_preview"></div>
+			                      <div class="pt10">
+					                  <button type="button" class="button" title="{@Manage palettes@}" value="{@Manage palettes@}" onclick="document.location='<%SITEURL%><%INDEXPAGE%><%ROLE%>/color_palettes'; return false;">
+						                  <span class="ico ico-color">{@Manage palettes@}</span>
+					                  </button>
+			                      </div>
+				               </td>
+				            </tr>
+							</table>
+							 </div>
+				      </div>
+					</td>
+				</tr>
+			</table>
+
+		<div class="pb10 pt10">
+		   <!-- input class="button" type="button"  title="{@Copy Code to Clipboard@}" onclick="copyCodeToClipboard();" value="{@Copy Code to Clipboard@}"-->
+		     
+		     <button class="button" title="{@Copy Code to Clipboard@}" value="{@Copy Code to Clipboard@}" onclick="copyCodeToClipboard();"  type="button">
+				 <span class="ico ico-confirm">{@Copy Code to Clipboard@}</span>
+			</button>
+		    <button class="button ml5" title="{@Cancel@}" value="{@Cancel@}" onclick="location.href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'" value="{@Cancel@}" title="{@Cancel@}" type="button">
+			 	<span class="ico ico-cancel">{@Cancel@}</span>
+			</button>
+		</div>  
+</form>

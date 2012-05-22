@@ -1,0 +1,27 @@
+<script type="text/javascript">
+//<!--
+   function toReportsCenter() {
+      document.location = "<%RETURN%>";
+   }
+//-->
+</script>
+<h1><a href="<%RETURN%>"><%FROM%></a> &rarr; {@Report@}: <span class='green i'>&bdquo;<%REPORTNAME%>&ldquo;</span></h1>
+<form method="post" id="viewreport_form" name="viewreport_form">
+   <input type="hidden" name="view_code" value="<%CODE%>">
+   <input type="hidden" name="from_controller" value="<%FROMCONTROLLER%>">
+   <input type="hidden" id="viewreport_action" name="viewreport_action"/>
+   	<table class="frame mb10 w100p" cellpadding="0" cellspacing="0"><tr><td class="p5">
+      <%COLUMNS%>
+		<table class="inlet w100p" cellpadding="0" cellspacing="0"><tr><td>
+			<%TABLE%>
+	   	</td></tr></table>
+		<%PAGINATION%>
+   			
+   	</td></tr></table>
+   	
+   	<!-- div class="frame mb10 p5 dtableie" style="display: table;">
+	</div -->
+	<div class="mb10 right">
+		<input class="button w200" type="button" onclick="return toReportsCenter();" value="{@Close Report@}"/>
+	</div>
+</form>

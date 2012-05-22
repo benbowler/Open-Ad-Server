@@ -1,0 +1,96 @@
+<script type="text/javascript">
+//<!--
+   function edit(code) {
+      document.getElementById("edit_code").value = code;
+      document.forms["edit_form"].submit();
+   }
+   
+   
+   function getCodeList() {
+      codeList = '';            
+      $('tr.selected', '#managefeeds_form').find('input:checked').each(
+         function(){
+            if (codeList != '') {
+               codeList = codeList+',';               
+            }
+            codeList = codeList + $(this).val();
+         })
+      return codeList;            
+   }
+   
+   function toReports() {
+      document.getElementById("reportsCodeList").value = getCodeList();
+      document.forms["reports_form"].submit();      
+   }
+
+//-->
+</script>
+<h1>{@Manage Feeds@}</h1>
+<%NOTIFICATION%>
+<form method="post" id="managefeeds_form" name="managefeeds_form">
+	<table class="w100p table" border="0">
+		<tbody>
+			<tr class="top">
+				<td class="top">
+					<div class="filterBox">
+						<table  class="table">
+							<tr>
+  						   	<td class="w100 right"><label>{@Select date range@}:</label></td>
+								<td class="pl5">
+				               <%DATEFILTER%>
+								</td>
+								<td class="pl10">
+								    <label for="filt" class="pb5">
+						               {@Filter by status@}
+						            </label>
+						            <select name="filt" class="w200"></select>
+								</td>
+								<td class="pl10 bottom">
+									<input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#managefeeds_form').submit();"/>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="frame mb10">
+						<div class="outlet p5">
+                     <%COLUMNS%>
+							<div class="xTbar">
+								<%BUTTONST%>
+							</div>
+							<div class="inlet">
+				               <%FEEDS%>
+							</div>
+							<div class="xTbar">
+								<%PAGINATION%>
+							</div>
+						</div>
+					</div>
+					
+				</td>
+				<td class="w270 pl20 top">
+					
+					<%BYTECITY_LINK_FEED%>
+					
+					<div class="Box xFrame" style="margin-top: 10px;">
+			               <h2>{@Order XML Feed Integration@}</h2>
+			               <h3>{@Do you want to get a permanent revenue source from your system?@}</h3>
+			               Become a partner of an XML Feed provider and request XML Feed Integration to the system. 
+                           Displayed ads from XML Feeds let you to promote and monetize your website with XML Feeds revenue.  
+			               <div class="mt10 mb10 h20" style="clear: both;">
+		                     <a href="<%SITEURL%><%INDEXPAGE%>admin/manage_feeds/request" class="guibutton floatl" onclick="top.location.href='<%SITEURL%><%INDEXPAGE%>admin/manage_feeds/request'" value="{@Request@}" title="{@Request Feed Installation@}">{@Request Feed Installation@}</a>
+			               </div>
+					</div>
+					
+				</td>
+			</tr>
+		</tbody>
+	</table>
+   <input type="hidden" id="managefeeds_action" name="managefeeds_action"/>          
+</form>
+<form method="post" id="edit_form" action="<%SITEURL%><%INDEXPAGE%>admin/manage_feeds/edit">
+   <input type="hidden" id="edit_code" name="edit_code"/>
+</form>
+<form method="post" id="reports_form" action="<%SITEURL%><%INDEXPAGE%>admin/reports_center">
+   <input type="hidden" id="reportsCodeList" name="feed_list"/>
+</form>

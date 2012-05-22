@@ -1,0 +1,26 @@
+<form name="forgot_password" method="post">
+	<h1>{@Forgot Password@}</h1>
+	<div id="error_message_div"></div>
+	<div class="frame mb10">
+		<table cellpadding="0" cellspacing="10" border="0">
+	    	<tr>
+				<td>
+					<label for="em"> <span class="required">{@E-mail@}:</span></label>
+				</td>
+				<td>
+					<input type="text" id="em" name="mail" class="text w200" tabindex="1">
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" value="{@Send me mail@}" class='button' tabindex="3"/>         	
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="mt10 mb10 hintBox">
+			<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+	</div>
+</form>

@@ -1,0 +1,22 @@
+<script type="text/javascript">
+//<!--
+   function showUnread() {
+      $('#show_unread').submit();
+      return false;      
+   }
+//-->
+</script>
+<form id="show_unread" method="post" action="<%SITEURL%><%INDEXPAGE%><%ROLE%>/dashboard/#mails">
+   <input type="hidden" name="unread" value="true">
+</form>
+<div class='wrapper'>
+	<div class='line ico ico-user userName'><%USERNAME%></div>
+	<%BALLANCE%>
+	<table class="table">
+		<tr>
+			<td></td>
+			<td><div class='line ico ico-key'><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%><%ACTION%>'>{@<%ACTIONTEXT%>@}</a></div></td>
+		</tr>
+	</table> 
+</div>
+<div class='footer'></div>

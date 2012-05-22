@@ -1,0 +1,31 @@
+<h1 class='progressBar'><nobr><%STEPS%></nobr></h1>
+<div class="clr"/>
+	
+<br/>
+<script type="text/javascript">
+//<!--
+	$('.progressBar:empty').hide();
+	var i = 0
+	var h1 = $('.progressBar')[0];
+	var h1ol = h1.offsetLeft;
+	$('.progressBar span').filter(':not(.spacer)').each(function(){
+		i++;
+		var step = document.createElement('span');
+		wpos  = parseInt(this.offsetWidth / 2) - 15;
+		$(step)
+			.append(i)
+			.css('margin-top','-27px')
+			.css('font-size','18px')
+			.css('margin-left', wpos + 'px')
+			.css('background', 'url("<%SITEURL%>images/smartppc6/stepbg.gif") no-repeat center')
+			.css('padding', '5px 14px')
+			.css('align', 'center')
+			.css('z-index', '1')
+			.css('position','absolute');
+		if (this.className == 'current') {
+			$(step).css('font-weight','bold');
+		}
+		$(this).prepend(step);
+	});
+//-->
+</script>

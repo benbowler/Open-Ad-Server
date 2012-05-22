@@ -1,0 +1,284 @@
+<script type='text/javascript'>
+//<!--
+   $(function(){
+      onUsedForChange();
+   });
+   
+   function onCancelForm() {
+      document.location = '<%SITEURL%><%INDEXPAGE%>admin/manage_payment_gateways'
+      return true;
+   }
+   
+   function onSubmitForm() {
+      switch ($('#used_for').val()) {
+         case 'withdraw' :
+            $('#fund_comm').val('0');
+         break;
+         case 'deposit' :
+            $('#withdraw_comm').val('0');
+         break;
+      }
+      $('#edit_payment_gateway_form').submit();
+   }
+   
+   function onUsedForChange() {
+      switch ($('#used_for').val()) {
+         case 'withdraw' :
+            changeCommission('withdraw');
+            $('#fund_comm_edit').hide();
+            $('#fund_comm_example_div').hide();
+            $('#withdraw_comm_edit').show();
+            $('#withdraw_comm_example_div').show();
+         break;
+         case 'deposit' :
+            changeCommission('fund');
+            $('#fund_comm_edit').show();
+            $('#fund_comm_example_div').show();
+            $('#withdraw_comm_edit').hide();
+            $('#withdraw_comm_example_div').hide();
+         break;
+         case 'both' :
+        	   changeCommission('fund');
+            changeCommission('withdraw');
+            $('#fund_comm_edit').show();
+            $('#fund_comm_example_div').show();
+            $('#withdraw_comm_edit').show();
+            $('#withdraw_comm_example_div').show();
+         break;
+      }
+   }
+
+   var money_format = '<%MONEYFORMAT%>';
+   var number_format = '<%NUMBERFORMAT%>';
+   var fund_text = "{@Example: {TOTAL} - total ({DEPOSIT} - deposit, {COMMISSION} - commission)@}";
+   var withdraw_text = "{@Example: {TOTAL} - total ({WITHDRAW} - withdraw, {COMMISSION} - commission)@}";
+   var dec_digits = new Number(number_format.charAt(0));
+   var dot_char = number_format.charAt(1);
+   var thousand_separator = number_format.charAt(2);
+
+   function float_to_str(float_number){      
+      num_string = float_number.toFixed(dec_digits);
+      num_string =  num_string.replace('.', dot_char);
+      pos = num_string.indexOf(dot_char);
+      len = num_string.length;
+      if (pos == -1) {
+         pos = len; 
+      }
+      pos--;
+      digits = 0;
+      num_str = '';      
+      for (i = pos; i >= 0; i-=3) {
+         if (num_str != '') {
+            num_str = thousand_separator+num_str;
+         }
+         start = i-2;
+         if (start < 0) {
+            start = 0;
+         }
+         num_str = num_string.substring(start,i+1)+num_str;
+      }
+      if (pos+1 != len) {
+         num_str = num_str+num_string.substring(pos+1,len);
+      }         
+      return num_str;     
+   }
+ 
+   function str_to_float(float_str){
+      chars = '0123456789'+dot_char+thousand_separator;
+      len = float_str.length;
+      if (len == 0) {
+         return Number.NaN;
+      }
+      digits = 0;
+      dec_part = true;
+      for (i = len-1; i >= 0; i--) {         
+         pos = chars.indexOf(float_str.charAt(i));
+         if (pos == -1) {
+            return Number.NaN;        
+         } else if (pos < 10) {
+            digits ++;
+         } else if (pos == 10) {
+            if (!dec_part) {
+               return Number.NaN;
+            }
+            dec_part = false;
+            digits = 0;
+         } else {
+            if (digits != 3) {
+               return Number.NaN;
+            }
+            dec_part = false;
+            digits = 0;
+         }
+      }
+      float_str = float_str.replace(dot_char, '.');
+      float_str = float_str.replace(thousand_separator, '');
+      float_str = float_str.replace(thousand_separator, '');
+      float_str = float_str.replace(thousand_separator, '');
+      return new Number(float_str);
+   }
+ 
+   function money(value) {
+      return money_format.replace("%", float_to_str(value)); 
+   }
+
+   function isUnsignedInteger(s) {
+      return (s.toString().search(/^[0-9]+$/) == 0);
+   }
+   
+   function changeCommission(payment_type) {
+      switch (payment_type) {
+         case 'fund':
+            var comm_input = $('#fund_comm');
+			var example_div = $('#fund_comm_example_div');
+			var msg_div = $('#fund_comm_msg_div');
+			var text = fund_text;
+			var comm_not_int = "{@The 'Deposit Commission' field must contain a positive integer number.@}";
+		    break;
+		 case 'withdraw': 
+		    var comm_input = $('#withdraw_comm');
+			var example_div = $('#withdraw_comm_example_div');
+			var msg_div = $('#withdraw_comm_msg_div');
+			var text = withdraw_text;
+			var comm_more = "{@Withdraw Commission can not be more than 100%@}";
+			var comm_not_int = "{@The 'Withdraw Commission' field must contain a positive integer number.@}";
+		    break;
+		 default: return;
+      }
+
+      amount_val = 100;
+      if (comm_input.val()=='') {
+         commission = 0;
+      } else {
+         if (!isUnsignedInteger(comm_input.val())) {
+            // not Integer
+        	msg_div.html(comm_not_int);
+            example_div.show();
+            return;
+         }
+         commission = parseInt(comm_input.val());
+      } 
+      
+      if (!isNaN(commission)) {           	
+         if (commission > 100) {
+            msg_div.html(comm_more);
+            example_div.show();
+            return;
+         }
+
+         text = text.replace(/{PROCENT}/g, commission);
+         text = text.replace(/{COMMISSION}/g, money(amount_val*commission/100));
+
+         var total;
+
+         switch (payment_type) {
+            case 'fund':
+               text = text.replace(/{DEPOSIT}/g, money(amount_val));
+               total = amount_val*(100+commission)/100;
+               break;
+            case 'withdraw':
+               text = text.replace(/{WITHDRAW}/g, money(amount_val));
+               total = amount_val*(100-commission)/100;
+               break;
+         }
+
+         text = text.replace(/{TOTAL}/g, money(total));
+         text = text.replace(/{GATE}/g, '<%GATEWAY_NAME%>');
+         msg_div.html(text);
+         example_div.show();
+      } else {
+         example_div.hide();         
+      }
+   }
+//-->
+</script> 
+		<form id="edit_payment_gateway_form" name="edit_payment_gateway_form" method="post">
+		<h1><a href="<%SITEURL%><%INDEXPAGE%>admin/manage_payment_gateways">{@Manage Payment Gateways@}</a> &rarr; {@Settings of payment gateway@}: <span id="gateway_name" class="green i">&bdquo;<%GATEWAY_NAME%>&ldquo;</span></h1>
+		<div id="error_message_div"></div>
+		<div class="frame p10 mb10">
+			<table class="table">
+				<tr>
+               <td class="w60 pt10"><label for="used_for"><span class="required">{@Used For@}:</span></label></td>
+               <td class='pl10 pt10'><select id="used_for" name="used_for" onchange="onUsedForChange()" class="w100p"></select></td>
+            </tr>
+				<tr>
+					<td class="w60 pt10"><label for="account_id1"><span class="required">{@<%ACCOUNT_ID_1_TITLE%>@}:</span></label></td>
+					<td class='pl10 pt10 pr10'><input class="text w95p" type="text" id="account_id1" name="account_id1"></td>
+				</tr>
+				<tr <%ACCOUNT_ID_2_VISIBLE%>>
+            	<td class="w60 pt10"><label for="account_id2"><span class="required">{@<%ACCOUNT_ID_2_TITLE%>@}:</span></label></td>
+            	<td class='pl10 pt10 pr10'><input class="text w95p" type="text" id="account_id2" name="account_id2"></td>
+         	</tr>
+            <tr <%ACCOUNT_ID_3_VISIBLE%>>
+               <td class="w60 pt10"><label for="account_id3"><span class="required">{@<%ACCOUNT_ID_3_TITLE%>@}:</span></label></td>
+               <td class='pl10 pt10 pr10'>
+                  <a name="usetextarea_begin"></a>
+                     <textarea id="account_id3" name="account_id3" class="text w300 h150"></textarea>
+                  <a name="usetextarea_end"></a>
+               </td>
+            </tr>
+         	<tr id="fund_comm_edit">
+            	<td class="w60 pt10"><label for="fund_comm">{@Fund Commission@},&nbsp;%:</label></td>
+            	<td class='pl10 pt10'>
+            		<input type="text" id="fund_comm" name="fund_comm" class="text w50" onkeyup="changeCommission('fund');">
+					</td>
+         	</tr>
+				<tr>
+            	<td></td>
+            	<td>
+						<div id="fund_comm_example_div" class='ml5 p5 pl0 hide'>
+							<div id="fund_comm_msg_div"></div>
+						</div>                  
+					</td>
+         	</tr>
+				<tr id="withdraw_comm_edit">
+            	<td class="w60 pt10"><label for="withdraw_comm">{@Withdraw Commission@},&nbsp;%:</label></td>
+            	<td class='pl10 pt10'>
+            	  <input type="text" id="withdraw_comm" name="withdraw_comm" class="text w50" onkeyup="changeCommission('withdraw');"></td>
+         	</tr>
+         	<tr>
+               <td></td>
+               <td>
+                  <div id="withdraw_comm_example_div" class='ml5 p5 pl0 hide'>
+                     <div id="withdraw_comm_msg_div"></div>
+                  </div>                  
+               </td>
+            </tr>
+            
+            		
+			<tr id="minimal_payment_edit">
+            	<td class="w60 pt10"><label for="minimal_payment">{@Minimal payment@},&nbsp;$:</label></td>
+            	<td class='pl10 pt10'>
+            		<input type="text" id="minimal_payment" name="minimal_payment" class="text w50">
+					</td>
+         	</tr>
+			<tr>
+            	<td></td>
+            	<td>
+						<div id="minimal_payment_example_div" class='ml5 p5 pl0 hide'>
+							<div id="minimal_payment_msg_div"></div>
+						</div>                  
+			</td>		
+					
+					
+         	</tr>
+         	
+            
+            
+				<tr>
+					<td class="pt10">&nbsp;</td>
+					<td class='pl10 pt10'>
+						<button class="button" type="button" title="{@OK@}" value="{@OK@}" onclick="onSubmitForm()">
+							<span class="ico ico-confirm">{@OK@}</span>
+						</button>
+						<button class="button ml5" type="button"  title="{@Cancel@}"value="{@Cancel@}" onclick="onCancelForm()">
+							<span class="ico ico-cancel">{@Cancel@}</span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="mt10 mb10 hintBox">
+		<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+	</div>
+</form>

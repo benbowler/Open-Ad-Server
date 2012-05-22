@@ -1,0 +1,490 @@
+<script type="text/javascript">
+//<!--
+
+var tree_selected_category_id;
+
+function simplify(selfx) {
+	var x = {};
+	x.width = selfx.width;
+	x.height = selfx.height;
+	x.channels = selfx.channels;
+	x.sizesH = selfx.sizesH;
+	x.sizesW = selfx.sizesW;
+	x.id = selfx.id;
+	x.zones = selfx.zones;
+	return x;
+}
+
+function gotoStep(step) {
+	if (step) {
+		if (siteLayoutJson != '' && step == 'step1' && !confirm('{@Selection of the other layout may lead to losing changed parameters in the current layout!@}')) return false; 
+		$('.tabdiv').hide();
+		$('#' + step).show();
+		$('.tabsPanel>span>a').removeClass('sel');
+		$('.tabsPanel>span>a.' + step).addClass('sel');
+	}
+	return false;
+}
+
+$(function(){
+	
+	var site_category_id = $('#category').val();
+
+	if (site_category_id) {
+		tree_selected_category_id = site_category_id;
+		$('#selected_category_name').val($('#categories_tree_'+tree_selected_category_id).text());
+	} else {
+		tree_selected_category_id = 1;
+	}
+
+	$('#categories_tree').treeview({animated: "fast", persist: "id", persist_id: "categories_tree_"+tree_selected_category_id});
+	$('#categories_tree_'+tree_selected_category_id).addClass('selected_item');
+
+	thumb_id = $('#thumb_id').val();
+	if (thumb_id != "DEFAULT") {
+		$('#thumb_img').attr('src', '<%SITEURL%><%IMAGEPATH%>thumbs/'+thumb_id+'.jpeg?ac='+Math.ceil(Math.random()*9999999));
+	}
+
+	upload_init();
+
+	if ($('#category').hasClass('invalidfield')) {$('#selected_category_name').addClass('invalidfield');}
+
+	$("#selected_category_name").removeClass('disabled');
+
+	/*
+ * LAYOUT 
+ */
+
+	var presets = new Array(
+			{"zones": [
+							{"id":"", "colspan": 3, "rowspan": 3}
+						],
+					"sizesW" : ['33.3333%', '33.3333%','33.3333%'],
+					"sizesH" : ['33.3333%', '33.3333%','33.3333%']
+				},
+			{"zones": [
+						{"id":"", "colspan": 3, "rowspan": 1},
+						{"id":"", "colspan": 3, "rowspan": 2}
+					],
+				"sizesW" : ['33.3333%', '33.3333%','33.3333%'],
+				"sizesH" : ['25%', '50%', '25%']
+				},
+			{"zones": [
+						{"id":"", "colspan": 3, "rowspan": 1},
+						{"id":"", "colspan": 3, "rowspan": 1},
+						{"id":"", "colspan": 3, "rowspan": 1}
+					],
+					"sizesW" : ['33.3333%', '33.3333%','33.3333%'],
+					"sizesH" : ['25%', '55%', '20%']
+			},
+			{"zones": [
+						{"id":"", "colspan": 1, "rowspan": 3},
+						{"id":"", "colspan": 2, "rowspan": 3}
+					],
+				"sizesW" : ['33.3333%', '33.3333%', '33.3333%'],
+				"sizesH" : ['33.3333%', '33.3333%','33.3333%']
+			},
+			{"zones": [
+						{"id":"", "colspan": 3, "rowspan": 1},
+						{"id":"", "colspan": 1, "rowspan": 2},
+						{"id":"", "colspan": 2, "rowspan": 2}
+					],
+				"sizesW" : ['33.3333%', '33.3333%', '33.3333%'],
+				"sizesH" : ['25%', '55%', '20%']
+			},
+			{"zones": [
+						{"id":"", "colspan": 3, "rowspan": 1},
+						{"id":"", "colspan": 1, "rowspan": 1},
+						{"id":"", "colspan": 2, "rowspan": 1},
+						{"id":"", "colspan": 3, "rowspan": 1}
+					],
+				"sizesW" : ['33.3333%', '33.3333%', '33.3333%'],
+				"sizesH" : ['25%', '55%', '20%']
+			},
+			{"zones": [
+						{"id":"", "colspan": 1, "rowspan": 3},
+						{"id":"", "colspan": 1, "rowspan": 3},
+						{"id":"", "colspan": 1, "rowspan": 3}
+					],
+				"sizesW" : ['25%', '50%','25%'],
+				"sizesH" : ['25%', '55%', '20%']
+			},
+			{"zones": [
+							{"id":"", "colspan": 3, "rowspan": 1},
+							{"id":"", "colspan": 1, "rowspan": 2},
+							{"id":"", "colspan": 1, "rowspan": 2},
+							{"id":"", "colspan": 1, "rowspan": 2}
+						],
+					"sizesW" : ['25%', '50%','25%'],
+					"sizesH" : ['25%', '55%', '20%']
+				},
+			{"zones": [
+							{"id":"", "colspan": 3, "rowspan": 1},
+							{"id":"", "colspan": 1, "rowspan": 1},
+							{"id":"", "colspan": 1, "rowspan": 1},
+							{"id":"", "colspan": 1, "rowspan": 1},
+							{"id":"", "colspan": 3, "rowspan": 1}
+						],
+					"sizesW" : ['25%', '50%','25%'],
+					"sizesH" : ['25%', '55%', '20%']
+				}
+			);
+
+	if (siteLayoutJson !='') {
+		preset_config = JSON.parse(siteLayoutJson);
+		preset_config.scaledWidth  = 570;
+		preset_config.scaledHeight  = 600;
+		preset_config.showChannels  = false;
+		preset_config.formatTable  = true;
+		preset_config.resizeCells  = true;
+		preset_config.showSizes  = true;
+		preset_config.onRebuild = function(){
+			var x = this;
+			$('#layout_json').text(JSON.stringify(simplify(x)));
+			$('#layout_width').val(this.width);
+			$('#layout_height').val(this.height);
+		}
+		$('#layout_width').val(preset_config.width);
+		$('#layout_height').val(preset_config.height);
+		presets[0] = preset_config;
+		gotoStep('step2');
+	} else {
+		preset_config = presets[0];
+		preset_config.scaledWidth  = 570;
+		preset_config.scaledHeight  = 600;
+		preset_config.width = $('#layout_width').val();
+		preset_config.height = $('#layout_height').val();
+		preset_config.onRebuild = function(){
+			var x = this;
+			$('#layout_json').text(JSON.stringify(simplify(x)));
+		} 
+		gotoStep('step1');
+	}
+
+	
+	$('#layout_width, #layout_height').change(function(){
+
+		if (parseInt($('#layout_width').val()) < 800) $('#layout_width').val(800);
+		if (parseInt($('#layout_height').val()) < 600) $('#layout_height').val(600);
+		if (parseInt($(this).val()) > 2500) $(this).val(2500);
+
+		var config = JSON.parse($('#layout_json').val());
+		config.width = parseInt($('#layout_width').val());
+		config.height = parseInt($('#layout_height').val());
+		config.scaledWidth  = 570;
+		config.scaledHeight  = 600;
+		config.onRebuild = function(){
+			var x = this;
+			$('#layout_json').text(JSON.stringify(simplify(x)));
+		}
+		$('#wizardHere').gridWizard(config);
+	});
+	preset_config.l = {
+		'split' : '{@split@}',
+		'px' : '{@px@}'
+		};
+	$('#wizardHere').gridWizard(preset_config);
+
+	$('.thumb')
+		.click(function(){
+			$('.thumb').removeClass('selectedThumb');
+			$(this).addClass('selectedThumb');
+	
+			preset_config = presets[parseInt($(this).attr('rel'))];
+			preset_config.width = $('#layout_width').val();
+			preset_config.height = $('#layout_height').val();
+			preset_config.scaledWidth  = 570;
+			preset_config.scaledHeight  = 600;
+			preset_config.onRebuild = function(){
+				var x = this;
+				$('#layout_json').text(JSON.stringify(simplify(x)));
+			}
+			$('#wizardHere').gridWizard(preset_config);
+	 	 });
+	})
+	.dblclick(function(e){
+		if ($(e.target).hasClass('thumbImg')) {
+			gotoStep('step2');
+		}
+	});
+
+var old_src;
+
+function upload_init(){
+    var button = $('#upload_button');
+
+    //alert();
+    new Ajax_upload(button, {
+       action: '<%SITEURL%><%INDEXPAGE%><%ROLE%>/edit_site/upload_image',
+       name: 'thumb_upload_file',
+       onSubmit : function(file, extension) {
+          old_src = $('#thumb_img').attr('src');
+          $('#thumb_img').attr('src', '<%SITEURL%><%IMAGEPATH%>thumbs/refresh.jpeg');
+       },
+       onComplete: function(file, response){
+    	   if (response.search('<!--Login'+'Page-->') == -1) {
+    		      try {
+   		    	   var upload_result = JSON.parse(response);
+    		      } catch (e) {
+        		      alert('{@Invalid server reply!@}');
+        		      return;
+    		      }
+               if (upload_result.error != null) {
+                  $('#thumb_img').attr('src', old_src);
+                  alert(upload_result.error);
+                  return;
+               }
+               var thumb_id = upload_result.id_image;
+               $('#thumb_img').attr('src', '<%SITEURL%><%IMAGEPATH%>thumbs/'+thumb_id+'.jpeg?ac='+Math.ceil(Math.random()*9999999));
+               $('#thumb_id').val(thumb_id);
+          } else {
+       	     document.location = '<%SITEURL%><%INDEXPAGE%><%ROLE%>/login';
+              return;
+          }
+       }
+    });	
+}
+
+function onShowCategoriesTree() {
+   var site_category_id = $('#category').val();
+   if (site_category_id) {
+      tree_selected_category_id = site_category_id;
+   } else {
+      tree_selected_category_id = 1;
+   }
+
+   set_active_category(tree_selected_category_id);
+}
+
+function getCategoryDescription(id) {
+    $('#info_category_description_container').addClass('loading').text('');
+    $.post("<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_categories/ajax_get_description",
+    	     {id_category: id},
+    	     function(data) {
+	        if (!checkAjaxLogin(data)) {
+	           setCategoryDescription(data); 
+	        }
+    });
+}
+
+function setCategoryDescription(server_response) {
+    try {
+      var response = JSON.parse(server_response);
+    } catch (e) {
+        alert('{@Invalid server reply!@}');
+        return;
+    }
+          if (response.result == "ok") {
+            $("#info_category_description_container").text(response.description);
+          } else {
+              alert('{@Error getting category description@}')
+          };
+          
+    $('#info_category_description_container').removeClass('loading');
+}
+
+function set_active_category(id) {
+   var eItem = $('#categories_tree_'+id);
+   $('#categories_tree span').removeClass('selected_item');
+   $(eItem).addClass('selected_item');
+   tree_selected_category_id = id;
+   getCategoryDescription(id);
+}
+
+function save_active_category() {
+   tb_remove();
+   var active_category_name = $('#categories_tree_'+tree_selected_category_id).text();
+   $('#category').val(tree_selected_category_id);
+   $('#selected_category_name').val(active_category_name);
+}
+
+function refreshThumb() {
+   $('#thumb_img').attr('src', '<%SITEURL%><%IMAGEPATH%>thumbs/refresh.jpeg');
+	$.post('<%SITEURL%><%INDEXPAGE%><%ROLE%>/edit_site/thumb',{url: $('#domain').val()},
+      function(data){	   
+			if (!checkAjaxLogin(data)) {  
+			   $('#thumb_img').attr('src', '<%SITEURL%><%IMAGEPATH%>thumbs/'+data+'.jpeg');
+			   $('#thumb_id').val(data);
+			}
+	   })		
+}
+//-->
+</script>
+
+<h1><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; {@<%FORM_TITLE%>@} <span class="green i"><%CURRENT_SITE_NAME%></span></h1>
+<form name="site_form" id="site_form" method="post">
+   <input type="hidden" name="id_channel">
+   <textarea name="layout_json" id="layout_json" style="display: none;"></textarea>
+   <input type="hidden" name="redirect_after_save" id="redirect_after_save" value="">
+   <div id="error_message_div"></div>
+   <div class="frame p10 mb10" id='layoutFrame'>
+      <table class='table'>
+         <tr class="pt10 top">
+            <td class="pt10 top w100">
+					<label for="domain">
+						<span class="required">{@Site URL@}:</span>
+					</label>
+				</td>
+				<td class="pt10 top">
+					<input type="text" id="domain" name="domain" class="w400 text">
+				</td>
+			</tr>
+			<tr class="pt10 top">
+				<td  class="pt10 top">
+					<label for="title">
+						<span class="required">{@Title@}:</span>
+					</label>
+				</td>
+				<td  class="pt10 top">
+					<input type="text" id="title" name="title" class="w400 text">
+				</td>
+			</tr>
+			<tr class="pt10 top">
+				<td class="pt10 top">
+					<label for="description">
+						<span class="required">{@Description@}:</span>
+					</label>
+				</td>
+				<td class="pt10 top">
+					<textarea rows="10" cols="45" id="description" name="description" class="w400 text"></textarea>
+				</td>
+			</tr>
+         
+			<tr class="pt10">
+				<td class="pt10">
+					<label for="category">
+						<span class="required">{@Category@}:</span>
+					</label>
+				</td>
+				<td class="pt10">
+						<input type="text" class="text" id="selected_category_name" disabled="disabled">
+						<input title="{@Choose@}" onclick="onShowCategoriesTree();" class="button thickbox w150 ml5 ffFix" type="button" value="{@Choose@}" alt="#TB_inline?height=330&width=550&inlineId=categories_tree_div&modal=true">
+						<input type="hidden" name="category" id="category">
+				</td>
+         </tr>
+
+         <tr>
+            <td class="pt10 top">
+               <label for="thumb">
+                  {@Thumb@}:
+               </label>
+            </td>
+            <td class="pt10">
+               <div id="site_thumb" class="h100">
+                  <img id="thumb_img" src="<%IMAGE%>" style="border: 1px; border-style: solid; border-color='black'; margin-right: 10px;">
+                  <input type="hidden" id="thumb_id" name="thumb_id" value="DEFAULT">
+               </div>
+			   
+               <div class="w65 h30 hidden abs" style="display:none;"><input type="file" class="opacity_0 w65 h30 hidden" name="thumb_upload_file" id="thumb_upload_file"></div>
+
+               <input id="upload_button" type="button" class="button" title="{@Upload@}" value="{@Upload@}">                                             
+			   <input title="{@Refresh@}" onclick="refreshThumb();" class="button ml10" type="button" value="{@Refresh@}">                              
+            
+			</td>
+         </tr>
+		</table>
+		<table class="table">
+			<tr class="top">
+				<td class="w640">
+					<h2>{@Layout@}<a class="ico ico-help h16 ml5" href='javascript:openHelpWindow();'></a></h2>
+					<div class="inlet p10" style="width: 640px;">
+						<div class="filterBox2 p10 mb10">
+							<table class="w100p" id="resTable">
+								<tr class="top">
+									<td>
+                                 <table>
+                                    <tr>
+                                        <td><label>{@Width@}:</label></td>
+                                        <td class="pl10"><input type="text" id="layout_width" class="text w50" value="1024"> {@px@}</td>
+                                    </tr>
+                                    <tr>
+                                       <td><label>{@Height@}:</label></td>
+                                       <td class="pl10"><input type="text"  id="layout_height"class="text w50" value="768"> {@px@}</td>
+                                    </tr>
+                                 </table>
+                              </td>
+                              <td>
+                                    <div class="hintBox w200">
+                                       {@Selected layout is an approximate view of your page/site@}
+                                    </div>
+                              </td>
+                           </tr>
+                       </table>
+						</div>						
+						
+   				<div class="tabsPanel">
+   					<span><a class="sel step1" href='#' onclick="return gotoStep('step1');">{@Layout Presets@}</a></span>
+   					<span><a class="step2" href='#' onclick="return gotoStep('step2');">{@Customize@}</a></span>
+   					
+   				</div>
+   				<div class="tabdiv h620" id='step1' >
+						<table class="table w100p" id='presetsTable'>
+                  	<tr>
+								<td><div class="thumb selectedThumb" rel=0><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/0.gif" alt="" width=170></div></td>
+                        <td><div class="thumb" rel=1><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/1.gif" alt="" width=170></div></td>
+      	               <td><div class="thumb" rel=2><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/2.gif" alt="" width=170></div></td>
+                     </tr>
+                     <tr>
+                        <td><div class="thumb" rel=3><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/3.gif" alt="" width=170></div></td>
+                        <td><div class="thumb" rel=4><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/4.gif" alt="" width=170></div></td>
+                        <td><div class="thumb" rel=5><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/5.gif" alt="" width=170></div></td>
+                     </tr>
+                     <tr>
+                        <td><div class="thumb" rel=6><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/6.gif" alt="" width=170></div></td>
+                        <td><div class="thumb" rel=7><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/7.gif" alt="" width=170></div></td>
+                        <td><div class="thumb" rel=8><img class='thumbImg' src="<%SITEURL%>/images/layouts_preview/8.gif" alt="" width=170></div></td>
+                     </tr>
+                  </table>
+   				</div>
+   				<div class="tabdiv hide h620" id='step2'>
+						<div class="pl10 pt10"><div id='wizardHere'></div></div>
+   				</div>				
+					</div>
+				</td>
+			</tr>
+		</table>
+
+					<button class="button"  type="submit"   title="{@Save@}"  value="{@<%APPLY_BTN_CAPTION%>@}">
+						<span class="ico ico-confirm">{@Save@}</span>
+					</button>
+					<button class="button ml5" type="button"  title="{@Cancel@}" value="{@Cancel@}"  onclick="go('<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels');" value="{@Cancel@}">
+						<span class="ico ico-cancel">{@Cancel@}</span>
+					</button>
+	</div>
+<div class="mt10 mb10 hintBox">
+	<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+</div>
+
+<div id="categories_tree_div" style="display:none" class="frameBorderless">
+	<div class='p20 frameBorderless h270'>
+		<table class="w100p">
+			<tr class="top">
+				<td class="w200">
+					<h2>{@Categories@}</h2>
+					<div class='ofa inlet h200'>
+						<%CATEGORIES_TREE%>
+					</div>
+				</td>
+				<td class="pl10 w345">
+					<h2>{@Description@}</h2>
+	                <div class="inlet h200" id="info_category_description_container">
+	                </div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="right pt10">
+							<button class="button w100"  type="button" value="{@OK@}" onclick="save_active_category();">
+								<span class="ico ico-confirm">{@OK@}</span>
+							</button>
+							<button class="button ml10"  type="button" value="{@Cancel@}" onclick="tb_remove();">
+								<span class="ico ico-cancel">{@Cancel@}</span>
+							</button>
+					   </div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+</form>

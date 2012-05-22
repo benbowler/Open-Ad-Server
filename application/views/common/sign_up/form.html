@@ -1,0 +1,203 @@
+<script type="text/javascript">
+<!--
+	function mode_click(){
+      mode = $('#upgrade_mode').attr('checked');
+      $('#upgrade_form').toggle(!!mode);
+      $('#sign_up_form').toggle(!mode);
+	}
+
+   $(
+      function(){
+         if(<%FORMMODE%>) {
+        	   $('#sign_up_mode').attr('checked', 'checked');
+         } else {
+         	$('#upgrade_mode').attr('checked', 'checked');
+         	$('#error_message_div','#upgrade_form').show();
+         }
+         mode_click();
+      }
+   );
+//-->
+</script>
+<h1><%FORMNAME%></h1>
+<%SELECTMODE%>
+<%UPGRADEFORM%>
+<form name="sign_up" method="post">
+   <input type="hidden" name="edit_code" value="<%IDENTITY%>">
+	<table class="w100p" cellpadding="0" cellspacing="0" id="sign_up_form">
+		<tr valign="top">
+			<td class="w100p">
+				<div id="error_message_div"></div>
+				<div class="frame">
+					<table cellspacing="10" cellpadding="0" class="">
+						<tr>
+							<td class="w150">
+								<label for="fn">
+									<span class="required">{@Full name@}:</span>
+								</label>
+							</td>
+							<td>
+								<input id="fn" type="text" name="name" class="text w200" tabindex="1">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="ml">
+									<span class="required">{@E-mail@}:</span>
+								</label>
+							</td>
+							<td>
+								<input id="ml" type="text" name="mail" class="text w200"  tabindex="2">
+							</td>
+						</tr><a name="password_begin"></a>
+						<tr>
+							<td>
+								<label for="pw">
+									<span class="required">{@Password@}:</span>
+								</label>
+							</td>
+							<td>
+								<input id="pw" type="password" name="password" class="text w200"  tabindex="3">
+							</td>
+						</tr>
+						<a name="password_end"></a>
+						<tr>
+							<td>
+							</td>
+							<td>
+								<a name="change_password_begin"></a>
+								<input alt="<%SITEURL%><%SROLE%>/change_pass/index/<%CODE%>?KeepThis=true&modal=true&TB_iframe=false&height=320&width=550" class="thickbox button w210" type="button" value="{@Change Password@}" >
+								<a name="change_password_end"></a>
+							</td>
+						</tr>
+						<a name="confirm_password_begin"></a>
+						<tr>
+							<td>
+								<label for="cp">
+									<span class="required">{@Confirm Password@}:</span>
+								</label>
+							</td>
+							<td>
+								<input id="cp" type="password" name="confirm" class="text w200" tabindex="4">
+							</td>
+						</tr><a name="confirm_password_end"></a>
+						<tr>
+							<td>
+								<label for="cn">
+									{@Country@}:
+								</label>
+							</td>
+							<td>
+								<select id="cn" name="country" class="w350" tabindex="5">
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="tz">
+									{@TimeZone@}:
+								</label>
+							</td>
+							<td>
+								<select id="tz" name="timezone" class="w350" tabindex="6">
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="ct">
+									{@City@}:
+								</label>
+							</td>
+							<td>
+								<input id="ct" type="text" name="city" class="text w200" tabindex="7">
+							</td>
+						</tr>
+                  <tr>
+                     <td>
+                        <label for="ct">
+                           <span class="">{@State@}:</span>
+                        </label>
+                     </td>
+                     <td>
+                        <input id="state" type="text" name="state" class="text w200" tabindex="8">
+                     </td>
+                  </tr>                  
+						<tr>
+							<td>
+								<label for="ad">
+									{@Address@}:
+								</label>
+							</td>
+							<td>
+								<textarea id="ad" name="address" class="text w200" tabindex="9">
+								</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="zp">
+									{@ZIP/Postal Code@}:
+								</label>
+							</td>
+							<td>
+								<input id="zp" type="text" name="zip_postal" class="text w200" tabindex="10">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="ph">
+									{@Phone #@}:
+								</label>
+							</td>
+							<td>
+								<input id="ph" type="text" name="phone" class="text w200" tabindex="11">
+							</td>
+						</tr>
+						<%COUPONS_SETTINGS%>
+						<tr>
+							<td class="vtop" colspan="2">
+								<a name="terms_and_conditions_begin"></a>
+                        <label>
+                           <span class="required">{@Our system applicants must agree the following Terms and Conditions@}</span>								   
+								</label>
+								<div class="scrollBox h130" id="tx">
+									<%TERMS%>
+								</div>
+								<div class="mt10">
+									<label for="lc">
+										<input id="lc" tabindex="12" name="agree" value="true" type="checkbox">&nbsp;{@I certify that I have read and agree with the these Terms and Conditions@}
+									</label>
+									<%NEEDAGREE%>									
+								</div><a name="terms_and_conditions_end"></a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+								<nobr>
+									<button class="button w200" tabindex="13" type="submit" title="<%BUTTONNAME%>" value="<%BUTTONNAME%>">
+										<span class="ico ico-confirm"><%BUTTONNAME%></span>
+									</button>&nbsp;
+                           <a name="cancel_button_begin"></a>
+									<button class="button w100 ml5"  tabindex="14" type="button" value="{@Cancel@}" title="{@Cancel@}" onclick="location='<%CANCEL%>'">
+										<span class="ico ico-cancel">{@Cancel@}</span>
+									</button>
+									<a name="cancel_button_end"></a>
+								</nobr>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="mt10 mb10 hintBox">
+					<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+				</div>
+			</td>
+			<!-- <td class='pl20'>
+			<div class="textInfo"><%INFO%></div>
+			</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td> -->
+		</tr>
+	</table>
+</form>

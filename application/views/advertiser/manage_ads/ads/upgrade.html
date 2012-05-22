@@ -1,0 +1,17 @@
+<h1 class="smaller"><a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads">{@Manage Ads@}</a> &rarr; <%TITLE%> &rarr; {@Upgrade@}</h1>
+<form id="upgrade_form" name="upgrade_form" method="post">
+   <input type="hidden" name="group_site_channel">
+   
+   <div id="error_message_div"></div>
+   <div class="frame p10">
+   <div class="hintBox2 p10 mb10"><div class="ico ico-infored"><%DESCRIPTION%></div></div>
+   <a name="submit_begin"></a>
+   <button class="button w100" title="{@Submit@}" id="okButton" value="{@Save@}" type="submit">
+      <span class="ico ico-confirm">{@Submit@}</span>
+   </button>
+   <a name="submit_end"></a>
+   <button class="button w100" title="{@Cancel@}" id="cancelButton" onclick="document.location='<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/group/<%CODE%>/channels'" value="{@Cancel@}" type="button">
+      <span class="ico ico-cancel">{@Cancel@}</span>
+   </button>
+   </div>
+</form>

@@ -1,0 +1,285 @@
+<script type="text/javascript">
+//<!--
+var BANNER = '';
+$(
+   function() {
+   
+  
+      if ($('#id_image').hasClass('invalidfield')) {
+    	  $('#id_image_div').addClass('invalidfield');
+      }
+
+	   var button = $('#upload_button');
+
+	   new Ajax_upload(button, {
+         action: '<%SITEURL%><%INDEXPAGE%><%CONTROLLER%>',
+         name: 'ad_image',
+         onSubmit : function(file, extension) {
+            $('#upload_process').show();
+            $('#uploaded_image_preview').hide();
+            $('#uploaded_swf_preview').hide();
+         },
+
+         onComplete: function(file, response){
+            $('#upload_process').hide();
+            if (response.search('<!--Login'+'Page-->') == -1) {
+               var upload_result = JSON.parse(response);
+               if (upload_result.error == null) {
+                  var id_image = upload_result.id_image;
+                  switch(upload_result.file_type) {
+			case 4:
+                        case 13:
+				$('#uploaded_swf_preview').html('');
+
+				var destination_url = $('#image_ad_destination_url').val();
+				if ('http' == $('#image_ad_destination_protocol').val()) {
+					destination_url = 'http://'+destination_url;
+				} else {
+					destination_url = 'https://'+destination_url; 
+				}
+            if ($('#bgcolor').val() == '') {
+              	$('#bgcolor').val('#FFFFFF');
+            }
+				
+            BANNER = '<%SITEURL%><%UPLOAD_IMAGE_DIR%>' + upload_result.id_image;
+					$('#uploaded_swf_preview').flash({
+						src: '<%SITEURL%>images/jquery_flash/loader_u_'+upload_result.img_w+'x'+upload_result.img_h+'.swf',
+						width: upload_result.img_w,
+						height: upload_result.img_h,
+						flashvars: { banner: '<%SITEURL%><%UPLOAD_IMAGE_DIR%>'+upload_result.id_image }
+						});
+								
+				$('#uploaded_swf_preview').show();
+				$('#img_w').val(upload_result.img_w);
+				$('#img_h').val(upload_result.img_h);
+				jQuery('#flash_banner').show();
+	                        $('#preview_td').show();
+                        break;
+			default:
+				
+    				$('#uploaded_image_preview').attr('src','<%SITEURL%><%UPLOAD_IMAGE_DIR%>'+upload_result.id_image).show();
+				   jQuery('#flash_banner').hide();
+				
+		  }
+		  
+ 		  fitAdDiv(upload_result.img_w,upload_result.img_h);
+		  $('#preview_td').show();
+		  
+		  
+                  $('#id_image').val(upload_result.id_image);
+                  $('#dimensions_list tr').removeClass('green').addClass('notgreen');
+                  $("#id_dimension").val(upload_result.id_dimension);
+                  $('#id_dim_'+upload_result.id_dimension).removeClass('notgreen').addClass('green');
+               } else {
+                  alert(upload_result.error);
+               }
+            } else {
+               document.location = '<%SITEURL%><%INDEXPAGE%>advertiser/login';
+            }
+         }
+      });
+
+      var id_image = $('#id_img_tmp').val();
+      if (id_image != '') {
+              var img_w = $('#img_w').val();
+              var img_h = $('#img_h').val();
+
+	      if(id_image.match(/\.swf$/i)) {
+              fitAdDiv(img_w,img_h);
+              if ($('#bgcolor').val() == '') {
+                 $('#bgcolor').val('#FFFFFF');
+              }
+				  var bgcolor = $('#bgcolor').val();
+              var destination_url = $('#image_ad_destination_url').val();
+              if ('http' == $('#image_ad_destination_protocol').val()) {
+            	  destination_url = 'http://'+destination_url;
+              } else {
+            	  destination_url = 'https://'+destination_url; 
+              }
+
+              BANNER = '<%SITEURL%><%IMAGE_DIR%>' + id_image;
+              $('#uploaded_swf_preview').flash({
+                  src: '<%SITEURL%>images/jquery_flash/loader_u_'+img_w+'x'+img_h+'.swf',
+                  width: img_w,
+                  height: img_h,
+                  bgcolor : bgcolor,
+                  flashvars: { banner: '<%SITEURL%><%IMAGE_DIR%>'+id_image }
+              });
+              
+	        $('#preview_td').show();
+				  jQuery('#flash_banner').show();
+	      } else { 
+	         fitAdDiv(img_w,img_h);
+		 
+	         $('#uploaded_image_preview').attr('src','<%SITEURL%><%IMAGE_DIR%>'+id_image);
+	         $('#uploaded_image_preview').show();
+				jQuery('#flash_banner').hide();
+		      $('#preview_td').show();
+	      }
+	    	  
+         if($('#id_dimension').val() != '') {
+		  $('#dimensions_list tr').removeClass('green').addClass('notgreen');
+        	  $('#id_dim_'+$('#id_dimension').val()).removeClass('notgreen').addClass('green');
+         }
+	 
+	 $('#id_image').val(id_image);
+	 
+      }
+   });
+
+function fitAdDiv(w,h){
+	if(w  > 480){ 
+	    $('#id_image_div').css({'overflow-x':'scroll'}); 
+	    $('#id_image_div').css({width: '550px'})
+	 }else{ 
+	    $('#id_image_div').css({'overflow-x':'hidden'}); 
+	    $('#id_image_div').css({width:(parseInt(w)+10) + 'px'});
+	 }
+	    				    
+	if(h > 300){ 
+	    $('#id_image_div').css({height:'300px'});
+    	 } else{ 
+	    $('#id_image_div').css({height:(parseInt(h)+20)+'px'}); 
+	 }
+
+
+}
+   
+   
+//-->
+</script>
+
+<form id="image_ad" name="image_ad" method="post">
+	<input type="hidden" name="review_mode" value="<%REVIEW_MODE%>">
+	<input type="hidden" name="id_group" value="">
+	<input type="hidden" name="id_dimension" id="id_dimension">
+	<input type="hidden" name="img_w" id="img_w" value="<%TMP_IMG_WIDTH%>">
+	<input type="hidden" name="img_h" id="img_h" value="<%TMP_IMG_HEIGHT%>">
+	<input type="hidden" name="id_img_tmp" id="id_img_tmp" value="<%TMP_IMG_SRC%>">
+
+	<div id="error_message_div"></div>
+	<input type="hidden" name="ad_type" value="image">
+	
+	<div class="p10 frameBorderless">
+
+
+	    <!-- Fields  -->
+	    <div class="sem_block">
+			<h2>{@Allowed Image Files Extensions@}: <%ALLOWED_EXTENSIONS%></h2>
+					
+					
+					
+					<table class="table" style="width: 600px;">
+						<tr>
+							<td><label for="image"><span class="required">{@Select an image from your computer@}</span></label></td>
+							<td><img id="upload_process" src="<%SITEURL%>images/loading.gif" style="display:none;"></td>
+							<td class="pl5">
+								<input type="file" class="file" name="ad_image" id="ad_image" style="display:none;">
+								<input id="upload_button" type="button" class="button w100" title="{@Upload@}" value="{@Upload@}">
+							</td>
+						</tr>
+						<tr>
+							<td><label for="title"><span class="required">{@Title@}:</span></label></td>
+							<td class="pl5"></td>
+							<td class="pl5"><input type = "text" class="text" name="title" id="image_ad_title"></td>
+						</tr>
+						<tr>
+							<td><label for="display_url"><span class="required">{@Display URL@}:</span></label></td>
+							<td class="pl5">http://</td>
+							<td class="pl5"><input type="text" class="text" name="display_url" id="image_ad_display_url" onchange="onDisplayUrlChange('image_ad');"></td>
+						</tr>
+						<tr>
+							<td><label for="image_ad_destination_url"><span class="required">{@Destination URL@}:</span></label></td>
+							<td class="pl5"><select id="image_ad_destination_protocol" name="destination_protocol"></select></td>
+							<td class="pl5"><input type="text" class="text" name="destination_url" id="image_ad_destination_url"></td>
+						</tr>
+					</table>
+
+
+		<!-- Image Preview -->
+		<div style="width: 550px;">
+    		    <div class="pl10 top" id="preview_td" style="display:none;">
+	    		<h2>{@Image@}</h2>
+			<div class="p10" id="id_image_div">
+				<img id="uploaded_image_preview" style="display:none;" >
+
+				<div id="uploaded_swf_preview" style="display:none;"></div>
+    				    <input type="hidden" name="id_image" id="id_image">
+			       </div>
+      		    </div>  
+		</div>      
+		<!-- End image -->
+
+      <div id="flash_banner" class="hide">
+         <br /><label for="bgcolor">{@Flash banner background color@}:</label>
+         <input type="text" name="bgcolor" id="bgcolor" size="7">
+         <div id="colorpicker"></div>
+      </div>
+					
+		</div>		
+		<!-- end fields -->
+		
+
+	    <!-- Required dims -->
+	    <div class="sem_block_right" style="margin-left: 90px;">
+		<h2>{@The size of your image must be one of the following@}, <a target="_blank" href="<%SITEURL%>help/advertiser/Topics/IDH_Topic480.htm">{@view example@}</a></h2>
+		<div class="p10" style="min-height: 100px;width: 450px;" >
+		<%REQIRED_DIMENSIONS%>			
+		</div>
+	   </div>	
+	    <!-- End dims -->
+
+	<div class="clr"></div>		
+	
+	</div>
+	
+</form>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var cp = jQuery.farbtastic('#colorpicker', function(color) {
+			jQuery('#bgcolor').val(color.toUpperCase());
+			jQuery('#bgcolor').trigger('change');
+		});
+		cp.setColor(jQuery('#bgcolor').val());
+	});
+    jQuery('#bgcolor').change(function() {
+      var id_image = $('#id_image').val();
+      if (id_image != '') {
+
+         if (id_image.match(/\.swf$/i)) {
+            var img_w = $('#img_w').val();
+            var img_h = $('#img_h').val();
+            var bgcolor = $('#bgcolor').val();
+            var destination_url = $('#image_ad_destination_url').val();
+            if ('http' == $('#image_ad_destination_protocol').val()) {
+               destination_url = 'http://' + destination_url;
+            } else {
+               destination_url = 'https://' + destination_url;
+            }
+
+            $('#uploaded_swf_preview').html("");
+            $('#uploaded_swf_preview').flash(
+                  {
+                     src : '<%SITEURL%>images/jquery_flash/loader_u_'
+                           + img_w + 'x' + img_h + '.swf',
+                     width : img_w,
+                     height : img_h,
+                     bgcolor : bgcolor,
+                     flashvars : {
+                        banner : BANNER
+                     }
+                  });
+
+            $('#uploaded_swf_preview').show();
+         } else {
+            $('#uploaded_image_preview').attr('src',
+                  '<%SITEURL%><%IMAGE_DIR%>' + id_image);
+            $('#uploaded_image_preview').show();
+         }
+
+         if ($('#id_dimension').val() != '') {
+            $('#id_dim_' + $('#id_dimension').val()).addClass('green');
+         }
+      }
+    });
+</script>

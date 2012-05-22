@@ -1,0 +1,157 @@
+<?php
+/**
+ * @file
+ * Displays Google orbitscriptsads ads on Drupal pages
+ *
+ * This is the core module of the orbitscriptsads package, with the Drupal hooks
+ * and other administrative functions.
+ */
+
+define('ORBITSCRIPTSADS_MANAGED_AD_BLOCK_DEFAULT', NULL);
+define('ORBITSCRIPTSADS_MANAGED_NUMBER_BLOCKS_DEFAULT', 0);
+
+/**
+ * Implementation of hook_menu().
+ */
+function orbitscriptsads_managed_menu() {
+  $items = array();
+
+  $items['admin/settings/orbitscriptsads/managed'] = array(
+    'title' => 'Managed Ads',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('orbitscriptsads_managed_form_table'),
+    'access arguments'  => array('administer orbitscriptsads'),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'orbitscriptsads_managed.admin.inc',
+  );
+  
+  $items['admin/settings/orbitscriptsads/addblock'] = array(
+    'title' => 'Add Block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('orbitscriptsads_managed_add_block_table'),
+    'access arguments'  => array('administer orbitscriptsads'),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'orbitscriptsads_managed.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Реализация hook_theme()
+ * Регистрируем функцию темизации формы orbitscriptsads_managed_form_table
+ */
+function orbitscriptsads_managed_theme()
+{
+    return array(
+        'orbitscriptsads_managed_form_table' => array('arguments' => array('form' => null)),
+    );
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function orbitscriptsads_managed_block($op = 'list', $delta = 0, $edit = array()) {
+  $block = NULL;
+	
+  switch ($op) {
+    case 'list':
+     $max = variable_get('orbitscriptsads_managed_last_block', 0);
+	 for ($count=0 ; $count <= $max ; $count++) {
+        if ($ad = variable_get('orbitscriptsads_managed_ad_block_'. $count, ORBITSCRIPTSADS_MANAGED_AD_BLOCK_DEFAULT)) {
+        	$edit = db_fetch_array(db_query("SELECT title FROM {blocks} WHERE module = '%s' AND delta = '%s'", 'orbitscriptsads_managed', $count));
+        	if (!empty($edit['title'])) {
+        	 	$title = $edit['title'];
+       		 } else {
+       		 	$title = $ad['channel_name'];
+       		 }
+       		 $block[$count]['info'] = $title;
+             $block[$count]['cache'] = BLOCK_NO_CACHE;
+        }
+      }
+      break;
+
+    case 'configure':
+      $ad = _orbitscriptsads_managed_get_block_config($delta);
+      return $form;
+
+    case 'save':
+      return;
+
+    case 'view':
+      if (_orbitscriptsads_page_match()) {
+        $ad = _orbitscriptsads_managed_get_block_config($delta);
+        $block['content'] = $ad;
+        //if (!empty($ad[3])) {
+        //  $block['content'] = "<div style='text-align:${ad[3]}'>${block['content']}</div>";
+        //}
+      }
+      break;
+    }
+  return $block;
+}
+
+/**
+ * Configuration of the provided block
+ *
+ * @param $delta
+ *   block number
+ * @return
+ *   array with the block configuration or FALSE if no such block was found
+ */
+function _orbitscriptsads_managed_get_block_config($delta = 0) {
+  if ($data = variable_get('orbitscriptsads_managed_ad_block_'. $delta, ORBITSCRIPTSADS_MANAGED_AD_BLOCK_DEFAULT)) {
+     	$output = "<script type=\"text/javascript\">
+ 			var sppc_site      = '".$data['site']."';
+    		var sppc_channel   = '".$data['channel']."';
+    		var sppc_dimension = '".$data['dimension']."';
+    		var sppc_width     = '".$data['width']."';
+    		var sppc_height    = '".$data['height']."';
+    		var sppc_palette   = '".$data['palette']."';
+    		var sppc_user      = '".$data['user']."';
+	</script>
+	<script type=\"text/javascript\" src=\"".$data['baseurl']."/show.js\"></script>";
+
+  	return $output;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Generates the orbitscriptsads ad
+ *
+ * @param $format
+ *   format of the ad
+ * @param $slot
+ *   Slot Id for the orbitscriptsads ad
+ * @return
+ *   JavaScript that embeds the Google orbitscriptsads ad
+ */
+function _orbitscriptsads_managed_get_ad($channelid,$palette = 1) {
+	$sites = variable_get('orbitscriptsads_channels', NULL);
+	
+	$userid = $sites['userid'];
+	unset($sites['userid']);
+	foreach ($sites as $idsite=>$channels) {
+        foreach ($channels['channels'] as $id=>$channel) {
+  			if ($id == $channelid) {
+				$settings = array (
+        				'site'=>$idsite,
+            			'channel'=>$id,
+            			'palette'=>$palette,
+            			'user'=> $userid,
+            			'width'=>$channel['width'],
+            			'height'=>$channel['height'],
+            			'dimension'=>$channel['dimension'],
+						'baseurl' => $channel['siteurl'],
+						'channel_name' => $channel['name']
+       				);
+			}
+        }
+    }
+	
+  return $settings;
+}

@@ -1,0 +1,91 @@
+<script type="text/javascript">
+//<!--
+	function setRangeType(type) {
+		if (document.getElementById("types").checked) {
+			document.getElementById("cld").disabled = false; 
+			document.getElementById("from").disabled = true; 
+			document.getElementById("to").disabled = true; 
+		} else { 	   
+			document.getElementById("cld").disabled = true; 
+			document.getElementById("from").disabled = false; 
+			document.getElementById("to").disabled = false; 
+		}
+	}
+	
+	//-->
+</script>
+<h1>{@Dashboard@}</h1>
+<table class="w100p vtop">
+   <tr class="top">
+      <td class="w450 top">      
+		<h2>{@Your balance:@}&nbsp;&nbsp;<span class='green'><%BALLANCE%></span><%USE_BONUS%><br />{@Your bonus:@}&nbsp;&nbsp;<span class='green'><%BONUS%></span><%/USE_BONUS%></h2>   
+		<%FORM%>
+         <div class="pb10">
+            <table class="w100p table">
+               <tr>
+                  <td>
+                     <h2>{@Total changes for the period@}:</h2>
+                  </td>
+                  <td align="right">
+                     <a class='more' href="<%SITEURL%><%INDEXPAGE%>advertiser/reports_center">{@more features...@}</a>
+                  </td>
+               </tr>
+            </table>         
+            <table class="w100p smplTable" border="0" rules="rows">
+               <tr>
+                  <td style="width:80%;">
+                     {@Total Spent@}
+                  </td>
+                  <td>
+                     <%TOTALSPENT%>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     {@Total Impressions@}
+                  </td>
+                  <td>
+                     <%TOTALIMPRESSIONS%>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     {@Total Clicks@}
+                  </td>
+                  <td>
+                     <%TOTALCLICKS%>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     {@CTR@} 
+                  </td>
+                  <td>
+                     <%CTR%>
+                  </td>
+               </tr>
+               <%ADDITIONAL_PERFORMANCE_FIELDS%>
+               <tr>
+                  <td>
+                     <%PERFORMANCE_FIELD_LABEL%> 
+                  </td>
+                  <td>
+                     <%PERFORMANCE_FIELD_VALUE%>
+                  </td>
+               </tr>
+               <%/ADDITIONAL_PERFORMANCE_FIELDS%>
+            </table>
+         </div>
+			<h2>{@Graphs for the period@}:</h2>
+         <div class="pr5"><%TABS%></div>
+         </td>
+      <td class="pl20 top">      
+         <%CAMPAIGNS%>         
+      </td>
+   </tr>
+</table>
+<script type="text/javascript">
+   //<!--
+      //setRangeType();
+   //-->
+</script>

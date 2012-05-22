@@ -1,0 +1,76 @@
+<script type="text/javascript">
+//<!--
+$(function() {
+	UpdateTextPreview();   	
+});
+
+function UpdateTextPreview() {
+	var title = $('#text_ad_title').val();
+	var description1 = $('#text_ad_description1').val().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;');
+	var description2 = $('#text_ad_description2').val().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;');
+	var display_url = $('#text_ad_display_url').val();
+	var destination_url = $('#text_ad_destination_url').val();
+	if ('' == title) title = '{@Title@}';
+	if ('' == description1) description1 = '{@Description 1@}';
+	if ('' == description2) description2 = '{@Description 2@}';
+	if ('' == display_url) display_url = 'example.com';
+	if ('' == destination_url) destination_url = 'example.com';
+   	$('#text_ad_example_title').text(title);
+	$('#text_ad_example_description1').html(description1);
+	$('#text_ad_example_description2').html(description2);
+	$('#text_ad_example_url').text(display_url);
+	$('#text_ad_example_title').attr('href',$('#text_ad_destination_protocol').val()+'://'+destination_url);
+	$('#text_ad_example_title').attr('target','_blank');
+}
+//-->
+</script>
+<form id="text_ad" name="text_ad" method="post">
+	<input type="hidden" name="review_mode" value="<%REVIEW_MODE%>">
+   <input type="hidden" name="id_group" value="">
+	
+	<div id="error_message_div"></div>
+
+	<div class="p10 frameBorderless">
+		<table class="table">
+			<tr class="top">
+				<td class="w450 top">
+					<input type="hidden" name="ad_type" value="text">
+					<table>
+						<tr>
+							<td><label for="text_ad_title"><span class="required">{@Title@}:</span></label></td>
+							<td class="pl10"></td>
+							<td><input type="text" class="text" name="title" id="text_ad_title" onkeyup="UpdateTextPreview();" onchange="UpdateTextPreview();"></td>
+						</tr>
+						<tr>
+							<td><label for="text_ad_description1"><span class="required">{@Description 1@}:</span></label></td>
+							<td class="pl10"></td>
+							<td><input type="text" class="text" name="description1" id="text_ad_description1" onkeyup="UpdateTextPreview();" onchange="UpdateTextPreview();"></td>
+						</tr>
+						<tr>
+							<td><label for="text_ad_description2"><span class="required">{@Description 2@}:</span></label></td>
+							<td class="pl10"></td>
+							<td><input type="text" class="text" name="description2" id="text_ad_description2" onkeyup="UpdateTextPreview();" onchange="UpdateTextPreview();"></td>
+						</tr>
+						<tr>
+							<td><label for="text_ad_display_url"><span class="required">{@Display URL@}:</span></label></td>
+							<td class="pl10">http://</td>
+							<td><input type="text" class="text" name="display_url" id="text_ad_display_url" onkeyup="UpdateTextPreview();" onchange="onDisplayUrlChange('text_ad');UpdateTextPreview();"></td>
+						</tr>
+						<tr>
+							<td><label for="text_ad_destination_url"><span class="required">{@Destination URL@}:</span></label></td>
+							<td class="pl10"><select id="text_ad_destination_protocol" class="w80" name="destination_protocol" onchange="UpdateTextPreview();"></select></td>
+							<td><input type="text" class="text" name="destination_url" id="text_ad_destination_url" onkeyup="UpdateTextPreview();" onchange="UpdateTextPreview();"></td>
+						</tr>
+					</table>
+
+				</td>
+				<td width="150"></td>
+				<td class="w300 top">
+					<h2>{@Example@}</h2>
+					<%TEXT_AD_EXAMPLE%>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</form>

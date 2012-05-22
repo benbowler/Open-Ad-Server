@@ -1,0 +1,51 @@
+<form id="bytecity_form_form" name="sign_up" method="post">
+	<table style="text-align: left;" class="w100p" cellpadding="0" cellspacing="0" id="sign_up_form">
+		<tr valign="top">
+			<td class="w100p">
+				<div id="error_message_div"></div>
+				<div class="frame">
+					<table cellspacing="10" cellpadding="0" class="">
+						<tr>
+							<td>
+								<label for="ml">
+									<span>{@E-mail@}:</span>
+								</label>
+							</td>
+							<td>
+								<input id="ml" type="text" name="mail" class="text w200"  tabindex="2">
+							</td>
+						</tr><a name="password_begin"></a>
+						<tr>
+							<td>
+								<label for="pw">
+									<span>{@Password@}:</span>
+								</label>
+							</td>
+							<td>
+								<input id="pw" type="password" name="password" class="text w200"  tabindex="3">
+							</td>
+						</tr>
+						<a name="password_end"></a>
+						<a name="confirm_password_begin"></a>
+						<tr>
+							<td>
+								<label for="cp">
+									<span>{@Confirm Password@}:</span>
+								</label>
+							</td>
+							<td>
+								<input id="cp" type="password" name="confirm" class="text w200" tabindex="4">
+								<input id="su" type="hidden" name="site_url" class="text w200" tabindex="5">
+								<input id="sn" type="hidden" name="site_name" class="text w200" tabindex="6">
+							</td>
+						</tr><a name="confirm_password_end"></a>
+					</table>
+				</div>
+				<div class="mt10 mb10 hintBox">
+					{@Аll fields is required@}.
+				</div>
+				<div>&nbsp;</div>
+			</td>
+		</tr>
+	</table>
+</form>

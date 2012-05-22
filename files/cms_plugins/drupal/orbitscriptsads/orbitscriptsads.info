@@ -1,0 +1,6 @@
+; Copyright 2010      OrbitScripts, LLC      http://orbitscripts.com
+
+name = <%SITE_NAME%> Ads Core
+description = Displays Ads by <%SITE_NAME%> on your site to earn revenue.
+package = <%SITE_NAME%> Ads
+core = 6.x

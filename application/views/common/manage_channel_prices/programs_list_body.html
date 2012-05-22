@@ -1,0 +1,70 @@
+<script type="text/javascript">
+//<!--
+$(function() {
+	  var ad_type = <%AD_TYPE%>;
+	  var img_prefix = 'txt';
+
+	  var textAllowed = (-1 != ad_type.indexOf('text')) ? true : false; 
+	  var imageAllowed = (-1 != ad_type.indexOf('image')) ? true : false;
+
+	  if (textAllowed) {
+		  if (imageAllowed) {
+			  img_prefix = 'txt_and_img_';
+		  } else {
+			  img_prefix = 'txt_';
+		  }
+	  }
+
+	  if (imageAllowed) {
+		  if (textAllowed) {
+			  img_prefix = 'txt_and_img_';
+		  } else {
+			  img_prefix = 'img_';
+		  }
+	  }
+
+	   $('#trigger_preview').attr('href','<%SITEURL%>images/dimensions_preview/'+img_prefix+'<%ID_DIMENSION%>.png');
+	   $('#trigger_preview').attr('title','<%DIMENSION_NAME%>');
+	   
+	   $("a[rel^='lightbox']").slimbox({/* Put custom options here */}, null, function(el) {
+           return (this == el) || ((this.rel.length > 8) && (this.rel == el.rel));
+        });
+});
+
+//-->
+</script>
+<h1><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; {@Manage prices for channel@}: <span class='green i'>&bdquo;<%CHANNEL_NAME%>&ldquo;</span></h1>
+<%NOTIFICATION%>
+<div class="frame p10 mb10">
+	<h2 class='underline'>{@Parameters of channel@}: <span class="green i">&bdquo;<%CHANNEL_NAME%>&ldquo;</span></h2>
+	<table>
+		<tr>
+			<td class="w150"><label>{@Ad Type@}:</label></td>
+			<td><div class="inlet p3"><%AD_TYPE_STRING%></div></td>
+			<td class="pl5" rowspan="3">
+				<div id='slots_preview_container'>
+				  <table class='table w100p frame p10 mt5'><tr><td align='center'><img src='<%SITEURL%>images/slots_preview/<%SLOTS_PREVIEW%>.gif'></td></tr></table>
+				</div>
+			</td>
+			<td class="pl5" rowspan="3">
+				<input id="format_preview" class="button"  type="button"  value="{@Preview Ad@}" onclick="$('#trigger_preview').click();"/>
+            <a id="trigger_preview" rel="lightbox" style="display:none;" href="#"></a>
+			</td>
+		</tr>
+		<tr>
+			<td class="w150"><label>{@Format@}:</label></td>
+			<td><div class="inlet p3"><%CHANNEL_DIMENSIONS%> (<%DIMENSION_NAME%>)</div></td>
+		</tr>
+		<tr>
+			<td class="w150"><label>{@Max Ad Slots@}:</label></td>
+			<td><div class="inlet p3"><%MAX_AD_SLOTS%></div></td>
+		</tr>
+	</table>
+</div>
+<%CPM_FORM%>
+<%FLAT_RATE_FORM%>
+<form>
+	<div class="mt10 right">
+		<input class="button" type="button"  title="{@Back to Manage Sites/Channels@}" onclick="location.href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'" value="{@Back to Manage Sites/Channels@}">
+	</div>
+</form>

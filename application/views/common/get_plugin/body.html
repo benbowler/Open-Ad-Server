@@ -1,0 +1,58 @@
+<script type="text/javascript">
+function submit_form(){         
+	if ($('#sites_list').val() == 0) {
+		$('#error').html('{@Please choose a site@}.');
+		$('#sites_list').addClass('invalidfield');
+	} else {
+		$('#sites').submit();
+	}
+}
+function refresh_apikey() {
+	if (confirm('Previously installed <%EXTENSION%>s will not work. You will need to manually enter the new API key for them. Are you sure?')) {
+	$.ajax({
+	       type: "GET",
+	       url: "<%SITEURL%><%INDEXPAGE%><%ROLE%>/get_plugin/new_apikey", 
+	       dataType: "html",
+	       success: function(html) {
+	          $("#apikey").html(html);
+	           }
+	       });
+	}
+}
+$(document).ready(function(){$("#sites_list :first").attr("disabled","disabled");});
+</script>
+
+
+	<h1><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; <span style="text-transform: capitalize;">{@Get <%SITENAME%> <%EXTENSION%> for <%CMS%>@}</span></h1>
+	
+	<div class="frame">
+	<table class="w100p" cellpadding="0" cellspacing="0" border="0" style="padding: 0 0 10px 10px;">
+		<tr>
+			<td colspan="2">
+				<div class="floatl pt2 f12px"><h2>{@How to display ads on <span style="text-transform: capitalize;"><%CMS%></span> based websites@}</h2></div>
+				<div class="floatr" style="height: 34px; background-color: #7a7977;">
+					<div class="floatr pl5 mt7"><input class="floatl guibutton ico ico-arrowreload" type="submit" id="regenerate" value="Regenerate" onclick="refresh_apikey();"></div>
+					<div id="apikey" style="color: white; margin-top: 9px;" class="f11px b pt2 floatr"><%API_KEY%></div>
+					<div style="color: white;" class="floatr mt8 pt2 f12px">Current API Key: &nbsp</div>
+					<div style="float: right; height: 34px; width: 12px; background-image: url('../../images/cms_plugins/api-right.png');"></div>
+				</div>
+			</td>
+			
+		</tr>
+		<tr>
+			<td>
+				<div class="mb20" >
+					<p>If your website works based on <%CMS%> systems, then you can easily add ads on your websites by using developed <%EXTENSION%>. After instalation of <%EXTENSION%> into your <%CMS%> by using the API  you can view available channels and color palettes and with a wet finger placed channels on your websites. Firstly you need to choose if you want to view in the administrative panel of your <%CMS%> channels of all websites or just from one website. If you have a lot of websites then we recommend you to select only one website.</p>
+				</div>
+			</td>
+		</tr>
+		<tr class="pt10">
+		</tr>
+		
+		<tr>
+			<td>
+					<%SITES_LIST%>
+			</td>
+		</tr>
+	</table>
+	</div>

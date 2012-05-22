@@ -1,0 +1,15 @@
+<div class='floatr pt10'>
+	<%CREATE_REPORTS_BUTTONS%>
+	<button class='createReportButton ml3' id='createReportButton' onclick="go('<%SITEURL%><%INDEXPAGE%><%REPORT_GROUP_CONTROLLER%>?openCreateForm=1');">
+		<span class='ico ico-createReportplus'><%TITLE%></span>
+	</button>	    
+	<%/CREATE_REPORTS_BUTTONS%>
+</div>
+<a name="create_report"></a>
+<h1>{@<%MENU_ITEM%>@}</h1>
+<%NOTIFICATION%>
+<h2>{@Reports@}:</h2>
+<input type="hidden" id='check_str' value='<%CHECKSTR%>'>
+<div>   
+   <%TABLE%>
+</div>

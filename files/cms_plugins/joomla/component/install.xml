@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="component" version="1.5.0">
+	<name>Orbitscripts Ads</name>
+	<!-- The following elements are optional and free of formatting conttraints -->
+	<creationDate>2010-11-10</creationDate>
+	<author><%SITE_NAME%></author>
+	<authorEmail></authorEmail>
+	<authorUrl><%BASE_URL%></authorUrl>
+	<copyright>All right reserved @<%SITE_NAME%></copyright>
+	<license>GNU/GPL</license>
+	<version>1.0</version>
+	<description>You CMS system will communicate with <%SITE_NAME%> system thru API, so always will have updated information about channels, their positions and color scheme.</description>
+    <!-- Parameters-->
+    <params>
+	    <param name="apikey" type="text" default="<%API_KEY%>" label="API key"></param>
+	    <param name="siteurl" type="text" default="<%BASE_URL%>" label="Site URL"></param>
+	    <param name="siteid" type="text" default="<%SITE_ID%>" label="Site ID"></param>
+	    <param name="channels" type="hidden"></param>
+	    <param name="palettes" type="hidden"></param>
+   </params>
+   <!-- Database-->
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">install.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file charset="utf8" driver="mysql">uninstall.sql</file>
+		</sql>
+	</uninstall>	
+
+	<!--Admin's files copy-->
+	<administration>
+		<menu img="components/com_orbitscriptsads/views/orbitscripts/img/orbitscriptsads16.png"><%SITE_NAME%> Ads</menu>
+		<files folder="admin">
+			<!-- Site Main File Copy Section -->
+			<filename>config.xml</filename>
+			<filename>install.sql</filename>
+			<filename>uninstall.sql</filename><filename>orbitscriptsads.php</filename>
+			<filename>controller.php</filename>
+			<filename>index.html</filename><filename>controllers/orbitscriptsads.php</filename><filename>controllers/orbitscriptsapi.php</filename>
+			<filename>controllers/index.html</filename><filename>models/orbitscripts.php</filename>
+			<filename>models/orbitscriptsads.php</filename>
+			<filename>models/index.html</filename>
+			<filename>views/orbitscripts/view.html.php</filename><filename>views/orbitscripts/index.html</filename><filename>views/orbitscripts/tmpl/default.php</filename>
+			<filename>views/orbitscripts/tmpl/index.html</filename><filename>views/orbitscriptsads/tmpl/form.php</filename><filename>views/orbitscriptsads/tmpl/index.html</filename>
+			<filename>views/orbitscripts/img/orbitscriptsads64.png</filename><filename>views/orbitscripts/img/orbitscriptsads16.png</filename><filename>views/orbitscripts/img/index.html</filename>
+			<filename>views/orbitscriptsads/view.html.php</filename><filename>views/orbitscriptsads/index.html</filename>
+			<filename>tables/orbitscriptsads.php</filename><filename>tables/index.html</filename>
+		</files>
+				
+	</administration>
+	
+	</install>

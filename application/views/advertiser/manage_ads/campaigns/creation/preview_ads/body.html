@@ -1,0 +1,64 @@
+<script type="text/javascript">
+//<!--
+function onSubmit() {
+	//document.location = "<%SITEURL%><%INDEXPAGE%><%NEXT_CONTROLLER_URL%>";
+   $('#preview_form').submit();
+}
+
+function EditAd(id) {
+	$('#action_form').attr("action","<%SITEURL%><%INDEXPAGE%><%EDIT_ADS_URL%>");
+	$('#form_action').remove();
+	$('#ad_id').val(id);
+	$('#action_form').submit();
+}
+
+function CreateAd() {
+	   $('#action_form').attr("action","<%SITEURL%><%INDEXPAGE%><%EDIT_ADS_URL%>");
+	   $('#form_action').remove();
+	   $('#ad_id').remove();
+	   $('#action_form').submit();
+}
+
+function DeleteAd(id) {
+	if (confirm('{@Delete Ad?@}')) {
+		   $('#form_action').val('delete');
+		   $('#ad_id').val(id);
+		   $('#action_form').submit();
+	}
+}
+//-->
+</script>
+
+<%PROGRESS_BAR%>
+<%ERROR_MESSAGE%>
+
+<form name="preview_form" id="preview_form" method="post">
+<input type="hidden" name="complete" value="1" />
+</form>
+
+<table class="w100p table">
+	<tr class="top">
+		<td>
+			<div class="frame p10 mb10 clearFix">
+		
+				<form id="action_form" name="action_form" method="post">
+					<input type="hidden" id="form_action" name="form_action">
+					<input type="hidden" id="ad_id" name="id">
+				</form>
+			   <div class="floatl mw150"><%ADS_PREVIEW%></div>
+			   <div class="clearBoth">
+			   <div class="pt10">
+			   	{@You can create additional ads for this ad group now if you wish. When you're satisfied with the ad(s) you've created, continue to the next page.@}
+			   </div>
+			   
+				<div class="pt5">
+			   	<a class='guibutton floatl ico ico-plusgreen' href="<%ADD_MORE_ADS_URL%>" value="{@Create new ad@}" title="{@Create new ad@}" onclick="CreateAd();">{@Create new ad@}</a>
+			   </div>
+			</div>
+		</td>
+		<!--  td class="w270 pl20">
+			<%CAMPAIGN_SCHEME%>
+		</td> -->
+	</tr>
+</table>
+ <%NAVIGATION_BAR%>

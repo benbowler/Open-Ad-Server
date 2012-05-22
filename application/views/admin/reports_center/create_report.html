@@ -1,0 +1,273 @@
+<script type="text/javascript">
+//<!--
+$(function(){
+	makeName();	makeName();	setColumns(); 
+	$('#repcreate_cld').change(function(){
+		makeName(); setColumns();
+	});
+
+	$('#repcreate_types, #repcreate_typer, #repcreate_from, #repcreate_to').change(function(){
+		makeName();
+	});
+
+	$('#repcreate_changeTrigger').change(
+		function() {
+			makeName();
+	});		 
+	                  
+	
+	if (gup('openCreateForm')) {
+		$('#createReportForm').toggle();
+		$('#createReportButton').toggle();
+	}
+
+   if (<%CREATEOPEN%>) {
+         $('#createReportForm').show();
+         $('#createReportButton').hide();
+   } 	 
+	
+});	
+
+function setPeriod() {
+   if ($('#repcreate_typer').attr('checked')) {
+  	   document.getElementById("repcreate_types").checked = true;		
+	}
+	makeName();
+}
+
+function getPeriod() {
+	if (document.getElementById("repcreate_types").checked) {
+		switch (document.getElementById("repcreate_cld").value) {
+		  <%PERIODCASE%>	
+		}
+	} else {
+		return document.getElementById("repcreate_from").value + "-" + document.getElementById("repcreate_to").value;
+	}
+}
+	
+var makeDefault = true;
+function makeName() {
+	if (makeDefault) {
+		document.getElementById("rep_n").value = 
+			document.getElementById("rep_type").options[
+				document.getElementById("rep_type").options.selectedIndex].text + 
+			" (" + getPeriod() + ") ";				  
+	}
+}
+	
+function setFlag() {
+	makeDefault = (document.getElementById("rep_n").value == "");
+	document.getElementById("defname").value = makeDefault ? 'true' : 'false'; 
+}
+
+function toggleManageColumns() {
+	if ($('#manageCols').hasClass('hide')) {			
+		$('#manageCols').removeClass('hide').addClass('show');
+	} else {
+		$('#manageCols').removeClass('show').addClass('hide');
+	}
+}
+	
+function setColumns() {
+	rt = document.getElementById("rep_type").value;
+	for (i=0; i<document.getElementById('rep_type').options.length; i++) {
+		vl = document.getElementById("rep_type").options[i].value;		  
+		document.getElementById("report_type_"+vl).style.display = (vl == rt)? 'block':'none';		  
+	}		
+} 
+
+function toggleColumn(id_col) {   
+	$('#save_defs, #rest_defs').guiEnable();
+	col = document.getElementById("col_"+id_col);
+	chb = document.getElementById("check_"+id_col);
+	if (chb.checked) {
+		col.style.display = '';
+	} else {
+		col.style.display = 'none';
+	}
+}
+
+function restoreDefs() {
+	$('#save_defs, #rest_defs').guiDisable();
+	rt = document.getElementById("rep_type").value;
+	vis = document.getElementById("vis_report_type_"+rt).value;
+	bit = 1;
+	for (i=0; i<document.getElementById('check_report_type_'+rt).rows.length; i++) {
+		//document.getElementById('row_report_type_'+rt).cells[i].style.display = (vis&bit)?'':'none'; 
+		name = document.getElementById('check_report_type_'+rt).rows[i].id;
+		document.getElementById('check_'+rt+'-'+name).checked = (vis&bit);
+		bit = bit<<1;			
+	}
+}
+	
+function makeNewVis() {
+	rt = document.getElementById("rep_type").value;
+	vis = 0;
+	bit = 1;
+	for (i=0; i<document.getElementById('check_report_type_'+rt).rows.length; i++) {
+		name = document.getElementById('check_report_type_'+rt).rows[i].id;
+		if (document.getElementById('check_'+rt+'-'+name).checked) {
+			vis = vis|bit;
+		} 
+		bit = bit<<1;			
+	}
+	document.getElementById("vis_report_type_"+rt).value = vis;
+	return vis;				
+}
+
+function saveDefs() {
+	if (!checkColumns()){
+        return;
+     }
+	$('#save_defs, #rest_defs').guiDisable();
+	  vis = makeNewVis();
+     rt = $("#rep_type").val();
+     $.post('<%SAVE_DEFAULTS_CONTROLLER%>',{id_report_type: rt, columns: vis}); 									
+}
+
+function checkColumns() {
+   if ($('input:checked',$('#check_report_type_'+$('#rep_type').val())).length == 0) {
+      alert('{@You must select at least one column!@}');
+      return false;
+   }
+   return true;
+}
+
+function createReport() {
+   if (!checkColumns()){      
+      return;
+   }
+	makeNewVis();
+	makeName();
+	document.forms['create_report'].submit();
+}
+
+   function resetReport() {
+      makeDefault = true;
+      $('#rep_type').val($('#rep_type>option:first').val());
+      restoreDefs();      
+      $('#repcreate_types').attr('checked', true);
+      $('#repcreate_cld').val('today');
+      $('#repcreate_callbackTrigger').change();
+      setColumns();
+      makeName();
+      $('#send').attr('checked', false);
+   }  
+
+   function cloneReport(code) {
+	      $('#createReportForm').show('slow');
+	      $('#createReportButton').hide('slow');
+	      $('#create_table').hide();
+	      $('#ajax').show();
+	      
+	      $.post('<%CLONE_REPORT_CONTROLLER%>',{code: code},function(response) {
+	    	  if (checkAjaxLogin(response)) return;
+	    	  cloneResponse(response);
+	          });
+
+	      location = "#create_report";                       
+	   }
+	   
+	function cloneResponse(response) {
+	         try {
+	             var report = JSON.parse(response);
+	             if (!report.isValid) {
+	                 alert('{@Report is not found@}');
+	                 return;
+	             }
+	         } catch (e) {
+	             alert('{@Invalid server reply!@}');
+	             return;
+	         }
+	         resetReport();
+	         $('#rep_type').val(report.type);
+	         setColumns();
+	         
+	         $('#repcreate_typer').attr('checked',true);
+	         $('#repcreate_from').val(report.from);
+	         $('#repcreate_to').val(report.to);
+	         
+	         cur_vis = $("#vis_report_type_"+report.type).val();
+	         $("#vis_report_type_"+report.type).val(report.vis);
+	         restoreDefs();
+	         $("#vis_report_type_"+report.type).val(cur_vis);                  
+
+	         $('#create_table').show();
+	         $('#repcreate_callbackTrigger').change(); 
+		     $('#ajax').hide();
+	         $('#rep_n').val(report.title); 
+	   }    
+//-->
+</script>
+<div id='createReportForm' class='hide'>
+	<div class="frame p10 mb10" id="cr_rep">
+		<a name="create_report"></a>
+		<h2 class='underline'>{@New Report@}</h2>
+<form name="create_report" method="post" id="fcrrep">
+	<input type="hidden" id="defname" name="defname" value="true">
+  
+	<table class="w100p" id="create_table" border="0">	
+		<tr class="top">
+			<td class="w50p top">
+		  
+		  	<table border="0">
+				<tbody>
+					<tr class="pt10">
+						<td class="pt10">
+							 <label for="rep_type">{@Report Type@}:&nbsp;&nbsp; </label>
+						</td>
+						<td class="pt10">
+							<select name="report_type" id="rep_type" class="w350"  onchange="setColumns(); makeName(); restoreDefs();"></select>
+						</td>
+					</tr>
+					<tr class="pt10">
+						<td class="pt10 w150">
+							 <label for="rep_n">{@Report Name@}:</label>
+						</td>
+						<td class="pt10">
+							  	<input id="rep_n" name="report_name" type="text"  class="w342 text" onchange="setFlag();" maxlength="100" />
+						</td>
+					</tr>
+					<tr class="pt10">
+						<td class="pt10">
+							 <label for="">{@Report Date Range@}:</label>
+						</td>
+						<td class="pt10"><%DATEFILTER%></td>
+					</tr>						
+					</tbody>
+			  </table>
+		
+			</td>
+			<td class="pl20 w50p top">
+				  <h3>{@Manage Columns@}</h3>
+				  <div class="p10 inlet" id="manageCols">
+				  	<table class='w100p table'>
+				  		<tr>
+				  			<td class="top">
+								  <div id="container2">
+									  <%MANAGECOLUMNS%>
+								  </div>
+								  <div id="container"></div>
+							</td>
+							<td class="top w200">
+									<input disabled="disabled" type="button" class="guibutton floatl center w200 mb3" id="save_defs" value="{@Save As Default@}" title="{@Save As Default@}" onclick="saveDefs();"/>
+								    <div class="h5"></div>
+									<input id="rest_defs" disabled="disabled" type="button" class="guibutton floatl center w200" value="{@Restore Defaults@}" title="{@Restore Defaults@}" onclick="restoreDefs();"/>
+							</td>
+						</tr>
+				
+					</table> 
+				  </div>
+					
+			</td>
+		</tr>	  		 
+	</table>
+	<br/>
+	<div class="right pt10">
+		<button type="button" class="button"  title="{@Create Report@}" onclick="createReport();"/><span class="ico ico-confirm">{@Create Report@}</span></button>
+		<button type="button" class="button ml5"  title="{@Cancel@}" onclick="resetReport();$('#createReportForm').toggle();$('#createReportButton').toggle();"/><span class="ico ico-cancel">{@Cancel@}</span></button>
+	</div>
+	
+</form>
+	</div>
+</div>

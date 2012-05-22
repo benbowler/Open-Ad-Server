@@ -1,0 +1,44 @@
+<h1><a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads">{@Manage Ads@}</a> &rarr; 
+    <a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/campaign/<%CAMPAIGN_CODE%>">{@Campaign@}:</a> <span class="green i">&bdquo;<%CAMPAIGN_NAME%>&ldquo;</span> &rarr; <%TITLE%></h1>
+
+<form id="group_form" name="group_form" method="post">
+	<input type="hidden" name="campaign">
+	<input type="hidden" name="group">
+	<table class="w100p table mb10">
+		<tr class="top">
+			<td>
+				<div id="error_message_div"></div>
+				<div class="frame p10">
+					<table>
+						<tr>
+							<td><label for="group_name"><span class="required">{@Group Name@}:</span></label></td>
+							<td class="pl10"><input type="text w300" class="text" name="group_name"></td>
+						</tr>
+						<a name="cpc_only_begin"></a>
+                  <tr>
+                     <td><label for="budget">{@Daily Budget@}, {@$@}:</label></td>
+                     <td class="pl10"><input type="text" class="text w100" name="budget" id="budget"></td>
+                  </tr>
+                  <a name="cpc_only_end"></a>
+						<tr>
+							<td>&nbsp;</td>
+							<td class="right pt10 pl10">
+								<button class="button w100" title="{@Save@}" id="okButton" value="{@Save@}" type="submit">
+									<span class="ico ico-confirm">{@Save@}</span>
+								</button>
+								<button class="button w100" title="{@Cancel@}" id="cancelButton" onclick="go('<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/campaign/<%CAMPAIGN_CODE%>')" value="{@Cancel@}" type="button">
+									<span class="ico ico-cancel">{@Cancel@}</span>
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="mt10 mb10 hintBox">
+				<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.</div>	
+			</td>
+			<td class="w270 pl20">
+				<%CAMPAIGN_SCHEME%>
+			</td>
+		</tr>
+	</table>
+</form>

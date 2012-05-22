@@ -1,0 +1,1238 @@
+.helpbody {
+   margin: 0;
+   font: normal 11px Tahoma;
+}
+
+.clr {
+   clear: both;
+}
+
+#header {
+   border-bottom: 2px solid #ccc;
+}
+
+#header .logo {
+   position: absolute;
+   z-index: 1;
+}
+
+#header .menu {
+}
+
+#header .menu ul {
+   display: block;
+   margin: 0;
+   padding: 0;
+}
+
+#header .menu ul li {
+   float: left;
+   display: block;
+}
+
+#header .menu ul.first {
+   background: #ccc;
+}
+
+#header .menu li a {
+   float: left;
+   padding: 1em;
+   text-decoration: none;
+   margin-right: 1px;
+   font: bold 1.1em Tahoma;
+}
+
+#header .topmenu {
+   background: #555;
+}
+
+#header .submenu {
+   background: #c3c3c3;
+	height: 36px;
+}
+
+#header .topmenu li a {
+   background: #333333;
+   color: #fff;
+}
+
+#header .topmenu li a:hover {
+   background: #444;
+}
+
+#header .topmenu li a.sel {
+   background: #666;
+}
+
+#header .submenu li a:hover {
+   background: #ccc;
+}
+
+#header .submenu li a.sel {
+   background: #eee;
+}
+
+#header .submenu li a {
+   background: #bbb;
+   color: #333;
+   font: normal 1em Tahoma;
+}
+
+#header .upanel {
+   position: absolute;
+   right: 20px;
+   border: 1px solid #ccc;
+   background: #eee;
+   padding: 5px;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+#header .upanel strong {
+   font-weight: bold;
+   padding-right: 5px;
+}
+
+#header .upanel a {
+   padding-left: 5px;
+}
+
+ul.text {
+   display: list-item;
+   line-height: 1.3em;
+}
+
+ul.text li {
+   color: #000;
+   list-style: disc outside;
+   margin-left: 1em;
+}
+
+.green {
+   color: green;
+}
+
+.silver{
+   color: #8a8a8a;
+}
+
+.hide {
+   display: none;
+}
+
+
+button.removeButtonB {
+   background: url('../images/design/icons.gif') 0px -198px no-repeat !important;
+}
+
+button.addButtonB {
+   background: url('../images/design/icons.gif') 0px -223px no-repeat !important;
+}
+
+button.optionsButtonB {
+   background: url('../images/design/icons.gif') 0px -73px no-repeat !important;
+}
+
+button.pauseButtonB {
+   background: url('../images/design/icons.gif') 0px -298px no-repeat !important;
+}
+button.rejectButtonB {
+  background: url('../images/design/icons.gif') 0px -720px no-repeat !important
+}
+
+button.resumeButtonB {
+   background: url('../images/design/icons.gif') 0px -323px no-repeat !important;
+}
+
+button.reportButtonB {
+   background: url('../images/design/icons.gif') 0px -248px no-repeat !important;
+}
+button.editButtonB {
+   background: url('../images/design/icons.gif') 0px -97px  no-repeat !important;
+}
+
+button.mailButtonB {
+   background: url('../images/design/icons.gif') 0px -144px no-repeat !important;
+}
+
+button.approveButtonB {
+   background: url('../images/design/icons.gif') 0px -348px no-repeat !important;
+}
+
+button.adsButtonB {
+   background: url('../images/design/icons.gif') 0px -370px no-repeat !important;
+}
+
+button.showButtonB {
+   background: url('../images/design/icons.gif') 0px -397px no-repeat !important;
+}
+
+button.hideButtonB { padding: 0.5em;
+   background: url('../images/design/icons.gif') 0px -421px no-repeat !important;
+}
+
+button.exportButtonB {
+   background: url('../images/design/icons.gif') 0px -448px no-repeat !important;
+}
+
+button.cloneButtonB {
+   background: url('../images/design/icons.gif') 0px -498px no-repeat !important;
+}
+button.csvButtonB {
+   background: url('../images/design/icons.gif') 0px -571px no-repeat !important;
+}
+button.excelButtonB {
+   background: url('../images/design/icons.gif') 0px -546px no-repeat !important;
+}
+button.loginButtonB {
+  background: url('../images/design/icons.gif') 0px -172px no-repeat !important;
+}
+
+input.i, textarea.i, div.i {
+   font: normal 11px Tahoma;
+   color: #333;
+   padding: 3px;
+   background: url("../images/design/in_shadow.gif") top left repeat-x #fff;
+   border: 1px solid #aaa;
+}
+
+
+.roller300 {
+   overflow: auto;
+   height: 100px;
+   padding: 10px;
+   width: 300px;
+}
+
+.roller250 {
+   overflow: auto;
+   height: 100px;
+   padding: 10px;
+   width: 250px;
+}
+
+.errorBox {
+   background: url("../images/design/error_bg.gif") top center repeat-x;
+   border: 1px solid #ff9999;
+   padding: 15px;
+}
+
+.errorBox .title, .infoBox .title, .helpBox .title {
+   position: relative;
+   top: -0.8em;
+   margin: 0em 0em 0em 0em !important;
+   padding: 0;
+   font: bold 11px Tahoma !important;
+   color: #333;
+}
+
+a.unread:link, a.unread:visited {
+   text-decoration:underline;
+   color: black !important;
+   font-weight: bold;
+}
+
+
+a.create_camp{
+	font-family: 'Arial';
+	font-weight:600;
+	font-size: 15px;
+	padding-top:10px;
+	padding-bottom:10px
+}
+.errorBox .title {
+   color: #c00;
+}
+
+.helpBox .title {
+   color: #880;
+}
+
+.infoBox {
+   background: url("../images/design/info_bg.gif") top center repeat-x;
+   position: relative;
+   border: 1px solid #99ccff;
+   padding: 15px;
+}
+
+.helpBox {
+   background: url("../images/design/help_bg.gif") top center repeat-x;
+   border: 1px solid #cccc00;
+   position: relative;
+   padding: 15px;
+   margin: 10px 0;
+}
+
+a.helpLink:link, a.helpLink:visited {
+   background: url('../images/design/help.gif') left center no-repeat;
+   padding: 2px 5px 2px 20px;
+   margin: -2px 0 -2px 0;
+   color: #689968;
+}
+
+.panel {
+   background: #fff;
+   border: 1px solid #ccc;
+}
+
+.panel_bg {
+   background: #ededed;
+   border: 1px solid #bbb;
+}
+
+* html .panel {
+	width: 220px;
+}
+
+.panel .title {
+   background: url('') top center repeat-x #eee;
+   padding: .5em;
+   border-bottom: 1px solid #ccc;
+   font: bold 1em Tahoma;
+   color: #333;
+}
+
+.flatPanel {
+   background: #fff;
+   border: 1px solid #ccc;
+}
+
+.flatPanel .title {
+   background: url('') top center repeat-x #eee;
+   padding: .5em;
+   border-bottom: 1px solid #ccc;
+   font: bold 1em Tahoma;
+   color: #333;
+}
+
+.x-form-trigger {
+   margin-top: expression( '1px' ); /*small hack for fucking IE*/
+}
+
+.editButton {
+   background: url('../images/design/icons.gif') 3px -97px no-repeat #eee !important;
+   padding: 3px 15px;
+
+}
+
+.addButton {
+   background: url(../images/design/icons.gif) no-repeat scroll 2px -222px #eee !important ;
+   padding: 3px 15px;
+
+}
+.removeButton {
+  background: url(../images/design/icons.gif) no-repeat scroll 2px -197px #eee !important;
+  padding: 3px 15px;
+
+}
+.mailButton {
+  background: url(../images/design/icons.gif) no-repeat scroll 2px -146px #eee !important;
+  position:relative;
+  margin-bottom: -2px;
+  top: 1px;
+
+}
+.adsButton {
+   background: url('../images/design/icons.gif') 1px -740px no-repeat !important;
+	width:20px;
+	height:22px;
+	position: relative;
+	margin-left: 2px;
+	top:3px;
+	top: expression('1px')
+}
+
+a.editButton:link, a.editButton:visited {
+   background: url('../images/design/icons.gif') 0px -99px no-repeat !important;
+   text-decoration: none;
+}
+
+.editLinkButton img {
+   background: url('../images/design/icons.gif') 0px -99px no-repeat !important;
+   width: 14px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.getCodeLinkButton img {
+   background: url('../images/design/icons.gif') 0px -625px no-repeat !important;
+   width: 14px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   right: 2px;
+   border: none;
+}
+
+.getLinkButton img {
+   background: url('../images/design/icons.gif') 0px -649px no-repeat !important;
+   width: 18px;
+   height: 17px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.prodLinkButton img {
+   background: url('../images/design/icons.gif') 0px -674px no-repeat !important;
+   width: 18px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.payLinkButton img {
+   background: url('../images/design/icons.gif') 0px -697px no-repeat !important;
+   width: 17px;
+   height: 17px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.rejectLinkButton img {
+   background: url('../images/design/icons.gif') 0px -720px no-repeat !important;
+   width: 18px;
+   height: 17px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+
+
+.cloneLinkButton img {
+   background: url('../images/design/icons.gif') 0px -500px no-repeat !important;
+   left:-0.3em;
+   width: 14px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+
+.addLinkButton img {
+   background: url('../images/design/icons.gif') 0px -97px no-repeat !important;
+   width: 14px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+
+.adsLinkButton img {
+   background: url('../images/design/icons.gif') 0px -372px no-repeat !important;
+   width: 14px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   border: none;
+   right:1px;
+}
+.loginLinkButton img {
+   background: url('../images/design/icons.gif') 0px -172px no-repeat !important;
+   width: 14px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.requestLinkButton img {
+   background: url('../images/design/icons.gif') 0px -771px no-repeat !important;
+   width: 18px;
+   height: 10px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.channelLinkButton img {
+   background: url('../images/design/icons.gif') 0px -787px no-repeat !important;
+   width: 18px;
+   height: 17px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.feedsLinkButton img {
+   background: url('../images/design/icons.gif') 0px -371px no-repeat !important;
+   width: 16px;
+   height: 17px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+.steps {
+   float: right;
+}
+
+.steps span {
+   padding: 5px;
+   margin-right: 2px;
+   background: #ccc;
+   font: bold 10px Tahoma;
+}
+
+.steps span a, .steps span a:link, .steps span a:visited {
+   font: bold 10px Tahoma;
+   text-decoration: none;
+   color: #000;
+}
+
+.steps span.sel a, .steps span.sel a:link, .steps span.sel a:visited {
+   font: bold 10px Tahoma;
+   text-decoration: none;
+   color: #fff;
+}
+
+.steps span.sel {
+   background: #777;
+   color: #fff;
+}
+
+.steps strong {
+   margin-right: 10px;
+}
+
+.way {
+   float: left;
+}
+
+.way span {
+   padding: 5px;
+   margin-left: 2px;
+   background: #ccc;
+   font: bold 10px Tahoma;
+}
+
+.way span a, .way span a:link, .way span a:visited {
+   font: bold 10px Tahoma;
+   text-decoration: none;
+   color: #000;
+}
+
+.way span.sel a, .way span.sel a:link, .way span.sel a:visited {
+   font: bold 10px Tahoma;
+   text-decoration: none;
+   color: #fff;
+}
+
+.way span.sel {
+   background: #777;
+   color: #fff;
+}
+
+.way_goog {
+   float: left;
+}
+
+.way_goog span {
+   padding: 5px;
+   margin-left: 2px;
+   font: 11px Arial;
+}
+
+.way_goog span a, .way_goog span a:link, .way_goog span a:visited {
+   font: 11px Arial;
+   text-decoration: none;
+   color: #000;
+}
+
+.way_goog span.sel a, .way_goog span.sel a:link, .way_goog span.sel a:visited {
+   font: 11px Arial;
+   text-decoration: none;
+   color: green;
+
+	}
+
+.way_goog span.sel {
+   color: #8e8888;
+		font: 11px verdana;
+}
+.triangle{
+	padding-top: 10px;
+}
+.triangle3 {
+	width: 700px;   border-top: 1px solid #808080;
+	padding-top: 10px;
+}
+.triangle2 {
+	width: 710px;   border-top: 1px solid #808080;
+	padding-top: 10px;
+}
+
+.tri_bg1{
+		background: url('../images/design/triangle.png') 58px 0px no-repeat !important;
+}
+.tri_bg2{
+		background: url('../images/design/triangle.png') 193px 0px no-repeat !important;
+}
+.tri_bg3{
+		background: url('../images/design/triangle.png') 338px 0px no-repeat !important;
+}
+.tri_bg31{
+		background: url('../images/design/triangle.png') 326px 0px no-repeat !important;
+}
+.tri_bg32{
+		background: url('../images/design/triangle.png') 330px 0px no-repeat !important;
+}
+.tri_bg4{
+		background: url('../images/design/triangle.png') 470px 0px no-repeat !important;
+}
+.tri_bg41{
+		background: url('../images/design/triangle.png') 435px 0px no-repeat !important;
+}
+.tri_bg42{
+		background: url('../images/design/triangle.png') 455px 0px no-repeat !important;
+}
+.tri_bg5{
+		background: url('../images/design/triangle.png') 565px 0px no-repeat !important;
+}
+.tri_bg6{
+		background: url('../images/design/triangle.png') 700px 0px no-repeat !important;
+}
+.tri_bg51{
+		background: url('../images/design/triangle.png') 580px 0px no-repeat !important;
+}
+.tri_bg52{
+		background: url('../images/design/triangle.png') 600px 0px no-repeat !important;
+}
+
+
+.vtop {
+   vertical-align: top;
+}
+
+.vbot {
+   vertical-align: bottom;
+}
+.vmid {
+	vertical-align:middle;
+}
+
+.stdTable {
+   border: 1px solid #888;
+   border-collapse: collapse;
+}
+
+.stdTable td {
+   padding: 0.5em;
+}
+
+.stdTable th {
+   background: #ececec;
+   text-align: center;
+   padding: 0px;
+}
+
+.gray {
+   background: #ececec;
+}
+
+.sBody {
+   display: inline;
+}
+
+.sBody .x-panel {
+   position: absolute;
+}
+
+.banner_code{
+	border-style:none;
+	border-right:solid;
+	border-right-width:1px;
+	border-color:black;
+}
+
+.search-title-link{
+	font-size:16px;
+}
+.search-url-link{
+	color: green;
+}
+textarea {
+   overflow: auto;
+}
+
+.radio {
+   position: relative;
+   /*top: 3px;*/
+   margin-right: 4px;
+}
+
+.z-index-fix {
+   position: relative;
+   z-index: 100;
+}
+
+.rel {
+   position: relative;;
+}
+
+.nw {
+   white-space: nowrap !important;
+}
+/* ----------------------------------------------------------------------------------------------------------------*/
+/* ---------->>> global settings needed for thickbox <<<-----------------------------------------------------------*/
+/* ----------------------------------------------------------------------------------------------------------------*/
+/* global */
+#cluetip-close img {
+   border: 0;
+}
+
+#cluetip-title {
+   overflow: hidden;
+}
+
+#cluetip-title #cluetip-close {
+   float: right;
+   position: relative;
+}
+
+#cluetip-waitimage {
+   width: 43px;
+   height: 11px;
+   position: absolute;
+   background-image: url(../images/design/wait.gif);
+}
+
+.cluetip-arrows {
+   display: none;
+   position: absolute;
+   top: 0;
+   left: -11px;
+   height: 22px;
+   width: 11px;
+   background-repeat: no-repeat;
+   background-position: 0 0;
+}
+
+#cluetip-extra {
+   display: none;
+}
+/***************************************
+ =cluetipClass: 'default'
+ -------------------------------------- */
+.cluetip-default {
+	background: #f6f3f0;
+}
+
+.cluetip-default #cluetip-outer {
+   position: relative;
+   font-size: 10px;
+   margin: 0;
+	border: 1px solid #e0dcd8 #b9babf #b9babf #e0dcd8;
+   background-color: #f6f3f0;
+}
+
+.cluetip-default h3#cluetip-title {
+	margin: 0 0 5px;
+	padding: 8px 10px 4px;
+	font-size: 10px;
+	font-weight: bold;
+	border: 1px solid #e0dcd8 #b9babf #b9babf #e0dcd8;
+   background-color: #f6f3f0;
+   color: #333;
+}
+
+.cluetip-default #cluetip-title a {
+   color: #d9d9c2;
+   font-size: 10px;
+}
+
+.cluetip-default #cluetip-inner {
+   padding: 10px;
+   text-align: center;
+}
+
+.cluetip-default div#cluetip-close {
+   text-align: right;
+   margin: 0 5px 5px;
+   color: #900;
+}
+
+.tooltip img {
+   width: 20px;
+   height: 20px;
+   background: url('../images/design/icons.gif') 0px -520px no-repeat !important;
+}
+
+.tooltip2 img{
+   width: 20px;
+   height: 20px;
+   background: url('../images/design/icons.gif') 0px -598px no-repeat !important;
+}
+
+
+/*
+*  Farbtastic
+*/
+
+.farbtastic {
+  position: relative;
+}
+.farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.farbtastic, .farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .color, .farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.farbtastic .wheel {
+  background: url('../images/colorp/wheel.png') no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .overlay {
+  background: url('../images/colorp/mask.png') no-repeat;
+}
+.farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+
+  background: url('../images/colorp/marker.png') no-repeat;
+}
+.greyBorder{
+	border: 1px solid #aaa;
+	padding: 3px;
+	font: normal 11px Tahoma;
+}
+
+.loginAsButton img {
+   background: url("../images/smartppc6/icons/ico-user-blue.png") no-repeat !important;
+   width: 16px;
+   height: 16px;
+   position: relative;
+   top: 2px;
+   border: none;
+}
+
+
+/**
+*/
+
+/* [OPTIONAL] -- may be used for either Ext.grid.GroupSummary / Ext.ux.grid.GridSummary plugins */
+.x-grid3-summary-row{border-left:1px solid #fff;border-right:1px solid #fff;color:#333;background:#f1f2f4;}
+.x-grid3-summary-row .x-grid3-cell-inner{font-weight:bold;padding-bottom:4px;}
+.x-grid3-cell-first .x-grid3-cell-inner{padding-left:16px;}
+.x-grid-hide-summary .x-grid3-summary-row{display:none;}
+.x-grid3-summary-msg{padding:4px 16px;font-weight:bold;}
+
+
+/* [REQUIRED] (by Ext.ux.grid.GridSummary plugin) */
+.x-grid3-gridsummary-row-inner{overflow:hidden;width:100%;}/* IE6 requires width:100% for hori. scroll to work */
+.x-grid3-gridsummary-row-offset{width:10000px;}
+.x-grid-hide-gridsummary .x-grid3-gridsummary-row-inner{display:none;}
+
+
+/* -----------------Ads ---------------------------*/
+
+    	body{
+    		font-family: Tahoma, Arial, Helvetica, sans-serif;
+			font-size: 11px;
+    	}
+		a {
+			color: #3774AA;
+			text-decoration: none;
+		}
+		a:hover {
+			color: #007CE6;
+			text-decoration: none;
+		}		
+
+		.pos{
+			position: absolute;
+			z-index: 100;
+			border-collapse: collapse;
+		}
+
+      .leftbord{
+    		background: transparent url('../images/ads/left-border.png') repeat-y;
+    	}
+		.rightbord{
+    		background: transparent url('../images/ads/right-border.png') repeat-y;
+    	}
+		.leftcorn{
+    		background: transparent url('../images/ads/leftcorn.png') no-repeat right top;
+    	}
+		.rightcorn{
+    		background: transparent url('../images/ads/rightcorn.png') no-repeat left top;
+    	}
+		.leftcorntop{
+    		background: transparent url('../images/ads/leftcorntop.png') no-repeat right bottom;
+    	}
+		.rightcorntop{
+    		background: transparent url('../images/ads/rightcorntop.png') no-repeat left bottom;;
+    	}
+
+
+       .reltop{
+			position: relative;
+			top: 15px;
+			z-index: 1000;
+       }
+		 .prebg{
+       	background: #4c4c4c;
+			height: 5px;
+			width: 100%;
+       }
+		 
+		.topbg{
+
+            background: transparent url('../images/ads/top-bg.png') repeat-x left bottom;
+			   height: 10px;
+				width: 100%;
+		}	
+		 
+		.botbg{
+
+            background: transparent url('../images/ads/bot-bg.png') repeat-x;
+			   height: 10px;
+				width: 100%;
+		}	
+		
+		
+		.topbgleft{
+    		background: transparent url('../images/ads/top-left.png') no-repeat left top;
+         padding-top: 45px;
+			position: relative;
+			top: 3px;
+    	}
+		.topbgright{
+    		background: transparent url('../images/ads/top-right.png') no-repeat right top;
+         padding-top: 45px;
+			position: relative;
+			top: 3px;
+    	}
+	  .topbgcenter{
+    		background: transparent url('../images/ads/top-center.png') no-repeat right top;
+         padding-top: 45px;
+			position: relative;
+			top: 3px;
+    	}
+		.botbgleft{
+    		background: transparent url('../images/ads/bot-left.png') no-repeat left top;
+			padding-bottom: 44px;
+			position: relative;
+			top: -3px;
+    	}
+		.botbgright{
+    		background: transparent url('../images/ads/bot-right.png') no-repeat right top;
+			padding-bottom: 44px;
+			position: relative;
+			top: -3px;
+    	}
+		
+		.prebot{
+			background: #dfdfdf;
+			height: 20px;
+         text-align: right;	
+		}
+		.prebotbot{
+			background: #dfdfdf;
+			height: 20px;
+         text-align: right;
+			position: relative;
+			top: -3px;	
+		}
+
+		.prebot a, .prebotbot a{
+			display: block;
+			padding: 2px 5px 0 0;
+		}
+		
+
+		a.xclose{
+			display:block;
+         background: transparent url('../images/ads/x.png') no-repeat -30px 0;					
+			height:27px;
+			width:31px;			
+			position:absolute;
+			right:-12px;
+			top:35px;
+		}
+		a:hover.xclose{
+			display: block;
+			background:transparent url('../images/ads/x.png') no-repeat scroll 0 0;	
+			height:27px;
+			width:31px;			
+			position:absolute;
+			right:-12px;
+			top:35px;
+		}
+		a.xclosetop{
+			display:block;
+         background: transparent url('../images/ads/x.png') no-repeat -30px 0;					
+			height:27px;
+			width:31px;			
+			float:right;
+			margin-right:-12px;		
+		}
+		a:hover.xclosetop{
+			display: block;
+			background:transparent url('../images/ads/x.png') no-repeat scroll 0 0;	
+			height:27px;
+			width:31px;			
+			float:right;
+			margin-right:-12px;			
+		}
+		
+		
+/*======================================thickbox.css ================================================*/		
+
+/* ----------------------------------------------------------------------------------------------------------------*/
+/* ---------->>> thickbox specific link and font settings <<<------------------------------------------------------*/
+/* ----------------------------------------------------------------------------------------------------------------*/
+#TB_window {
+   font: 12px Arial, Helvetica, sans-serif;
+   color: #333333;
+}
+
+#TB_secondLine {
+   font: 10px Arial, Helvetica, sans-serif;
+   color: #666666;
+}
+
+#TB_window a:link {
+   color: #666666;
+}
+
+#TB_window a:visited {
+   color: #666666;
+}
+
+#TB_window a:hover {
+   color: #000;
+}
+
+#TB_window a:active {
+   color: #666666;
+}
+
+#TB_window a:focus {
+   color: #666666;
+}
+/* ----------------------------------------------------------------------------------------------------------------*/
+/* ---------->>> thickbox settings <<<-----------------------------------------------------------------------------*/
+/* ----------------------------------------------------------------------------------------------------------------*/
+#TB_overlay {
+   position: fixed;
+   z-index: 100;
+   top: 0px;
+   left: 0px;
+   height: 100%;
+   width: 100%;
+}
+
+.TB_overlayMacFFBGHack {
+   background: url(../images/macFFBgHack.png) repeat;
+}
+
+.TB_overlayBG {
+   background-color: #000;
+   filter: alpha( opacity = 75 );
+   -moz-opacity:   0.75;
+   opacity:   0.75;
+}
+
+* html #TB_overlay { /* ie6 hack */
+   position: absolute;
+   height: expression( document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight:document.body.offsetHeight + 'px' );
+}
+
+#TB_window {
+   position: fixed;
+   background: #ffffff;
+   z-index: 102;
+   color: #000000;
+   display: none;
+   border: 4px solid #525252;
+   text-align: left;
+   top: 50%;
+   left: 50%;
+}
+
+* html #TB_window { /* ie6 hack */
+   position: absolute;
+   margin-top: expression( 0 - parseInt( this.offsetHeight / 2 ) + (TBWindowMargin = document.documentElement && document.documentElement.scrollTop || document.body.scrollTop ) + 'px' );
+}
+
+#TB_window img#TB_Image {
+   display: block;
+   margin: 15px 0 0 15px;
+   border-right: 1px solid #ccc;
+   border-bottom: 1px solid #ccc;
+   border-top: 1px solid #666;
+   border-left: 1px solid #666;
+}
+
+#TB_caption {
+   height: 25px;
+   padding: 7px 30px 10px 25px;
+   float: left;
+}
+
+#TB_closeWindow {
+   height: 25px;
+   padding: 11px 25px 10px 0;
+   float: right;
+}
+
+#TB_closeAjaxWindow {
+   padding: 7px 10px 5px 0;
+   margin-bottom: 1px;
+   text-align: right;
+   float: right;
+}
+
+#TB_ajaxWindowTitle {
+   float: left;
+   padding: 7px 0 5px 10px;
+   margin-bottom: 1px;
+}
+
+#TB_title {
+   background-color: #e8e8e8;
+   height: 27px;
+}
+
+#TB_ajaxContent {
+   clear: both;
+   padding: 2px 0px 2px 0px;
+   overflow: auto;
+   text-align: left;
+   line-height: 1.4em;
+}
+
+
+#TB_ajaxContent p {
+   padding: 5px 0px 5px 0px;
+}
+
+#TB_load {
+   position: fixed;
+   display: none;
+   height: 13px;
+   width: 208px;
+   z-index: 103;
+   top: 50%;
+   left: 50%;
+   margin: -6px 0 0 -104px; /* -height/2 0 0 -width/2 */
+}
+
+* html #TB_load { /* ie6 hack */
+   position: absolute;
+   margin-top: expression( 0 - parseInt( this
+
+.offsetHeight / 2 ) + (TBWindowMargin =
+
+document.documentElement && document.documentElement.scrollTop || document.body.scrollTop ) + 'px' );
+}
+
+#TB_HideSelect {
+   z-index: 99;
+   position: fixed;
+   top: 0;
+   left: 0;
+   background-color: #fff;
+   border: none;
+   filter: alpha( opacity = 0 );
+
+         -moz-opacity:0;
+
+         opacity:0;
+
+         height:100%;
+
+         width:100%;
+}
+
+* html #TB_HideSelect { /* ie6 hack */
+   position: absolute;
+   height: expression( document
+
+.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight:document.body.offsetHeight + 'px' );
+}
+
+#TB_iframeContent {
+   clear: both;
+   border: none;
+   margin-bottom: -1px;
+   margin-top: 1px;
+   _margin-bottom: 1px;
+}
+
+
+/******************************/
+
+#TB_window, #TB_ajaxContent {
+   background-color: #F6F3F0;
+}
+   #TB_window{
+      margin-top:-295px;
+	  
+	 /* height: 600px;
+	  border: 1px solid red;*/
+   }  
+	
+	
+
+/**
+ * jQuery Simple Dialog 
+ */
+.sd_container{
+ font-family: arial,helvetica,sans-serif;
+ margin:0;
+ padding: 10px;
+ position: absolute;
+ background-color: #fff;
+ border: solid 1px #ccc;
+ text-align:center;
+}
+.sd_header{
+ font-size: 125%;
+ font-weight:bold;
+ margin-bottom: 10px;
+}
+.sd_content{}
+.sd_footer{
+ color: #a0a0a0;
+ margin-top: 10px;
+}
+.sd_overlay{
+ position: absolute;
+ margin:0;
+ padding: 0;
+ top: 0;
+ left: 0;
+ background-color: #222;
+}
+.sd_loading{
+ background: url('indicator.gif') center no-repeat;
+ background-color: #fff;
+ height: 60px;
+ width: 60px;
+}
+.sd_closelabel{
+ position:absolute;
+ width:50px;
+ height:22px;
+ line-height:22px;
+ top:0;
+ left:0;
+ padding:5px;
+ text-align:center;
+ background-color:#ccc;
+}
+.sd_closelabel a {
+ text-decoration:none;
+ color: #222;
+ font-size: 12px;
+ font-weight:bold;
+}
+
+	

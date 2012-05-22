@@ -1,0 +1,48 @@
+<script type="text/javascript">
+//<!--
+   function viewReport(code) {
+      $('#view_code').val(code);
+      $('#view_form').submit();
+   }
+//-->
+</script>
+<form method="post" id="<%FORM_PREFIX%>_reqreports_form" name="<%FORM_PREFIX%>_reqreports_form">
+   <div class="filterBox">
+	   <table class="table">
+	      <tr>
+   	   	<td class="w100 right"><label>{@Select date range@}:</label></td>
+	         <td class="pl5">
+	            <%DATEFILTER%>
+				</td>
+	         <td class="pl10">
+	            <label for="type_filt" class="mb5">{@Filter by Report Type@}:</label>
+	            <select name="type_filt" id="type_filt"  class="">
+	            </select>
+	         </td>
+	         <td class="pl10 bottom pr10">
+	         	 <input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#<%FORM_PREFIX%>_reqreports_form').submit();"/>
+	         </td>
+	      </tr>
+	   </table>
+	</div>
+
+   <input type="hidden" id="<%FORM_PREFIX%>_reqreports_action" name="<%FORM_PREFIX%>_reqreports_action"/>
+	
+	<div class="frame">
+		<div class="outlet p5">
+      <%COLUMNS%>
+	   <%BUTTONST%>
+		<div class="inlet">
+			<%REPORTS%>
+		</div>                  
+      <!-- <%BUTTONSB%>  -->
+		<%PAGINATION%>
+		</div>                  
+	</div>                  
+</form>
+<form method="post" id="view_form" action="<%VIEW_REPORT_CONTROLLER%>">
+   <input type="hidden" id="view_code" name="view_code">
+   <input type="hidden" name="on_start" value="true">
+   <input type="hidden" name="from_page" value="<%MENUITEM%>">
+   <input type="hidden" name="from_controller" value="<%VIEW_FROM_CONTROLLER%>">
+</form>

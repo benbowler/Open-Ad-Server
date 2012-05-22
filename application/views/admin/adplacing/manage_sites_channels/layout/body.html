@@ -1,0 +1,94 @@
+<script type="text/javascript">
+
+function simplify(selfx) {
+	var x = {};
+	x.width = selfx.width;
+	x.height = selfx.height;
+	x.channels = selfx.channels;
+	x.sizesH = selfx.sizesH;
+	x.sizesW = selfx.sizesW;
+	x.id = selfx.id;
+	x.zones = selfx.zones;
+	return x;
+}
+
+$(function(){
+
+	try {
+		var layout = JSON.parse(siteLayoutJson);
+	} catch(e) {}
+
+	if (siteLayoutJson !='') {
+		layout = JSON.parse(siteLayoutJson);
+		layout.onRebuild = function(){
+			var layout = this;
+			$('#layout_json').text(JSON.stringify(simplify(layout)));
+		}
+		layout.formatTable = false;
+		layout.resizeCells = false;
+		layout.scaledWidth = 630;
+		layout.scaledHeight = 370;
+		layout.showChannels = true;
+		layout.callbackChannels = false;
+		layout.manageChannels = true;
+		
+		layout.foreignChannels = JSON.parse(siteChannelsJson);
+		layout.channelsContainerId = 'channels_list'
+
+			layout.l = {
+				'slots' : '{@slots@}',
+				'type' : '{@type@}',
+				'typeI' : '{@Image@}',
+				'typeT' : '{@Text@}',
+				'typeS' : '{@Search@}',
+				'typeR' : '{@Rich Media@}',
+				'typeIT' : '{@Text and Image@}',
+				'typeTR' : '{@Text and Rich Media@}',
+				'typeIR' : '{@Image and Rich Media@}',
+				'typeTIR' : '{@Text, Image and Rich Media@}',
+				'typeITXT': '{@In-Text@}'
+			};
+			
+		$('#wizardHere').gridWizard(layout);	
+	}
+});
+
+</script>
+<h1><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; {@Set Site Layout@}<span class="green i"> <%CURRENT_SITE_NAME%> </span></h1>
+<%NOTIFICATION%>
+<form id="hidden_form" method="post">
+<input type="hidden" id="id_site" name="id_site">
+<input type="hidden" id="id_channel" name="id_channel">
+</form>
+<form id="edit_site_channel_layout_form" name="edit_site_channel_layout_form" method="post">
+    <input type="hidden" id="edit_site_channel_layout_action" name="edit_site_channel_layout_action">
+    <textarea name="layout_json" id="layout_json" style="display: none;"></textarea>
+    
+    <div class="frame p10" id='layoutFrame'>
+    	<table class="w100p table mb10">
+    		<tr class="top">
+    			<td class="">
+    				<h2>{@Layout@}</h2>
+    				<div class="inlet p10 h400">
+	       			<div id='wizardHere'></div>
+	       		</div>
+    			</td>
+    			<td class="w250">
+	        		<div class="ml10">
+	        			<h2>{@Channels@}</h2>
+	        			<div id="channels_list"></div>
+	        			<div class="clr"></div>
+	        		</div>
+    			</td>
+    		</tr>
+    	</table>
+		<div>
+		    <button class="button"  type="submit"   title="{@Save@}"  value="{@<%APPLY_BTN_CAPTION%>@}">
+		        <span class="ico ico-confirm">{@Save@}</span>
+		    </button>
+		    <button class="button ml5" type="button"  title="{@Cancel@}" value="{@Cancel@}"  onclick="go('<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels');" value="{@Cancel@}">
+		        <span class="ico ico-cancel">{@Cancel@}</span>
+		    </button>        
+		</div>
+    </div>
+</form>

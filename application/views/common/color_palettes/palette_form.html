@@ -1,0 +1,309 @@
+<script type='text/javascript'>
+//<!--
+var id_current_color_palette;
+
+$(function(){
+	var f = $.farbtastic('#colorpicker');
+	var p = $('#colorpicker');
+	var selected;
+	$('.colorwell').each(function(){
+		f.linkTo(this);
+	}).focus(function(){
+		if (selected) {
+			$(selected).removeClass('colorwell-selected');
+		}
+		f.linkTo(this);
+		$(selected = this).addClass('colorwell-selected');
+	});
+	$("#background_color").focus();
+	id_current_color_palette = $('#palettes_list').val();
+	displayPreview();
+	getPaletteParams();
+});
+
+function deletePalette(){
+	if (confirm('{@Delete selected color palette?@}')) {
+		$.post("<%SITEURL%><%INDEXPAGE%><%ROLE%>/color_palettes/delete",{id_color_palette: id_current_color_palette},function(data) {
+			if (!checkAjaxLogin(data)) {
+				onDeletePaletteReply(data);
+			}
+		})
+	
+	}
+}
+
+function onDeletePaletteReply(data) {
+	try {
+		var response = JSON.parse(data);
+	} catch (e) {
+		alert('{@Invalid server reply@}');
+		return;
+	}
+
+	if ('OK' == response.result) {
+		alert('{@Color palette were successfully deleted@}');
+		$('#palettes_list').find("option[value="+response.id_palette+"]").remove();
+		getPaletteParams();
+	} else {
+		if ('' != response.message) {
+			alert(response.message);
+		}
+	}
+}
+
+function submitChanges(){
+	if ($('#tab_create').hasClass('sel')) {
+		$('#id_color_palette').val('');
+	} else {
+		$('#id_color_palette').val(id_current_color_palette);
+	}
+	$('#color_palette_form').submit();
+}
+
+function displayPreview(){
+	var template = $('#ads_preview_template').text();
+	
+	color = $("#border_color").val().replace('#', '');
+	template = template.replace('<%BORDER_COLOR%>', color);
+	
+	color = $("#background_color").val().replace('#', '');
+	template = template.replace('<%BACKGROUND_COLOR%>', color);
+	
+	color = $("#title_font_color").val().replace('#', '');
+	template = template.replace(/<%TITLE_COLOR%>/g, color);
+	template = template.replace(/<%TITLE_FONT_SIZE%>/g, $("#title_font_size").val());
+	template = template.replace(/<%TITLE_FONT_STYLE%>/g, $("#title_font_style").val());
+	template = template.replace(/<%TITLE_FONT_WEIGHT%>/g, $("#title_font_weight").val());
+	template = template.replace(/<%TITLE_FONT_NAME%>/g, $("#title_font :selected").text());
+   
+	color = $("#text_font_color").val().replace('#', '');
+	template = template.replace(/<%TEXT_COLOR%>/g, $("#text_font_color").val().replace('#', ''));
+	template = template.replace(/<%TEXT_FONT_SIZE%>/g, $("#text_font_size").val());
+	template = template.replace(/<%TEXT_FONT_STYLE%>/g, $("#text_font_style").val());
+	template = template.replace(/<%TEXT_FONT_WEIGHT%>/g, $("#text_font_weight").val());
+	template = template.replace(/<%TEXT_FONT_NAME%>/g, $("#text_font :selected").text());
+	
+	color = $("#url_font_color").val().replace('#', '');
+	template = template.replace(/<%URL_COLOR%>/g, color);
+	template = template.replace(/<%URL_FONT_SIZE%>/g, $("#url_font_size").val());
+	template = template.replace(/<%URL_FONT_STYLE%>/g, $("#url_font_style").val());
+	template = template.replace(/<%URL_FONT_WEIGHT%>/g, $("#url_font_weight").val());
+	template = template.replace(/<%URL_FONT_NAME%>/g, $("#url_font :selected").text());
+	
+	$('#ads_preview').html(template);
+	$("#ads_preview_loading").hide();
+	$("#ads_preview").show();
+}
+
+function switchBtnState(eNode){
+	if ($(eNode).hasClass('button_selected')) {
+		$(eNode).removeClass('button_selected');
+	} else {
+		$(eNode).addClass('button_selected');
+	}
+}
+
+function switchStyleBtnState(eNode, linkedId){
+	switchBtnState(eNode);
+	if ($(eNode).hasClass('button_selected')) {
+		$('#' + linkedId).val('italic');
+	} else {
+		$('#' + linkedId).val('normal');
+	}
+}
+
+function switchWeightBtnState(eNode, linkedId){
+	switchBtnState(eNode);
+	if ($(eNode).hasClass('button_selected')) {
+		$('#' + linkedId).val('bold');
+	} else {
+		$('#' + linkedId).val('normal');
+	}
+}
+
+function getPaletteParams(){
+	$("#ads_preview_loading").show();
+	$("#ads_preview").hide();
+	id_current_color_palette = $('#palettes_list').val();
+	 
+	$.post("<%SITEURL%><%INDEXPAGE%><%ROLE%>/color_palettes/get_palette",{id_palette: id_current_color_palette}, function(data) {
+			   if (!checkAjaxLogin(data)) {
+				   onGetPaletteParams(data);
+			   }
+		   });
+}
+
+function onGetPaletteParams(data){
+	   try {
+			var response = JSON.parse(data);
+	   }
+		catch (e) {
+			alert('{@Invalid server reply@}');
+			return;
+		}
+
+			if ('OK' == response.result) {
+				var palette_info = response.palette_info;
+				 
+				$("#border_color").val('#' + palette_info.border_color);
+				$("#background_color").val('#' + palette_info.background_color);
+				$("#title_font_color").val('#' + palette_info.title_color);
+				$("#text_font_color").val('#' + palette_info.text_color);
+				$("#url_font_color").val('#' + palette_info.url_color);
+				
+				$("#border_color").focus();
+				$("#text_font_color").focus();
+				$("#url_font_color").focus();
+				$("#title_font_color").focus();
+				$("#background_color").focus();
+				
+				$("#title_font").val(palette_info.title_id_font);
+				$("#text_font").val(palette_info.text_id_font);
+				$("#url_font").val(palette_info.url_id_font);
+				
+				$("#title_font_size").val(palette_info.title_font_size);
+				$("#text_font_size").val(palette_info.text_font_size);
+				$("#url_font_size").val(palette_info.url_font_size);
+				
+				$("#title_font_style").val(palette_info.title_font_style);
+				if ('italic' == palette_info.title_font_style) {
+					$('#title_font_style_btn').addClass('button_selected');
+				} else {
+					$('#title_font_style_btn').removeClass('button_selected');
+				}
+				$("#text_font_style").val(palette_info.text_font_style);
+				if ('italic' == palette_info.text_font_style) {
+					$('#text_font_style_btn').addClass('button_selected');
+				} else {
+					$('#text_font_style_btn').removeClass('button_selected');
+				}
+				$("#url_font_style").val(palette_info.url_font_style);
+				if ('italic' == palette_info.url_font_style) {
+					$('#url_font_style_btn').addClass('button_selected');
+				} else {
+					$('#url_font_style_btn').removeClass('button_selected');
+				}
+				
+				$("#title_font_weight").val(palette_info.title_font_weight);
+				if ('bold' == palette_info.title_font_weight) {
+					$('#title_font_weight_btn').addClass('button_selected');
+				} else {
+					$('#title_font_weight_btn').removeClass('button_selected');
+				}
+				$("#text_font_weight").val(palette_info.text_font_weight);
+				if ('bold' == palette_info.text_font_weight) {
+					$('#text_font_weight_btn').addClass('button_selected');
+				} else {
+					$('#text_font_weight_btn').removeClass('button_selected');
+				}
+				$("#url_font_weight").val(palette_info.url_font_weight);
+				if ('bold' == palette_info.url_font_weight) {
+					$('#url_font_weight_btn').addClass('button_selected');
+				} else {
+					$('#url_font_weight_btn').removeClass('button_selected');
+				}
+				
+				displayPreview();
+			} else {
+			  if ('' != response.message) {
+				  alert(response.message);
+			  }	
+			}
+}
+//-->
+</script> 
+<h1>{@Color Palettes@}</h1>
+<form name="color_palette_form" id="color_palette_form" method="post">
+	<input type="hidden" name="id_color_palette" id="id_color_palette">
+	<div id="error_message_div"></div>
+	
+	<div class="frame p10 mb10">
+		<table class="w100p table" border="0">
+			<tr class="top">
+				<td class="top">
+					<%PALETTE_TABS%>
+					<div class="inlet p5 mt10">
+						<div class='b mb10'>{@This sample will be changed according to selected parameters: logo and colors.@}</div>
+						<div>
+							<div id="ads_preview_loading" style="display:none;">
+								<img src="<%SITEURL%>images/loading.gif">
+							</div>
+							<div id="ads_preview">
+							</div>
+							<textarea id="ads_preview_template" style="display:none;">
+								<%PREVIEW_TEMPLATE%>
+							</textarea>
+						</div>
+					</div>
+				</td>
+				<td class="pl20 top" style="width:475px;">
+					<h2 class="underline">{@Palette settings@}</h2>
+					<table>
+						<tr>
+							<td>
+								<label for="title_font">{@Link Title@}:</label>
+								<select class='w100' id='title_font' name='title_font' onchange="displayPreview();"></select>
+								<select style="display:none;" id="title_font_size" name="title_font_size" onchange="displayPreview();"></select>
+								<input type="button" class="button w30" id="title_font_style_btn" onclick="switchStyleBtnState(this,'title_font_style'); displayPreview();" value="I">
+								<input type="button" class="button w30" id="title_font_weight_btn" onclick="switchWeightBtnState(this,'title_font_weight'); displayPreview();" value="B">
+								<input type="hidden" class="text" id="title_font_style" name="title_font_style" onchange="displayPreview();">
+								<input type="hidden" class="text" id="title_font_weight" name="title_font_weight" onchange="displayPreview();">
+								<input type="text" class="colorwell" id="title_font_color" name="title_font_color" onchange="displayPreview();">
+							</td>
+							<td rowspan=5 class="pl10">
+								<div id="colorpicker"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="text_font">{@Description color@}:</label>
+								<select class='w100' id="text_font" name="text_font" onchange="displayPreview();"></select>
+								<select style="display:none;" id="text_font_size" name="text_font_size" onchange="displayPreview();"></select>
+								<input type="button" class="button w30" id="text_font_style_btn" onclick="switchStyleBtnState(this,'text_font_style'); displayPreview();" value="I">
+								<input type="button" class="button w30" id="text_font_weight_btn" onclick="switchWeightBtnState(this,'text_font_weight'); displayPreview();" value="B">
+								<input type="hidden" id="text_font_style" name="text_font_style" onchange="displayPreview();">
+								<input type="hidden" id="text_font_weight" name="text_font_weight" onchange="displayPreview();">
+								<input type="text" class="colorwell" id="text_font_color" name="text_font_color" onchange="displayPreview();">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="url_font">{@URL color@}:</label>
+								<select class='w100' id="url_font" name="url_font" onchange="displayPreview();"></select>
+								<select style="display:none;" id="url_font_size" name="url_font_size" onchange="displayPreview();"></select>
+								<input  type="button" class="button w30" id="url_font_style_btn" onclick="switchStyleBtnState(this,'url_font_style'); displayPreview();" value="I">
+								<input  type="button" class="button w30" id="url_font_weight_btn" onclick="switchWeightBtnState(this,'url_font_weight'); displayPreview();" value="B">
+								<input type="hidden" id="url_font_style" name="url_font_style" onchange="displayPreview();">
+								<input type="hidden" id="url_font_weight" name="url_font_weight" onchange="displayPreview();">
+								<input type="text" class="colorwell" id="url_font_color" name="url_font_color" onchange="displayPreview();">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="background_color">{@Background color@}:</label>
+								<input type="text" class="colorwell" id="background_color" name="background_color" onchange="displayPreview();">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="border_color">{@Border color@}:</label>
+								<input type="text" class="colorwell" id="border_color" name="border_color" onchange="displayPreview();">
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td class="pl20 pt10 right">
+					<button class="button" onclick="submitChanges();" type="button" title="{@Save Changes@}">
+						<span class="ico ico-confirm">{@Save Changes@}</span>
+					</button>
+				</td>
+				<td class="pl20 pt10"></td>
+			</tr>
+		</table>
+	</div>
+	<div class="mt10 mb10 hintBox">
+		<span class="required">&nbsp;</span>&nbsp;&nbsp;&nbsp;- {@required fields@}.
+	</div>
+</form>

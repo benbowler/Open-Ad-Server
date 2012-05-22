@@ -1,0 +1,32 @@
+<%PROGRESS_BAR%>
+<%NOTIFICATION%>
+<form id="group_form" id="group_form" method="post">
+	<input type="hidden" name="review_mode" value="<%REVIEW_MODE%>">
+
+<table class="w100p table">
+	<tr class="top">
+		<td>
+			<div id="error_message_div"></div>
+			
+			<div class="frame p10">
+				<table class="w100p table">
+					<tr class="top">
+						<td class="w100"><label for="group_name" style="padding-top: 5px;"><span class="required">{@Group Name@}:</span></label></td>
+						<td class="pl10 pr10">
+							<input type="text" class="text w300" id="group_name" name="group_name">
+						</td>
+					</tr>
+				</table>
+			</div>
+				<%NAVIGATION_BAR%>
+			<div class="mt10 mb10 hintBox">
+				<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+		    </div>
+		
+		</td>
+		<td class="w270 pl20">
+			<%CAMPAIGN_SCHEME%>
+		</td> 
+	</tr>
+</table>
+</form>

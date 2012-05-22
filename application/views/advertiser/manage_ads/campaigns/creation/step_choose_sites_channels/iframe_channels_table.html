@@ -1,0 +1,39 @@
+<script type="text/javascript">
+//<!--  
+ $(function() {
+    $('#iframe_channels_form').find('.tooltip').each(function() {
+             var title = $(this).attr('title');
+             $(this).tooltip({ 
+                   delay: 0, 
+                   showURL: false,
+                   track: true, 
+                   bodyHandler: function() {
+                       var tooltip_content = $("<div/>");
+                       var caption = $("<div/>").text(title);
+                       var image = $("<img/>").attr("src", $(this).attr('href'));
+                       $(caption).addClass('tooltipCaption');
+                       $(tooltip_content).append(caption);
+                       $(tooltip_content).append(image);
+                       return tooltip_content; 
+                   }
+             });
+         });
+ }); 
+//-->
+</script>
+<!-- h2>{@Channels@}</h2-->
+<div class=" inlet">
+	<form id="iframe_channels_form" name="choose_sites_channels_channel_form" method="post">
+		<input type="hidden" id="choose_sites_channels_channel_action" name="action">
+      <input type="hidden" id="filter_mode" name="filter_mode">
+      <input type="hidden" id="id_category" name="id_category">
+      <input type="hidden" id="id_site" name="id_site">
+      <input type="hidden" id="price" name="price">
+      <input type="hidden" id="price_program" name="price_program">
+      <input type="hidden" id="ads_type" name="ads_type">
+      <input type="submit" style="display:none;">
+		<div class="inlet">
+			<%CHANNELS_TABLE%>
+		</div>
+	</form>
+</div>

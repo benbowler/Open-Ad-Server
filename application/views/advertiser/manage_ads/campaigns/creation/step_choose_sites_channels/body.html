@@ -1,0 +1,552 @@
+<script type="text/javascript">
+//<!--
+var money_format = '<%MONEYFORMAT%>';
+var number_format = '<%NUMBERFORMAT%>';
+var dec_digits = new Number(number_format.charAt(0));
+var dot_char = number_format.charAt(1);
+var thousand_separator = number_format.charAt(2);
+
+function str_to_float(float_str){
+    chars = '0123456789'+dot_char+thousand_separator;
+    len = float_str.length;
+    if (len == 0) {
+       return Number.NaN;
+    }
+    digits = 0;
+    dec_part = true;
+    for (i = len-1; i >= 0; i--) {         
+       pos = chars.indexOf(float_str.charAt(i));
+       if (pos == -1) {
+          return Number.NaN;        
+       } else if (pos < 10) {
+          digits ++;
+       } else if (pos == 10) {
+          if (!dec_part) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       } else {
+          if (digits != 3) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       }
+    }
+    float_str = float_str.replace(dot_char, '.');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    return new Number(float_str);
+ }
+
+function float_to_str(float_number){      
+    num_string = float_number.toFixed(dec_digits);
+    num_string =  num_string.replace('.', dot_char);
+    pos = num_string.indexOf(dot_char);
+    len = num_string.length;
+    if (pos == -1) {
+       pos = len; 
+    }
+    pos--;
+    digits = 0;
+    num_str = '';      
+    for (i = pos; i >= 0; i-=3) {
+       if (num_str != '') {
+          num_str = thousand_separator+num_str;
+       }
+       start = i-2;
+       if (start < 0) {
+          start = 0;
+       }
+       num_str = num_string.substring(start,i+1)+num_str;
+    }
+    if (pos+1 != len) {
+       num_str = num_str+num_string.substring(pos+1,len);
+    }         
+    return num_str;     
+ }
+
+
+
+var added_sites_channels_ids = [];
+
+function ChangePriceFilterType(new_type) {
+	   if ('cpm' == new_type) {
+	      $('#price_filter_cpm').attr('checked','checked');
+	   }
+	   if ('flat_rate' == new_type) {
+	         $('#price_filter_flat_rate').attr('checked','checked');
+	      }
+	}
+
+	function UpdatePriceField() {
+	    var price_val;
+	    
+	    if ($('#price_filter_cpm:checked').length) {
+	       price_val = str_to_float($('#price_cpm').val());
+	       $('#price_cpm').val(float_to_str(price_val));
+	    }
+
+	    if ($('#price_filter_flat_rate:checked').length) {
+	       price_val = str_to_float($('#price_flat_rate').val());
+	       $('#price_flat_rate').val(float_to_str(price_val));
+	    }
+	 }
+
+function UpdateAddedSitesChannelsInfo() {
+	added_sites_channels_ids = [];
+	$('#just_added_channels_container').find('tr[id_site_channel]').each(function () {
+		added_sites_channels_ids[$(this).attr('id_site_channel')] = true;
+	});
+
+	$('#before_added_channels_container').find('tr[id_site_channel]').each(function () {
+	      added_sites_channels_ids[$(this).attr('id_site_channel')] = true;
+	});
+
+	$("#sites_container").find('tr[id_site_channel]').each(function () {
+		var id_site_channel = $(this).attr('id_site_channel');
+		$(this).find('table').each(function () {
+			if ($(this).hasClass('xBtn')) {
+				if (added_sites_channels_ids[id_site_channel]) {
+					if($(this).parent().find('span.added_label').length == 0) {
+						   $(this).parent().append('<span class="added_label">{@Channel_Added@}</span>');
+					}
+					$(this).hide();
+				} else {
+					$(this).parent().find('span.added_label').remove();
+					$(this).show();
+				}
+			}
+		});
+	});
+}
+
+var old_tab = '';
+
+function tabs_click(tab) {
+	if (old_tab != '') {
+		$('#tab_div_'+old_tab).hide();     
+		$('#tab_'+old_tab).removeClass('sel');               
+		$('#tab_'+old_tab).parent().removeClass('sel');               
+	}
+	$('#tab_div_'+tab).show();        
+	$('#tab_'+tab).addClass('sel');             
+	$('#tab_'+tab).parent().addClass('sel');             
+	old_tab = tab;
+	return false;
+}
+ 
+$(function(){
+
+	tabs_click('by_category_div');
+	$('#categories_tree').treeview({animated: "fast"});
+	$('#categories_tree').removeClass('hide');
+
+
+	getBeforeAddedSitesChannels();
+	getJustAddedSitesChannels();
+});
+
+function getBeforeAddedSitesChannels() {
+	$('#before_added_channels_table_process').show();
+	var before_added_channels_container = $("#before_added_channels_container");
+	before_added_channels_container.attr('src','#');
+	before_added_channels_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/get_old_added_channels"><input id="submit" type="submit"></form>');
+	before_added_channels_container.activateJFrame();
+	before_added_channels_container.find("#submit").click();  
+}
+
+function getJustAddedSitesChannels() {
+	 $('#just_added_channels_table_process').show();
+	 var just_added_channels_container = $("#just_added_channels_container"); 
+	 just_added_channels_container.attr('src','#');
+	 just_added_channels_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/get_added_channels"><input id="submit" type="submit"></form>');
+	 just_added_channels_container.activateJFrame();
+	 just_added_channels_container.find("#submit").click();  
+}
+
+function post_checkSitesChannelsRequirements() {
+	req.open("POST", "<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/check_sites_channels_requirements", true);     
+	req.onreadystatechange = checkSitesChannelsRequirements;
+	req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	req.send('');
+}
+
+function checkSitesChannelsRequirements() {
+	 if (req.readyState != 4) return;
+	    if (req.status == 200) {
+	      if (!checkAjaxLogin(req.responseText)) { 
+	          var response = JSON.parse(req.responseText);
+	          if (false == response.error_flag) {
+	        	   $('#choose_sites_channels_form').attr('action','<%SITEURL%><%INDEXPAGE%><%NEXT_STEP_CONTROLLER%>');
+	        	   $('#choose_sites_channels_form').submit();
+	          } else
+	          {alert(response.error_message)}
+	      }
+	    }   
+}
+
+function onSubmit() {
+	post_checkSitesChannelsRequirements();
+}
+
+function SwitchExpander(id, eItem) {
+	var table = $(eItem).parents('tbody');
+	
+	if ($(eItem).hasClass('plus')) {
+		$(table).children('#tr'+id).show();
+		$(eItem).removeClass('plus');
+		$(eItem).addClass('minus');
+	} else {
+		$(table).children('#tr'+id).hide();
+		$(eItem).addClass('plus');
+		$(eItem).removeClass('minus');
+	}
+}
+
+function getCategoryDescription(id,target_tab) {
+    $('#loading_category_description_info').show();
+    $("#info_category_description").text('');
+    req.open("POST", "<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/ajax_get_category_description", true);    
+
+    req.onreadystatechange = setCategoryDescription; 
+
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    req.send('id_category=' + id);      
+}
+
+function setCategoryDescription() {
+	 if (req.readyState != 4) return;
+	    if (req.status == 200) {
+	      if (!checkAjaxLogin(req.responseText)) { 
+	          var response = JSON.parse(req.responseText);
+	          if (response.result == "ok") {
+
+	                  $("#info_category_description").text(response.description);
+
+	          } else
+	          {alert('{@Error getting category description@}')};
+
+	             $('#loading_category_description_info').hide();
+	      }
+	    }  
+	}
+
+function set_active_category(id,eItem) {
+	$('#categories_tree span').removeClass('selected_item');
+   $(eItem).addClass('selected_item');
+   getCategoryDescription(id,'site');
+   getSitesByCategory(id);
+}
+
+function set_active_tab(id, tab) {
+	$('#by_category_div').hide();
+	$('#by_channel_category_div').hide();
+	$('#by_name_div').hide();
+	$('#by_price_div').hide();
+	$('#'+id).show();
+	$('.tabtd').removeClass('currentTab');
+	$('.'+tab).addClass('currentTab');
+}
+
+function onSitesTableLoad() {
+	  if(!checkAjaxLogin($('#sites_container').html())) {
+		  replaceFormButtons($('#sites_container').document); 
+		  UpdateAddedSitesChannelsInfo();
+		  $('#sites_table_process').hide();
+		  $('#sites_container').show();
+	  }
+}
+
+function onJustAddedSitesChannelsTableLoad() {
+	   if(!checkAjaxLogin($('#just_added_channels_container').html())) {
+		   replaceFormButtons($('#just_added_channels_container').document); 
+		   UpdateAddedSitesChannelsInfo();
+		   $('#just_added_channels_table_process').hide();
+	   }
+}
+
+function onBeforeAddedSitesChannelsTableLoad() {
+    if(!checkAjaxLogin($('#before_added_channels_container').html())) {
+       replaceFormButtons($('#before_added_channels_container').document); 
+       UpdateAddedSitesChannelsInfo();
+       $('#before_added_channels_table_process').hide();
+    }
+}
+
+function getSitesByCategory(id_category) {
+	   $('#sites_table_process').show();
+	   var sites_container = $("#sites_container"); 
+	   sites_container.hide();
+	   sites_container.attr('src','#');
+	   sites_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/sites_table"><input id="submit" type="submit"><input id="filter_mode" name="filter_mode"><input id="id_category" name="id_category"></form>');
+	   sites_container.find("#filter_mode").val('by_category');
+	   sites_container.find("#id_category").val(id_category);
+	   sites_container.activateJFrame();
+	   sites_container.find("#submit").click(); 
+	}
+
+function getSitesByPrice() {
+
+	   var price;
+	   var price_program;
+	   var active_input;
+	    
+	    if ($('#price_filter_cpm:checked').length) {
+	       price_program = 'cpm';
+	       active_input = $('#price_cpm');
+	       ads_type = $('#cpm_ads_type').val();
+
+	       if ($("#price_flat_rate").hasClass('invalidfield')) {
+	           $("#price_flat_rate").removeClass('invalidfield');
+	           $("#price_flat_rate").next('p.errorP:first').remove();
+	       }
+	    } else {
+	       price_program = 'flat_rate';
+	       active_input =  $('#price_flat_rate');
+	       ads_type = $('#flat_rate_ads_type').val();
+
+	       if ($("#price_cpm").hasClass('invalidfield')) {
+	           $("#price_cpm").removeClass('invalidfield');
+	           $("#price_cpm").next('p.errorP:first').remove();
+	       }
+	    }
+
+	    price = $(active_input).val();
+
+	    if (isNaN(str_to_float(price))) {
+	       if (false == $(active_input).hasClass('invalidfield')) {
+	         $(active_input).addClass('invalidfield'); 
+	         $('<p class="errorP">{@Incorrect price value specified!@}</p>').insertAfter(active_input);   
+	       }
+	       $(active_input).focus();
+	       return false;
+	    } else {
+	      UpdatePriceField();
+	      if ($(active_input).hasClass('invalidfield')) {
+	          $(active_input).removeClass('invalidfield');
+	          $(active_input).next('p.errorP:first').remove();
+	        }
+	    }
+
+	    $('#sites_table_process').show();
+	    var sites_container = $("#sites_container");
+	    sites_container.hide(); 
+	    sites_container.attr('src','#');
+	    sites_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/sites_table"><input id="submit" type="submit"><input id="filter_mode" name="filter_mode"><input id="price_program" name="price_program"><input id="price" name="price"><input id="ads_type" name="ads_type"></form>');
+	    sites_container.find("#filter_mode").val('by_price');
+	    sites_container.find("#price_program").val(price_program);
+	    sites_container.find("#price").val(price);
+	    sites_container.find("#ads_type").val(ads_type);
+	    sites_container.activateJFrame();
+	    sites_container.find("#submit").click();
+	}
+
+function addSiteChannelToGroup(id_site_channel) {
+	$('#just_added_channels_table_process').show();
+	
+	req.open("POST", '<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/add_site_channel', true);     
+	req.onreadystatechange = onGetReplyOnAddSiteChannelToGroup;
+	req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	req.send('&id_site_channel='+encodeURIComponent(id_site_channel));
+}
+
+function onGetReplyOnAddSiteChannelToGroup() {
+	if (req.readyState != 4) return;
+	   if (req.status == 200) {
+	      if(!checkAjaxLogin(req.responseText)) {
+	         $('#sites_list').removeOption(/./);
+	         var response = JSON.parse(req.responseText);
+	         if (response != null) {
+	            if (response.error_flag) {
+	            	$('#just_added_channels_table_process').hide();
+		            alert(response.message);
+	            } else {
+	            	$("#just_added_channels_container").find("#submit").click();
+	            }
+	         }
+	      }
+	   }
+}
+
+function deleteNewSiteChannelFromGroup(id_site_channel) {
+
+       $('#just_added_channels_table_process').show();
+
+       req.open("POST", '<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_choose_sites_channels/del_site_channel', true);     
+       req.onreadystatechange = onGetReplyOnDeleteSiteChannelFromGroup;
+       req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+       req.send('&id_site_channel='+encodeURIComponent(id_site_channel));
+ }
+
+function onGetReplyOnDeleteSiteChannelFromGroup() {
+	   if (req.readyState != 4) return;
+	      if (req.status == 200) {
+	         if(!checkAjaxLogin(req.responseText)) {
+	            $('#sites_list').removeOption(/./);
+	            var response = JSON.parse(req.responseText);
+	            if (response != null) {
+	               if (response.error_flag) {
+	            	   $('#just_added_channels_table_process').hide();
+	                  alert(response.message);
+	               } else {
+	                  $("#just_added_channels_container").find("#submit").click();
+	               }
+	            }
+	         }
+	      }
+	}
+
+
+//-->
+</script>
+
+<%FORM_TITLE%>
+<%PROGRESS_BAR%>
+<%NOTIFICATION%>
+<table class="w100p table">
+	<tr class="top">
+		<td class="top">
+			<form name="choose_sites_channels_form" id="choose_sites_channels_form" method="post">
+				<div id="error_message_div"></div>
+				<input type="hidden" id="review_mode" name="review_mode" value="<%REVIEW_MODE%>">
+			</form>
+			<div class="tabsPanel">
+				 <span >
+					<a id="tab_by_category_div" href="#" onclick="return tabs_click('by_category_div');">{@Choose by Site Category@}</a>
+			    </span>
+				 <span>
+					<a id="tab_by_price_div" href="#" onclick="return tabs_click('by_price_div');">{@Find By Price@}</a>
+			    </span>
+			</div>
+							
+			<div class="tabdiv" id='tab_div_by_category_div'>
+				<div class="p10 frameBorderless">
+					<table class="table w100p" border="0">
+		               <tr>
+		                  <td class="w200">
+		                     <h2>{@Categories@}</h2>
+		                     <div class="h200 w200 inlet" style="overflow: auto;">
+		                       <%CATEGORIES_TREE%>
+		                     </div>
+		                  </td>
+		                  <td class="pl10">
+		                     
+		                     <h2>{@Description@} <img id="loading_category_description_info" src="<%SITEURL%>images/loading.gif" style="display:none"></h2>
+		                     <div class="inlet h200" style="overflow: auto;">
+		                        <div id="info_category_description" class="p10"></div>
+		                      </div>
+		                  </td>
+		               </tr>
+		            </table>
+            	</div>
+      		</div>
+
+			<div class="tabdiv hide" id='tab_div_by_price_div'>
+				<div class="p10 frameBorderless" align="center">
+					<table class="">
+						<tr class="middle">
+							<td class="right middle">
+								<input class="radio" type="radio" name="price_filter_type" id="price_filter_cpm" value="cpm" checked>
+							</td>
+							<td class="w80 left">
+								<label for="price_filter_cpm">{@CPM@}</label>
+							</td>
+							<td class="pl5 right pt3 mw100 pr20">
+								{@less or equals@}
+							</td>
+							<td class="b pl5">{@$@}&nbsp;</td>
+							<td>
+								<input class="text w150" type="text" id="price_cpm" onfocus="ChangePriceFilterType('cpm');">
+							</td>
+							<td class="pl5 right b">
+								{@per 1K@}
+							</td>
+							<td class="pl5">
+								<select id="cpm_ads_type"  class='mw150'>
+									<option value="text">{@Text Ad@}</option>
+									<option value="image">{@Image Ad@}</option> 
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan=7 style="height:4px;"></td>
+						</tr>
+						<tr class="">
+							<td class="right">
+								<input class="radio" type="radio" name="price_filter_type" id="price_filter_flat_rate" value="flat_rate">
+							</td>
+							<td class="w80 left">
+								<label for="price_filter_flat_rate">{@Flat Rate@}</label>
+							</td>
+							<td class="pl5 right pt3 mw100 pr20">
+								{@less or equals@}
+							</td>
+							<td class="b pl5">{@$@}&nbsp;</td>
+							<td>
+								<input class="text w150" type="text" id="price_flat_rate" onfocus="ChangePriceFilterType('flat_rate');">
+							</td>
+							<td class="pl5 right b">
+								{@per day@}
+							</td>
+							<td class="pl5">
+								<select id="flat_rate_ads_type" class='mw150'>
+									<option value="text">{@Text Ad@}</option>
+									<option value="image">{@Image Ad@}</option> 
+								</select>
+							</td>
+						</tr>
+					</table> 
+					<div class="pt10"><input class="button" id="get_sites_by_price_btn" type="button" title="{@Get aviable channels@}" value="{@Get aviable channels@}" onclick="getSitesByPrice();"></div>
+				</div>
+			</div>
+
+			<div class="frame mt10 mb10 p10">
+				<table class="w100p">
+					<tr class="top">
+						<td>
+							<h2 class="pt0">{@Channels@}</h2>
+							<div class="center"><img style="display: none;" src="<%SITEURL%>images/loading_animation.gif" id="sites_table_process"/></div>
+							<div id="sites_container" class="w100p" src="#" onload="onSitesTableLoad();"></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<%NAVIGATION_BAR%>
+
+		</td>
+		<td class="pl20 w270 top">
+			<!--  <%CAMPAIGN_SCHEME%>  -->
+			<h2 class="pt0" style="padding-bottom: 2px;" ><span class="required">{@Added Channels@}</span></h2>
+		
+			<table class="frame mb5 w100p" cellpadding="0" cellspacing="0" <%HIDE_OLD_SITES_CHANNELS%>><tr><td class="p5">
+	            <label class="p3">{@Before Added Channels@}</label>
+	            <img style="display: none;" src="<%SITEURL%>images/loading_animation.gif" id="before_added_channels_table_process"/>
+	            <div id="before_added_channels_container" src="#" onload="onBeforeAddedSitesChannelsTableLoad();"></div>
+			</td></tr></table>
+			
+			<table class="frame mb10 mt20 w100p" cellpadding="0" cellspacing="0"><tr><td class="p5">
+	               <label class="p3">{@Just Added Channels@}</label>
+	               <img style="display: none;" src="<%SITEURL%>images/loading_animation.gif" id="just_added_channels_table_process"/>
+	               <div id="just_added_channels_container" src="#" onload="onJustAddedSitesChannelsTableLoad();"></div>
+			</td></tr></table>
+	
+	        <div id="hidenext"><%NAVIGATION_BAR%></div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<div class="mt10 mb10 hintBox">
+				<span class="required">&nbsp;</span>&nbsp;&nbsp;&nbsp;- {@required fields@}.
+			</div>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+$(function(){
+	$('#hidenext .ico-cancel').parent().hide();
+});
+</script>

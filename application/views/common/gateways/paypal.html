@@ -1,0 +1,55 @@
+
+	<form name="paypal" method="post">
+      <div id="error_message_div"></div>
+      <div id="layoutFrame" class="frame p10 mb10">
+	   <input type="hidden" id="fund_comm" value="<%COMMISSION%>">
+		<table cellpadding="10" cellspacing="10" style="border-collapse: separate">
+         <tr>
+            <td class='w180'>
+               <label for="pg">{@Payment gateway@}:</label>
+            </td>
+            <td>
+               <input type="text" id="pg_input" class="p3 w200" autocomplete="off" readonly="" tabindex="0" value ="PayPal">
+            </td>
+         </tr>
+			<tr>
+				<td class="w180">
+					<label for="am1">
+						<span class="required">{@Amount@}:</span>
+					</label>
+				</td>
+				<td class="w300">
+					<input type="text" id="am" name="amount" class="text w200 ammount_sum">
+					<div class="hintBox mt5" style="width: 186px;">{@Minimal payment amount@}: <strong><%MINIMAL_PAYMENT%></strong></div> 
+			         	
+				</td>
+			</tr>
+			<tr>
+			   <td></td>			      
+			   <td>
+			      <div id="agree_div" style="display:none;">
+			         <div id="msg_div" class="mb10"></div>
+			         <label for="agree1">
+			         	<input id="agree1" type="checkbox" name="agree" class="agree_to_pay"> 
+			         	{@I agree to pay@}
+			         </label>
+			         <%paypalNEEDAGREE%>
+			      </div>
+			   </td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="2">
+					<button id="sb" class="button w206" value="{@Pay@}" title="{@Pay@}" type="submit">
+							<span class="ico ico-confirm">{@Pay@}</span>
+					</button>
+				</td>
+			</tr>			
+		</table>
+      </div>
+	</form>
+
+<script type="text/javascript">
+//<!--   
+//-->
+</script>

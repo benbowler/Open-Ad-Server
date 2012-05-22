@@ -1,0 +1,264 @@
+/*
+ * CSS Open Class Library And Hacks
+ * Ann
+ * @date: 2011-19-01
+ */
+
+	html, body {
+		height:100%;
+	}
+
+	body {
+		background: transparent url(../images/install_Light/bg.gif)  repeat-x;
+		color:#fff;
+		font-family: Tahoma, GenevaCY, Sans-serif;
+		font-size: 11px;
+		text-align:center; /* horizontal centering for IE Win quirks */
+	}
+
+	#distance { 
+		width:1px;
+		height:50%;
+		background-color:#fc6;
+		margin-bottom:-257px; /* half of container's height */
+		float:left;
+	}
+
+	#container {		
+		margin:0 auto;
+		position:relative; /* puts container in front of distance */
+		text-align:left;
+		height:514px;
+		width: 752px;
+		clear:left;
+		/*overflow:hidden;*/
+	}
+	
+/* footer */
+	
+	.install_header{
+		background: transparent url(../images/install_Light/header.png) 5px 0 no-repeat;
+		height:208px;
+	}
+	
+	.install_body{
+		background: transparent url(../images/install_Light/body.png)  no-repeat;	
+	}
+	
+	
+	.install_footer{
+		background: transparent url(../images/install_Light/footer.png) no-repeat;	
+		height:131px;
+		margin: 0 0 0 0;
+	}
+	.install_footer a{
+color:#EEE;
+position:relative;
+left: 40px;
+top: 100px;
+font-size:12px;
+	}
+
+/* end of footer */	
+	
+	
+		#container .inner{
+			position: relative;			
+			margin: 0 0 0 9px;
+			padding: 0 0 15px 147px;			
+			width: 598px;
+		   /*background-color: red;*/
+		}
+		
+		
+		#container .inner .box{
+			background: transparent url(../images/install_Light/box.png)  no-repeat;
+			position:absolute;
+			width:  176px;			
+			height: 212px;					
+			left: 30px;
+			top: 41px;
+		}
+		
+
+		
+			#container .inner h1{
+				font-size: 19.5px;
+				font-weight:normal;
+				margin: 0 151px 16px 0;				
+				padding: 45px 0 0 0;				
+			}
+			.pl82px{
+				padding-left: 82px;
+			}
+		
+/* text block */		
+		
+		
+			#container .text_block{
+				font-size: 11px;
+				margin: 0 150px 0 0;
+				overflow:hidden;			
+			}
+			
+			#step1 .text_block{
+				width: 300px;	
+					
+			}
+			#step3 .text_block,
+			#step4 .text_block,
+			#step5 .text_block{
+				width: 410px;		
+			}
+
+
+			
+/* begin of button */				
+
+				#step1 .button,#step2 .button,
+				#step3 .button,#step4 .button,
+				#step5 .button,#step6 .button,
+				#step7 .button{
+					position: absolute;
+					width: 128px;
+					height: 127px;
+					right: 30px;
+					top: 25px;
+				}						
+				.button{
+					background: transparent url(../images/install_Light/button_next.png)  no-repeat;
+					width: 128px;
+					height: 127px;
+					border:none;
+					cursor: pointer;
+					
+					display:block;
+					text-indent:-10000px;
+					white-space: nowrap;
+				}
+				.button_prev{
+					position: absolute;
+					width: 128px;
+					height: 127px;
+					left: 15px;
+					top: 24px;
+					
+					background: transparent url(../images/install_Light/button_prev.png)  no-repeat;
+					border: none;
+					cursor: pointer;
+					
+					display:block;
+					text-indent:-10000px;
+					white-space: nowrap;
+				}
+/* end of button */		
+		
+				div.install_description{
+					font-size: 19.5px;
+					font-weight:normal;					
+					text-align:center;
+				}
+				
+			
+/* step3 Database settings */			
+			
+
+#step3 table,
+#step4 table,
+#step5 table{
+	border-collapse: collapse;
+	padding: 0px;
+	width: 410px;
+}
+
+/* step2 Check server configuration */			
+			
+
+#step2 table,
+#step4 table,
+#step5 table{
+	border-collapse: collapse;
+	padding: 0px;
+}
+			
+	#step3 table tbody tr td,
+	#step3 table tbody tr,
+	#step4 table tbody tr td,
+	#step4 table tbody tr,
+	#step5 table tbody tr td,
+	#step5 table tbody tr{
+		height: 27px;
+	}
+				
+		#step3 table tbody tr td,
+		#step4 table tbody tr td,
+		#step5 table tbody tr td{
+			font-size: 14px;
+			vertical-align: middle;
+		}
+			#step3 table tbody tr td.col1{
+				width: 135px;
+			}
+			#step3 table tbody tr td.col2,
+			#step4 table tbody tr td.col2,
+			#step5 table tbody tr td.col2{
+				width: 275px;
+			}
+			
+
+			
+				label{
+					padding: 0 10px 0 0;
+				}
+				input, 
+				textarea{					
+					border: 1px solid #35a1d2;
+               resize: none;
+				}
+				input{
+					width:  272px;
+					height: 21px;
+					border: 1px solid #35a1d2;
+				}
+				input#agree{
+					width: 13px; 
+					height: 13px;
+					border: 1px solid #35a1d2 !important;
+				}
+				
+#step5 textarea,				
+#step7 textarea{
+	width: 100%;
+	margin: 9px 0 0 0;
+}				
+	#step5 textarea,				
+	#step7 textarea{
+		height: 182px;
+	}				
+	#step2 textarea{
+		width: 403px;
+		height: 71px;
+	}
+
+	#step1{
+		padding: 0 0 10px 0;
+	}
+	
+	/* step */
+#step1{
+	margin: 0 0 0 83px;
+}
+
+#step3,
+#step2{
+	margin: 0 0 0 18px;
+}				
+	#step4,#step5,
+	#step6,#step7{
+		padding: 0 0 0 18px;
+	}
+
+/* error */
+.install_error{
+	color: red;	
+}			

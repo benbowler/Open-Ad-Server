@@ -1,0 +1,150 @@
+<script type="text/javascript">
+//<!--
+   var is_loading = true;
+   
+   $(function(){
+	  $('#categories_tree').treeview({animated: "fast", persist: "id", persist_id: "categories_tree_<%SELECTED_CATEGORY_ID%>"});
+	  $('#categories_tree_<%SELECTED_CATEGORY_ID%>').addClass('selected_item');
+	  set_active_category(<%SELECTED_CATEGORY_ID%>,$('#categories_tree_<%SELECTED_CATEGORY_ID%>'));
+	  is_loading = false;
+	});
+
+	function clear_errors() {
+		$('#edit_category_div #error_message_div').find('.closeButton').click();
+	   $('#create_category_div #error_message_div').find('.closeButton').click();
+	}
+	
+	function create_category() {
+	   $('#create_category_div').show();
+	   $('#edit_category_div').hide();
+	   $('#info_category_div').hide(); 
+	   
+	   clear_errors();
+	}
+	
+	function edit_category() {
+	   $('#create_category_div').hide();
+	   $('#edit_category_div').show();
+	   $('#info_category_div').hide();  
+
+	   clear_errors();
+	}
+	
+	function show_category() {
+		   $('#create_category_div').hide();
+		   $('#edit_category_div').hide();
+		   $('#info_category_div').show();
+
+		   clear_errors();
+	}
+	
+	function delete_category() {
+	   var current_category = $('#id_current_category').val();
+	   if (!confirm('{@Delete category@} "'+$('#create_parent_title').text()+'"?')) {
+	         return false;
+	   } else {
+	      $('#delete_category_form').submit();
+	   }
+	}
+	
+	function get_description(id) {
+	      $('#loading_category_description').show();
+		$('#loading_here').addClass('loading');
+	      $("#info_category_description").text('');
+	      if ( 0 == ($('#edit_category_div #error_message_div').length)) {
+	    	   $("#edit_category_description").val('').attr("disabled",true);
+	      }
+	    	   $('#edit_submit_btn').attr("disabled",true);
+
+	    	$.post("<%SITEURL%><%INDEXPAGE%>admin/manage_categories/ajax_get_description",{id_category: id},function (data) {
+	    		if (!checkAjaxLogin(data)) {
+	    			  set_description(data);
+	    		}
+	    	});    
+	}
+	
+	function set_description(data) {
+				   try {
+				      var response = JSON.parse(data);
+				   }
+				   catch (e) { 
+					   alert("Invalid server reply");
+					   return; 
+					} 
+		         $('#edit_category_description').removeAttr("disabled");
+		         $('#edit_submit_btn').removeAttr("disabled");
+		         if (response.result == "ok") {
+		        	  if ( 0 == ($('#edit_category_div #error_message_div').length)) {
+		        		  $("#edit_category_description").val(response.description);
+		        	  }
+		        	  $("#info_category_description").text(response.description);
+		         } else {   
+			         alert('{@Error getting category description@}')
+			      };
+			      $('#loading_category_description').hide();
+				  $('#loading_here').removeClass('loading');
+	}
+	
+	function set_active_category(id,eItem) {
+		if (!is_loading) {
+	         clear_errors();
+	   }
+		var title = $(eItem).text();
+	   $('#categories_tree span').removeClass('selected_item');
+	   $(eItem).addClass('selected_item');
+      if ( 0 == ($('#edit_category_div #error_message_div').length)) {
+    	  $('#edit_current_title').text(title);
+    	  $('#edit_category_title').val(title);
+      }
+      if ( 0 == ($('#create_category_div #error_message_div').length)) {
+    	  $('#create_parent_title').text(title);
+      }
+	   $('#id_category_parent').val(id);
+	   $('#id_edit_category').val(id);
+	   $('#id_current_category').val(id);
+	   get_description(id);
+	}
+//-->
+</script>
+<h1>{@Manage Categories@}</h1>
+{@<%MANAGE_ERROR%>@}
+<%NOTIFICATION%>
+<div class='frame mb10'>
+	<div class="p10">
+		<table class="table w100p">
+			<tr class="top">
+				<td class="w300 top">
+					<h2>{@Categories@}</h2>
+					<div class='frame p5'>
+						<div class="xTbar">
+							<input type="button" class="guibutton floatl ico ico-plusgreen" onclick="return create_category()" value="{@Create@}" title="{@Create@}">
+							<input type="button" class="guibutton floatl ico ico-edit" onclick="return edit_category()" value="{@Edit@}" title="{@Edit@}">
+							<input type="button" class="guibutton floatl ico ico-delete" onclick="return delete_category()" value="{@Delete@}" title="{@Delete@}">
+						</div>
+						<div class="inlet h300" style="overflow:auto;">
+							<%CATEGORIES_TREE%>
+						</div>
+					</div>
+				</td>
+				<td class="pl20 top">
+					<div id="create_category_div" <%CREATE_FORM_VISIBLE%>>
+				    	<%CREATE_FORM%>
+					</div>
+					<div id="edit_category_div" <%EDIT_FORM_VISIBLE%>>
+				    	<%EDIT_FORM%>
+					</div>
+					<div id="info_category_div" <%DESCRIPTION_VISIBLE%>>
+                  <h2>{@Description@}:</h2>
+                  <div class="frame inlet p10 h320 mr10" style="overflow:auto;" id='loading_here'>
+                     <div id="info_category_description"></div>
+                  </div>
+               </div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<form id="delete_category_form" method="post">
+	<input type="hidden" name="manage_categories_action" value="delete">
+	<input type="hidden" name="id_current_category" id="id_current_category" value="<%SELECTED_CATEGORY_ID%>">
+</form>

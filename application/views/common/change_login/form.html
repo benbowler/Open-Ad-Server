@@ -1,0 +1,39 @@
+<div class="p20">
+<form name="change_login" method="post">
+	<h2 class="underline">{@Change Login@}</h2>
+	<div id="error_message_div"></div> 
+	<div class="m10">
+	   <table class="table w100p" border="0">
+         <tr class="pt10">
+            <td class="w200 pt10">
+               <label for="pw">
+                 <span class="required"> {@New Login@}:</span>
+               </label>
+            </td>
+            <td class="pt10 pr10">
+               <input type="text" id="pw" name="login" class="w100p text">
+            </td>
+         </tr>
+	      <tr class="pt10">
+	         <td class="w200 pt10 h30">
+	            <label for="ol">
+	               <span class="required">{@Current Password@}:</span>
+	            </label>
+	         </td>
+	         <td class=" pr10 h50">
+	            <input type="password" id="ol" name="password" class="w100p text">
+	         </td>
+	      </tr>
+	   </table>
+	</div>
+	<div class="right pt10">
+		 <div class="floatl"><span class="required">&nbsp;</span>&nbsp; - {@required fields@}.</div>		
+		 <button class="button" title="{@Save@}" type="submit" >
+			<span class="ico ico-confirm">{@Save@}</span>
+	    </button>
+	    <button class="button ml5"  title="{@Cancel@}" type="button" onclick="self.parent.tb_remove();">
+			<span class="ico ico-cancel">{@Cancel@}</span>
+		</button>&nbsp;&nbsp;
+	</div>
+</form>
+</div>

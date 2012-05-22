@@ -1,0 +1,70 @@
+<script type="text/javascript">
+//<!--
+   function cancelBut() {
+      document.location = '<%SITEURL%><%INDEXPAGE%>admin/manage_feeds';
+   }
+//-->
+</script>
+<!-- h1>{@Request Feed Installation@}</h1-->
+<h1><a href='<%SITEURL%><%INDEXPAGE%>admin/manage_feeds'>{@Feeds@}</a> &rarr; {@Request Feed Installation@} </h1>
+
+<div id="grid1"></div>
+<form name="requestfeed_form" method="post">
+	<div class="frame mb10">
+		<table cellspacing="10" cellpadding="0" border="0">
+			<tbody>
+				<tr>
+					<td>
+						 <label for="feed_name">
+			                 {@Feed Name@}: 
+		                 </label>
+					</td>
+					<td>
+					     <select name="feed_name" id="feed_name" class="w308 text"></select>
+					</td>
+			   </tr>
+            <tr>
+               <td>
+                   <label for="phone">
+                     {@Phone #@}: 
+                   </label>
+               </td>
+               <td>
+                    <input type="text" name="phone" id="phone" class="w200 text"/>
+               </td>
+            </tr>
+			   <tr>
+					<td class="top">
+						<label for="comment">
+						  	 {@Your Comments@}: 
+						</label>
+					</td>
+					<td>
+						   <textarea name="comment" id="comment" size="4" class="w300 h200 text"></textarea>
+					</td>
+			   </tr>
+				<tr>
+					<td></td>
+					<td>
+						{@Request note@}
+					</td>
+				</tr>
+			    <tr>
+			    	<td>&nbsp;</td>
+					<td  class="vtop">
+						<button class="button" title="{@Request@}" id="RequestButton"  type="submit">
+							<span class="ico ico-confirm">{@Request@}</span>
+						</button>
+						<button class="button ml5"  title="{@Cansel@}" id="CancelButton" type="button" value="{@Cancel@}" onclick="cancelBut();">
+							<span class="ico ico-cancel">{@Cancel@}</span>
+						</button>
+					</td>
+			   </tr>
+			   
+			</tbody>
+		</table>
+	</div>
+		<div class="mt10 mb10 hintBox">
+			<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+		</div>
+</form>

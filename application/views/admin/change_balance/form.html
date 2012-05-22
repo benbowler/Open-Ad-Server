@@ -1,0 +1,56 @@
+<script type="text/javascript">
+//<!--
+   function ok_balance() {
+      document.getElementById('changeBallanceSubmit').disabled = true; 
+      document.getElementById('balance_form').submit();      
+   }
+
+   function balance_cancel() {
+      document.location = '<%CANCEL_URL%>';
+      return false;
+   }
+//-->
+</script>
+<h1><a href="<%CANCEL_URL%>" ><%PREV_TITLE%></a> &rarr; {@Change Balance@}: <span class="green i">&bdquo;<%ENTITY%>&ldquo;</span></h1>
+<form name="balance_form" id="balance_form" method="post">
+	<input type="hidden" id="balance_code" name="balance_code">
+	<div id="error_message_div"></div>
+	<div class="frame p10 mb10">
+		<table class="table f12px">
+			<tr>
+				<td class="pt10">
+					<label>{@Current Ballance@}:</label> 	         
+				</td>
+				<td class="pt10 f15">
+					<%CUR%>
+				</td>
+	      </tr>
+	      <tr>
+	         <td class="w200 pt10">
+	            <label for="cv">
+	               <span class="required">{@Amount@}:</span>
+	            </label>
+	         </td>
+	         <td class="pt10">
+	            <select name="balance_mode" class="w80"></select>
+	            <input type="text" id="cv" name="amount" class="text w200">
+	         </td>
+	      </tr>
+	      <tr>
+	      	<td  class="pt10"></td>
+	      	<td  class="pt10">
+	      		  <button id="changeBallanceSubmit" class="button" title="{@Change Ballance@}" onclick="return ok_balance();">
+				      <span class="ico ico-ok">{@Submit@}</span>
+				  </button>
+			      <button class="button ml5" title="{@Cancel@}" onclick="return balance_cancel();">
+			         <span class="ico ico-cancel">{@Cancel@}</span>
+			      </button>
+	      	</td>
+	      </tr>
+	   </table>	
+		  
+   </div>  
+   <div class="mt10 mb10 hintBox">
+		<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+	</div>  
+</form>

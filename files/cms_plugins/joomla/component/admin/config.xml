@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+   <params>
+	<param name="apikey" type="text" label="API key"></param>
+	<param name="siteurl" type="text" label="Site URL"></param>
+	<param name="siteid" type="text" label="Site ID"></param><param name="channels" type="hidden"></param><param name="palettes" type="hidden"></param>
+   </params>
+</config>

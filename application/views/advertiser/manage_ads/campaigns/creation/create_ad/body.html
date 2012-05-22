@@ -1,0 +1,39 @@
+<link type="text/css" rel="stylesheet" href="<%SITEURL%>/css/campaigns.css"/>
+<script type="text/javascript">
+//<!--
+function onSubmit() {
+	if ($('#tab_div_text').is(':visible')) {
+		$('#text_ad').submit();
+	} else if ($('#tab_div_image').is(':visible')) {
+		$('#image_ad').submit();
+	} else if ($('#tab_div_richmedia').is(':visible')) {
+		$('#richmedia_ad').submit();
+	} else {
+      if (checkImport()) {
+         $('#import_ads').submit();
+      }
+	}
+}
+//-->
+</script>
+<h1><%FORM_TITLE%></h1>
+<h1><%PROGRESS_BAR%></h1>
+
+<table class="w100p table">
+	<tr class="top">
+		<td>
+			<div class="mb10">
+				<%AD_TYPE_TABS%>
+				<%NAVIGATION_BAR%>
+			</div>
+			<div class="mt10 mb10 hintBox">
+				<span class="required">&nbsp;</span>&nbsp;&nbsp;&nbsp; - {@required fields@}.
+			</div>
+			
+		</td>
+		<!--  td class="w270 pl20">
+			<%CAMPAIGN_SCHEME%>
+		</td>  -->
+	</tr>
+</table>
+

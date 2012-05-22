@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+div.tags-selector-dialog {
+	text-align: left;	
+}
+
+div.tags-selector-dialog div.ui-dialog-titlebar {
+	display: none;
+}
+
+div.tags-selector-dialog div.ui-dialog-content {
+	padding: 10px 10px 50px 10px;
+}
+
+div.tags-selector-dialog div.ui-dialog-buttonpane {
+	text-align: right;
+}
+
+div.tags-selector-dialog div.ui-dialog-buttonpane button {
+   margin-right: 15px;
+}

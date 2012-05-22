@@ -1,0 +1,9 @@
+<div class="floatr">
+	<input jframe="no" type="button" class="guibutton floatl mr3 greenBtn ico ico-plusgreen2" value="<%EDITNAME%>" onclick="return top.<%EDITFUNCTION%>(<%GROUP%>);"/>
+	<input jframe="no" type="button" class="guibutton floatl mr3 greenBtn ico ico-plusgreen2" value="{@Create Image Ad@}" onclick="return top.createAd(<%GROUP%>, 'image');"/>
+	<input jframe="no" type="button" class="guibutton floatl greenBtn ico ico-plusgreen2" value="{@Create Text Ad@}" onclick="return top.createAd(<%GROUP%>, 'text');"/>
+</div>
+
+<input jframe="no" type="button" class="guibutton floatl mr3 ico ico-play" value="{@sch_Resume@}" title="{@sch_Resume@}" onclick="return do_action('manadschannels', 'resume', '', '{@Please select at least one record in the table@}')">
+<input jframe="no" type="button" class="guibutton floatl mr3 ico ico-pause" value="{@sch_Pause@}" title="{@sch_Pause@}" onclick="return do_action('manadschannels', 'pause', '', '{@Please select at least one record in the table@}')">
+<input jframe="no" type="button" class="guibutton floatl ico ico-delete" title="{@chn_Delete@}" value="{@chn_Delete@}" onclick="return do_action('manadschannels', 'delete', '{@Do you realy want to remove this site from your CPC camapign?@}', '{@Please select at least one record in the table@}')">

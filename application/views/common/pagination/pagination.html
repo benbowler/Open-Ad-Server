@@ -1,0 +1,79 @@
+<script type="text/javascript">
+//<!--
+	$(function(){
+		var currentPage =  $('#<%FORM_NAME%>_page').val();
+		var totalPages =  $('#<%FORM_NAME%>_totalPages').html();
+		if (currentPage == 1) $('#<%FORM_NAME%>_button_firstpage, #<%FORM_NAME%>_button_prevpage').guiDisable();
+		if (totalPages == currentPage) $('#<%FORM_NAME%>_button_nextpage, #<%FORM_NAME%>_button_lastpage').guiDisable();
+		if (totalPages == 1) $('#<%FORM_NAME%>_page').guiDisable();
+	});
+//-->>
+</script>
+<!-- form action="post" jframe="no" name='<%FORM_NAME%>_pageForm' -->
+	<div class="xTbar">
+	<table class='table w100p paginator' id='<%FORM_NAME%>_paginator'>
+		<tr class="middle">
+			<td width="16">
+				<input jframe="no" type="button" id='<%FORM_NAME%>_button_firstpage' class='guibutton floatl ico ico-arrowfirst' value='' title='{@First Page@}' onclick="return <%FIRST_PAGE_FUNC%>" >
+			</td>
+			<td width="16" class="pl5">
+				<input jframe="no" type="button" id='<%FORM_NAME%>_button_prevpage' class='guibutton floatl ico ico-arrowleft'  value='' title='{@Previous Page@}' onclick="return <%PREV_PAGE_FUNC%>" >
+			</td>
+			<td width="1">
+				<div class="vsplitter"></div>
+			</td>
+			<td width="50">
+				<table class="table">
+					<tr>
+						<td>
+							<span class="nowrap">{@Page@}&nbsp;</span>
+						</td>
+						<td>
+							<input class="textSmall w15 center" onkeypress="if (event.keyCode == 13) $('#<%FORM_NAME%>SubmitPaginator').click(); return true;" id="<%FORM_NAME%>_page" name="<%FORM_NAME%>_page" value="<%CURRENT_PAGE%>" />
+						</td>
+						<td>
+							<span class="nowrap">&nbsp;{@of@}&nbsp;<span id="<%FORM_NAME%>_totalPages"><%NUM_PAGES%></span></span>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td width="1">
+				<div class="vsplitter"></div>
+			</td>
+			<td width="16">
+				<input jframe="no" type="button" id='<%FORM_NAME%>_button_nextpage' class='guibutton floatl ico ico-arrowright' value='' title='{@Next Page@}' onclick="return <%NEXT_PAGE_FUNC%>" >
+			</td>
+			<td width="16" class="pl5">
+				<input jframe="no" type="button" id='<%FORM_NAME%>_button_lastpage' class='guibutton floatl ico ico-arrowlast' value='' title='{@Last Page@}' onclick="return <%LAST_PAGE_FUNC%>" >
+			</td>
+			<td width="1">
+				<div class="vsplitter"></div>
+			</td>
+			<td width="50">
+				<table class="table">
+					<tr>
+						<td>
+							<span class="nowrap">{@Items Per Page@}:&nbsp;</span>
+						</td>
+						<td>
+							<input maxlength="2" class="textSmall w20 center" onkeypress="if (event.keyCode == 13) return <%UPDATE_PAGINATION_FUNC%>" id="<%FORM_NAME%>_per_page" name="<%FORM_NAME%>_per_page" value="<%PER_PAGE%>">
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td width="1">
+				<div class="vsplitter"></div>
+			</td>
+			<td width="16">
+				<input type="submit" id='<%FORM_NAME%>SubmitPaginator' class='guibutton floatl ico ico-arrowreload' value='' title='{@Update@}' onclick="return <%UPDATE_PAGINATION_FUNC%>" >
+			</td>
+			<td width="20">
+				<img src="<%SITEURL%>images/loading.gif" width=16 height=16 class="hide" id="<%FORM_NAME%>_loading" hspace=3 vspace=2/>
+			</td>
+			<td class='right pr5'>
+				<%TOTAL%>
+			</td>
+		</tr>
+	</table>
+	</div>
+<!--/form -->

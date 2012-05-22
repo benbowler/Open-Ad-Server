@@ -1,0 +1,62 @@
+<h1><a href='<%SITEURL%><%INDEXPAGE%>admin/manage_tags/'>{@Manage Tags@}</a> &rarr; {@<%FORM_TITLE%>@}</h1>
+<form name="edit_tag_form" id="edit_tag_form" method="post">
+   <div id="error_message_div"></div>
+   <div class="frame p10 mb10">
+      <table class='table'>
+         <tr class="pt10 top">
+            <td class="pt10 top w100">
+               <label for="name">
+                  <span class="required">{@Title@}:</span>
+               </label>
+            </td>
+            <td class="pt10 top">
+               <input type="text" id="name" name="name" class="w400 text">
+            </td>
+         </tr>
+         <tr class="pt10 top">
+            <td class="pt10 top w100">
+               <label for="code">
+                  <span class="required">{@Code@}:</span>
+               </label>
+            </td>
+            <td class="pt10 top">
+               <textarea name="code" id="code" class="w400 h200 text"></textarea>
+            </td>
+         </tr>
+         <tr class="pt10 top">
+            <td class="pt10 top w100">
+               <label for="width">
+                  <span class="required">{@Width@}:</span>
+               </label>
+            </td>
+            <td class="pt10 top">
+               <input type="text" id="width" name="width" class="w100 text">
+            </td>
+         </tr><tr class="pt10 top">
+            <td class="pt10 top w100">
+               <label for="height">
+                  <span class="required">{@Height@}:</span>
+               </label>
+            </td>
+            <td class="pt10 top">
+               <input type="text" id="height" name="height" class="w100 text">
+            </td>
+         </tr>
+         <tr class="pt10 top">
+               <td class="pt10 top">
+               </td>
+               <td  class="pt10 top">
+               <button class="button" title="<%CONFIRM_BUTTON%>" value="<%CONFIRM_BUTTON%>" onclick="document.edit_tag_form.submit();">
+                  <span class="ico ico-confirm"><%CONFIRM_BUTTON%></span>
+               </button>&nbsp;&nbsp;
+               <button class="button ml5"  title="{@Cancel@}"  value="{@Cancel@}" onclick="document.location='<%SITEURL%><%INDEXPAGE%>admin/manage_tags/'; return false;" value="{@Cancel@}">
+                  <span class="ico ico-cancel">{@Cancel@}</span>
+               </button>
+               </td>
+            </tr>
+      </table>
+   </div>
+   <div class="mt10 mb10 hintBox">
+      <span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+   </div>
+</form>

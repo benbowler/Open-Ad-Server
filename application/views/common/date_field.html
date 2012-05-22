@@ -1,0 +1,23 @@
+<script type="text/javascript">
+//<!--
+   $(function(){
+      $("#<%NAME%>").datepicker({ 
+         dateFormat: <%DPDATEFORMAT%>, 
+         firstDay: <%DPWEEKSTART%>,
+         changeFirstDay: true,
+         showStatus: true, 
+			buttonText: '{@Click on@}',
+         showOn: "both",
+         buttonImage: "<%SITEURL%>images/smartppc6/icons/calendar_day.png", 
+         buttonImageOnly: true,
+         changeMonth: <%CHANGEMONTH%>,
+         changeYear: <%CHANGEYEAR%>,
+         yearRange: '<%YEARRANGE%>',
+         minDate: <%MINDATE%>,
+         maxDate: <%MAXDATE%>,
+         defaultDate: <%DEFAULT_DATE%>
+      });  
+   });
+//-->
+</script>
+<input name="<%NAME%>" id="<%NAME%>" class="calInps" tabindex="<%TAB_INDEX%>"/>

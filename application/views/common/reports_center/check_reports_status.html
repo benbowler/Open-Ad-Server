@@ -1,0 +1,63 @@
+<script type="text/javascript">
+//<!--
+ var check_reports = new Array();
+ var check_reports_input;
+ 
+ $(function() {
+	check_reports_input = $('#check_str');
+
+	if (check_reports_input.val()!='') {
+		try {
+			check_reports = JSON.parse(check_reports_input.val());
+		} catch (e) {
+		}
+
+		if (check_reports.length > 0) {
+        	interval_var = setInterval("checkChange();", 10000);
+		}
+    }
+ }
+);   
+
+   var interval_var;
+
+   function checkChange(){
+	  $.post('<%CHECK_REPORT_STATUS_CONTROLLER%>',{check_str: check_reports_input.val()},function(response) {
+		  if(!checkAjaxLogin(response)) {
+			  checkChangeResponse(response);
+		  }
+	  });
+   }
+
+   function checkChangeResponse(response) {
+	   try {
+		   var reports_info = JSON.parse(response); 
+	   } catch (e) {
+		   return;
+	   }
+
+	   check_reports = new Array();
+	   
+	   $.each(reports_info, function(i, report_info) {
+		   var report_row = $('tr[id_report='+report_info.id_report+']');
+		   var current_status = $('.status-ajax',report_row).html(); 
+		   if(current_status != report_info.status) {
+			   $('.status-ajax',report_row).html(report_info.status);
+		   }
+		   if (report_info.is_ready) {
+			   title = $($('>*',report_row)[2]).html();
+			   
+			   $($('>*',report_row)[2]).html("<a onclick='viewReport(\""+report_info.id_report+"\");' href='#view_report'>"+title+"</a>");
+		   } else {
+			   check_reports.push({id_report: report_info.id_report});
+		   }
+	      }); 
+
+	   check_reports_input.val(JSON.stringify(check_reports));
+	   
+	   if (0 == check_reports.length) {
+		   clearInterval(interval_var);
+	   }
+   }
+//-->
+</script>

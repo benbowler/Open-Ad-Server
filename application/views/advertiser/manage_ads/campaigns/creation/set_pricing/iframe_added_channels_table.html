@@ -1,0 +1,36 @@
+<script type="text/javascript">
+//<!--
+
+var modified_sites_channels_info = new Array();
+
+$(function() {
+    $('#iframe_added_channels_form').find('.tooltip').each(function() {
+             var title = $(this).attr('title');
+             $(this).tooltip({ 
+                   delay: 0, 
+                   showURL: false,
+                   track: true, 
+                   bodyHandler: function() {
+                       var tooltip_content = $("<div/>");
+                       var caption = $("<div/>").text(title);
+                       var image = $("<img/>").attr("src", $(this).attr('href'));
+                       $(caption).addClass('tooltipCaption');
+                       $(tooltip_content).append(caption);
+                       $(tooltip_content).append(image);
+                       return tooltip_content; 
+                   }
+             });
+         });
+ }); 
+//-->
+</script>
+<form id="iframe_added_channels_form" name ="iframe_added_channels_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_set_pricing/get_added_channels">
+	<input type="hidden" id="form_action" name="action">
+	<input type="hidden" id="id_site_channel" name="id_site_channel">
+	<input type="hidden" id="modified_sites_channels_info" name="modified_sites_channels_info">
+	<input id="submit" type="submit" style="display:none;">
+   <%COLUMNS%>
+	<div class="inlet">
+		<%CHANNELS_TABLE%>
+	</div>
+</form>

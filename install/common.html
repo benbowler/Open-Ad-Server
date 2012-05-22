@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+	   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	   <title>Ad Server Lite Installation Wizard</title>
+	   	
+		<link type='text/css' rel='stylesheet' href='../css/_commonlib.css' />
+		<link type='text/css' rel='stylesheet' href='../css/install.css' />
+	
+		<script type="text/javascript"  src="j.js" ></script>
+	
+		
+<script type="text/javascript">
+$(function(){
+
+	$('form a').click(function(){
+        $(this).closest('form').find('input[name=button]').val($(this).text());
+        $(this).closest('form').submit();
+        return false;
+    });
+});
+</script>		
+   </head>
+   <body>
+   		<div id="distance"></div>
+		<div id="container">  
+			
+			
+		     <div style="height: 752px; overflow:hidden;">  
+				  <div class="install_header"></div>
+			      <div class="install_body">
+					  <div class="inner">		 				 		      	  	  
+				          <!-- h1><%STEPTITLE%></h1 -->
+				          <%STEPCONTENT%>		 			  
+					  </div>			  			
+			  	   </div>		
+				   <div class="install_footer"><a href="http://orbitscripts.com/community/" target="_blank">Please visit our Orbit Open Ad Server community if you have any questions considering the installation or the product.</a></div>
+			  </div>
+			  
+		</div>
+   </body>
+</html>

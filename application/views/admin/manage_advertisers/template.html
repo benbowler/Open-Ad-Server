@@ -1,0 +1,105 @@
+<script type="text/javascript">
+//<!--
+   jQuery('document').ready(function(){
+	  jQuery('#quicksearch').keyup(function(e){
+		 if (e.keyCode == 13) {
+			jQuery('#manageadvertisers_form').submit();
+		 }
+	  });
+   });
+   
+   function edit(code) {
+      document.getElementById("edit_code").value = code;
+      document.forms["edit_form"].submit();
+   }
+   
+   function getCodeList() {
+      codeList = '';            
+      $('tr.selected', '#manageadvertisers_form').find('input').each(
+         function(){
+            if (codeList != '') {
+               codeList = codeList+',';               
+            }
+            codeList = codeList + $(this).val();
+         })
+      return codeList;            
+   }
+   
+   function toReports() {
+      document.getElementById("reportsCodeList").value = getCodeList();
+      document.forms["reports_form"].submit();      
+   }   
+
+   function sendMails() {
+      document.getElementById("mailsCodeList").value = getCodeList();
+      document.forms["mails_form"].submit();      
+   }   
+   
+   function loginAs(code) { 
+      document.getElementById("loginas_code").value = code;
+      document.forms["loginas_form"].submit();      
+   }
+
+   function balance(code) {
+      document.getElementById("balance_code").value = code;
+      document.forms["balance_form"].submit();      
+   }
+   
+   function createMail(code){
+      $('#adv_code').val(code);
+      $('#send_mail').submit();
+      return false;
+   }   
+
+   <%PLUGIN_JS_FUNCTIONS%>
+   
+//-->
+</script>
+<h1>{@Manage Advertisers@}</h1>
+<%NOTIFICATION%>
+<form method="post" id="manageadvertisers_form" name="manageadvertisers_form">
+
+	<div class="filterBox">
+		<table  class="table" border="0">
+			<tr>
+   	   	<td class="right"><label>{@Select date range@}:</label></td>
+				<td class="pl5">
+					<%DATEFILTER%>
+				</td>
+				<td class="pl10">
+					<label for="filt" class="mb5">
+						{@Filter by status@}
+					</label>
+					<select name="filt"></select>
+				</td>
+				<td class="pl10">
+					<label for="quicksearch" class="mb5">
+						{@Quick Search@} 
+						<span style="font-size: 0.8em">({@ID@}, {@Full Name@}, {@E-Mail@}, {@Join Date@})</span>
+					</label>
+					<input type="text" name="quicksearch" id="quicksearch" class="w400" value="" />
+				</td>
+				<td class="pl10 bottom">
+					<input type="submit" value="{@Update@}"  class="guibutton floatl ico ico-arrowreload"  onclick="$('#manageadvertisers_form').submit();"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+   <input type="hidden" id="manageadvertisers_action" name="manageadvertisers_action"/>
+   
+	<div class="frame mb10 p5">
+		<%COLUMNS%>
+		<%BUTTONST%>
+		<div class='inlet'>
+			<%ADVERTISERS%>
+	    </div>
+		<%PAGINATION%>
+   </div>                  
+</form>
+<form method="post" id="edit_form" action="<%SITEURL%><%INDEXPAGE%>admin/edit_advertiser">
+   <input type="hidden" id="edit_code" name="edit_code"/>
+</form>
+<form method="post" id="balance_form" action="<%SITEURL%><%INDEXPAGE%>admin/change_advertiser_balance">
+   <input type="hidden" id="balance_code" name="balance_code"/>
+</form>

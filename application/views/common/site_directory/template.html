@@ -1,0 +1,438 @@
+<script type="text/javascript">
+//<!--
+var siteLayoutJson;
+var siteChannelsList;
+var current_site_code;
+
+function filter(filt) {
+	strs = filt.split("/");
+	switch(strs[0]) {
+	case 'adtype':
+		$('#ad_type_filter').val(strs[1]);
+		break;
+   case 'imagesize':
+      $('#image_size_filter').val(strs[1]);
+      break;
+   case 'costmodel':
+      $('#cost_model_filter').val(strs[1]);
+      break;
+   case 'category':
+      $('#category_filter').val(strs[1]);
+      break;
+   case 'keyword':
+	      $('#keyword_filter').val($('#keyword_filter_input').val());}
+	$("#site_directory_form").submit();
+	return true;
+}
+
+
+function parseSitesInformation(siteChannelsList, layout) {
+
+	var hasLayout = (typeof(layout) != 'undefined' && layout !='');
+
+	if (hasLayout) {
+		try {
+			var Layout = JSON.parse(layout);
+			var LayoutChannels = Layout.channels;
+		} catch (e) {}
+	}
+
+	
+	var channels_list = $('#channels_list');
+	var default_list_item;
+	var first_item;
+	var changed = false;
+	$.each(siteChannelsList, function(i, v) {
+
+		
+		var isSearchOnLayout = false;
+
+		if (v.ad_type == 'search') {
+			if (typeof(LayoutChannels) != 'undefined' && LayoutChannels.length > 0) {
+				for (var i = 0; i < LayoutChannels.length; i++) {
+					if ((LayoutChannels[i].ad_type == 'search')) isSearchOnLayout = true;
+				}
+			}
+		} 
+
+		if (v.ad_type == 'search' && !isSearchOnLayout) return false;
+		
+		var isIntextOnLayout = false;
+
+		if (v.ad_type == 'intext') {
+			if (typeof(LayoutChannels) != 'undefined' && LayoutChannels.length > 0) {
+				for (var i = 0; i < LayoutChannels.length; i++) {
+					if ((LayoutChannels[i].ad_type == 'intext')) isIntextOnLayout = true;
+				}
+			}
+		} 
+
+		if (v.ad_type == 'intext' && !isIntextOnLayout) return false;
+		
+		
+		channels_list.append('<li id="channel_link_'+v.channel_code+'"><b></b></li>');
+		var list_item = $('#channel_link_'+v.channel_code);
+		var link = list_item.find('b');
+		link.text(v.channel_name);
+		
+		if (typeof(first_item) == 'undefined') {
+			first_item = list_item;
+		}
+
+		if (typeof(default_list_item) == 'undefined') {
+			if (typeof(LayoutChannels) != 'undefined' && LayoutChannels.length > 0) {
+				for (var i = 0; i < LayoutChannels.length; i++) {
+					//if (parseInt(LayoutChannels[i].id) == parseInt(v.id_channel) || (LayoutChannels[i].channel_type=='search' && v.channel_type == 'search')) {
+					
+					
+					
+					if (parseInt(LayoutChannels[i].id) == parseInt(v.id_channel)) {
+						default_list_item = list_item;
+						changed = true;
+					}
+				}
+			}
+		}
+		list_item.click(function() {
+			$('#channels_list li').removeClass('active2');
+			$('.ui-channel').removeClass('active');
+			$(this).addClass('active2');
+
+			var wiz = $('#wizardHere'); 
+			if ($('#channel' + v.id_channel).length == 1) {
+				wiz.next().hide().remove();
+				wiz.show();
+				$('#channel' + v.id_channel).addClass('active');
+			} else if ($('.search-channel.ui-channel').length == 1 && v.ad_type == 'search') {
+				wiz.next().hide().remove();
+				wiz.show();
+				$('.search-channel').addClass('active');
+			} else if ($('.intext-channel.ui-channel').length == 1 && v.ad_type == 'intext') {
+				wiz.next().hide().remove();
+				wiz.show();
+				$('.intext-channel').addClass('active');
+			} else {
+				//$('#wizardHere').hide();
+				if (wiz.next().length == 0)
+					if (typeof(LayoutChannels) != 'undefined') {
+						wiz.next().hide().remove();
+						wiz.after('<div><table class="hintTable" style="width:' + wiz.width() + 'px;height:' + wiz.height() + 'px;"><tr><td></td></tr></table><table class="hTable" style="width:' + wiz.width() + 'px;height:' + wiz.height() + 'px;"><tr><td align="center"><div class="empty">{@Selected channel is not listed on layout@}</div></td></tr></table></div>');
+					}
+			}
+			
+			getChannelInfo(v.channel_code);
+		});
+		
+	});
+
+	if (!changed) {
+		default_list_item = first_item;
+	}
+
+	if (default_list_item) {
+		default_list_item.click();
+	}
+	
+	return true;
+}
+
+
+
+$(function(){
+	type_change();
+
+});
+
+function type_change() {
+	isImage = $('#ad_type_filter').val()=='image';
+	if (isImage) {
+	   $('#image_size_filter').removeAttr('disabled');
+	} else {
+       $('#image_size_filter').val('');
+	    $('#image_size_filter').attr('disabled', 'disabled');		
+	}			
+}
+
+function reset_form() {
+	   $('#keyword_filter').val('');
+	   $('#ad_type_filter').val('');
+	   $('#image_size_filter').val('');
+	   $('#category_filter').val('');
+	   $('#cost_model_filter').val('');
+	   type_change();
+	   $("#site_directory_form").submit();
+	}
+
+function show_site_info(code_site) {
+   $('.xTable tr').removeClass('selected');
+	var tr = $('div.site_info#'+code_site).parent().parent();
+   if($('div.site_info#'+code_site).html()!='') {
+      $('div.site_info').empty();
+      return;
+   }
+   tr.addClass('selected');
+   tr.prev().addClass('selected');
+   $('div.site_info').empty();
+   $('div.site_info#'+code_site).load('<%SITEURL%><%INDEXPAGE%><%ROLE%>/site_information/index/'+code_site);
+     
+}
+
+function responseChannelInfo(response) {
+	try {
+		var response_object = JSON.parse(response);
+	} catch (e) {
+		alert('{@Invalid server reply@}');
+		return;
+	}
+
+	if (response_object.error_flag) {
+		alert(response_object.error_message);
+		return;
+	}
+
+	var channel = response_object.channel;
+
+	var Img =  (channel.type == 'Image') ? '_1' : '';
+	
+	if (channel.type == 'search') {
+		$('#channel_name').text(channel.name);
+		$('#channel_type').text(channel.type);
+		$('#channel_format').parent().parent().hide();
+		$('#channel_slots_count').parent().parent().hide();
+	} else if (channel.type == 'intext') {
+		$('#channel_name').text(channel.name);
+		$('#channel_type').text(channel.type);
+		$('#channel_format').parent().parent().hide();
+		$('#channel_slots_count').parent().parent().hide();
+	} else {
+		$('#channel_format').parent().parent().show();
+		$('#channel_slots_count').parent().parent().show();
+		$('#channel_name').text(channel.name);
+		$('#channel_type').text(channel.type);
+		$('#channel_format').html(channel.format);
+		$('#channel_slots_count').text(channel.slots);
+		$('#slots_preview')[0].src = '<%SITEURL%>images/slots_preview/slots_' + channel.id_dimension + Img + '.gif';
+		$('#channel_cost_models').text(channel.cost_models);
+	}
+
+
+   if (channel.cpm_prices == null) {      
+      $('#cpm_row').addClass('hide');
+   } else {
+      $('#cpm_row').removeClass('hide');
+      cpm_prices = '';
+      cpm_text = '';
+      cpm_image = '';
+      $.each(channel.cpm_prices, function(i, v){
+         cpm_prices += '<label><input type="radio" name="price" value="'+v.id+'">&nbsp;'+v.title+'</label>';
+         cpm_text += v.cost_text+" {@per@} "+v.volume+" {@imp.@}";
+         cpm_image += v.cost_image+" {@per@} "+v.volume+" {@imp.@}";
+      });
+      $('#cpm_prices').html(cpm_prices);
+      $('#cpm_text').html(cpm_text);
+      $('#cpm_image').html(cpm_image);
+   }
+
+   prices_html='';
+   if (channel.prices.Flat_Rate != null) {
+	   prices_html += '<tr class="th"><td><label>{@Flat Rate@}</label></td>'+
+	      '<td align="right">{@Period@}</td><td align="right">{@Text Price@}</td>'+
+	      '<td align="right">{@Image Price@}</td></tr>';
+	   if (channel.buyed_flat_rate) {
+		   prices_html += '<tr><td></td><td></td><td colspan=2>{@Program is already bought@}</td></tr>';
+	   } else {
+		   $.each(channel.prices.Flat_Rate,
+		      function(i,v){
+			      prices_html+='<tr title="'+v.title+'"><td class="center"><input type="radio" name="price_radio" '+
+			         'value="'+v.id_program+'"></td><td align="right">'+v.volume+' {@days@}</td>'+
+			         '<td align="right">'+v.cost_text+'</td><td align="right">'+v.cost_image+
+			         '</td></tr>';
+		      }
+		   );
+	   }
+   }
+   if (channel.prices.CPM != null) {
+	      prices_html += '<tr class="th"><td><label>{@CPM@}</label></td>'+
+	         '<td align="right">{@Impressions@}</td><td align="right">{@Text Price@}</td>'+
+	         '<td align="right">{@Image Price@}</td></tr>';
+	      $.each(channel.prices.CPM,
+	         function(i,v){
+	            prices_html+='<tr title="'+v.title+'"><td class="center"><input type="radio" name="price_radio" '+
+	               'value="'+v.id_program+'"></td><td align="right">'+v.volume+'</td>'+
+	               '<td align="right">'+v.cost_text+'</td><td align="right">'+v.cost_image+
+	               '</td></tr>';
+	         }
+	      );
+	   }
+   if (channel.prices.CPC != null) {
+       prices_html += '<tr class="th"><td><label>{@CPC@}</label></td><td></td>'+
+          '<td align="right">{@Min Text Bid@}</td>'+
+          '<td align="right">{@Min Image Bid@}</td></tr>';
+       v=channel.prices.CPC;
+       prices_html+='<tr title="{@CPC program@}"><td class="center"><input type="radio" name="price_radio" '+
+          'value="'+v.id_program+'"></td><td></td>'+
+          '<td align="right">'+v.cost_text+'</td><td align="right">'+v.cost_image+
+          '</td></tr>';
+    }
+
+//   prices_html+='</td></tr>';
+   $('#channel_price_table').html(prices_html);
+   $('#channel_price_table tr:not(.th, .skip) td').addClass('cursor-hand').click(function(e){
+			if (e.target.tagName == 'TD') {
+				$(this).parent().find('input:radio').click();
+				$('#buyButton, #buyButton1').guiEnable();
+			}
+   });
+   $('#channel_price_table input:radio').click(function(e){
+		$('#buyButton, #buyButton1').guiEnable();
+     });
+   
+   
+   
+}
+
+function clearChannelInfo() {
+	$('#channel_name').text('');
+	$('#channel_type').text('');
+	$('#channel_format').html('');
+	$('#channel_slots_count').text('');
+	$('#channel_cost_models').text('');
+}
+
+function responseBuySiteChannel(response) {
+	try {
+	      var response_object = JSON.parse(response);
+	   } catch (e) {
+	      alert('{@Invalid server reply@}');
+	      return;
+	   }
+
+	if (response_object.error_flag) {
+		alert(response_object.error_message);
+		return;
+	} else {
+		$('#buy_form').attr('action',response_object.buy_link);
+		$('#site_code').val(response_object.site_code);
+      $('#program_code').val(response_object.program_code);
+		$('#buy_form').submit();		
+//		go(response_object.buy_link);
+	}
+}
+
+function getChannelInfo(channel_code) {
+	clearChannelInfo();
+	$("#channel_information_loading").show();
+	current_channel_code = channel_code;
+	$.post('<%SITEURL%><%INDEXPAGE%><%ROLE%>/site_information/get_channel_details',{channel_code: channel_code, site_code: current_site_code}, function(data) {
+		responseChannelInfo(data);
+		$('#buyButton, #buyButton1').guiDisable();
+		$("#channel_information_loading").hide();
+	});
+}
+
+function BuySiteChannel() {
+	$.post("<%SITEURL%><%INDEXPAGE%><%ROLE%>/buy_site_channel/check",
+      {site_code: current_site_code, program_code: $('input[name=price_radio]:checked').val()},
+		function(data) {
+			responseBuySiteChannel(data); 
+		});
+}
+
+//-->
+</script>
+<form id="buy_form" method="post">
+   <input type="hidden" id="site_code" name="site_code">
+   <input type="hidden" id="program_code" name="program_code">
+</form>
+<h1>{@Site Directory@}</h1>
+<form method="post" name="site_directory_form" id="site_directory_form" style="min-width: 1200px">
+<div class="filterBox p5">
+	<table class="table">
+		<tr>
+			<td class="top pl15">
+				<label>Search by Keyword</label>
+				<table>
+					<tr>
+						<td><input id="keyword_filter" name="keyword_filter" class="w150" type="text" value=""/></td>
+						<td><input type="button" class="guibutton floatl" onclick="filter('keyword/value');" value="Search"></td>
+					</tr>
+				</table>
+			</td>
+			<td class="top pl25">
+				<label class="mb5" for="">{@Type@}: </label>
+					<select class="w150" name="ad_type_filter" id="ad_type_filter" onchange="type_change();">
+					</select>
+			</td>
+         <td class="top pl25">
+            <label class="mb5" for="">{@Image Size@}: </label>
+               <select class="w210" name="image_size_filter" id="image_size_filter">
+               </select>
+         </td>
+			<td class="top pl15">
+				<label class="mb5" for="">{@Cost Model@}: </label>
+					<select class="w100" name="cost_model_filter" id="cost_model_filter">
+					</select>			
+			</td>
+			<td class="top pl15">
+				<label class="mb5" for="">{@Category@}: </label>
+					<select class="w200" name="category_filter" id="category_filter">
+					</select>			
+			</td>
+			<td class="pt16 pl15"><input type="submit" class="guibutton floatl ico ico-arrowreload" value="{@Update@}" onClick="$('#site_directory_form').submit();"></td>
+			<td class="pt16 pl10"><input type="button" class="guibutton floatl ico ico-delete" value="{@Reset@}" onclick="reset_form();"></td>
+		</tr>
+	</table>
+</div>
+<!--  -->
+<table class="w100p table">
+   <tr class="top">
+      <td class="top w250 hide">
+         <h2 class="pt0">{@Site filters@}</h2>
+         <div class="inlet p10">
+	         <table class="w100p table">
+	            <tr>
+	               <td>
+	                  <%ADTYPEFILTER%>
+	                  <br><hr><br>
+	               </td>
+	            </tr>
+	            <tr>
+	               <td>
+	                  <%COSTMODELFILTER%>
+	                  <br><hr><br>
+	               </td>
+	            </tr>
+	            <tr>
+	               <td>
+	                  <%CATEGORYFILTER%>
+	                  <br><hr><br>
+	               </td>
+	            </tr>
+	            <tr>
+	               <td>
+	                  <%KEYWORDFILTER%>
+	               </td>
+	            </tr>
+	         </table>
+         </div>
+      </td>
+      <td class="w20 hide"></td>
+      <td class="top">
+      	<h2 class="pt0 hide">{@Sites@}</h2>
+            <div class="frame p5">
+             <div class="inlet">
+                <%TABLE%>
+             </div>
+             <%PAGINATION%>
+         </div>
+      </td>
+   </tr>
+</table>
+</form>
+<script type="text/javascript">
+   jQuery(document).ready(function() {
+      if ('<%SITE_CODE%>') {
+         show_site_info('<%SITE_CODE%>');
+      }
+   });
+</script>

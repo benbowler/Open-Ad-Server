@@ -1,0 +1,30 @@
+<div class='filterBox'>
+	<table class="table">
+		<tr>
+			<td class="pl10">
+				<label for="dimension_filter" class="mb5">{@Filter by dimension@}:</label>
+				<select id="dimension_filter" name="dimension_filter" class="w200">
+					<%DIMENSION_FILTER_OPTION%>
+					<option value="<%FILTER_VALUE%>" <%FILTER_SELECTED%> ><%FILTER_NAME%></option>
+					<%/DIMENSION_FILTER_OPTION%>
+				</select>
+			</td>
+         	<td class="pl10">
+         		<label for="quicksearch" class="mb5">
+         			{@Quick Search@}
+         			<span style="font-size: 0.8em">({@ID@}, {@Name@}, {@Dimension@})</span>
+         		</label>
+         		<input type="text" name="quicksearch" id="quicksearch" class="w200" value="<%QUICKSEARCH_FILTER%>" />
+         	</td>
+         	<td class="bottom pl10">
+         	 	<input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="reload_aviable_tags();"/>
+         	</td>
+		</tr>
+	</table>
+</div>
+<div class="mt5">
+	<%COLUMNS%>
+	<div class="inlet">
+		<%TAGS%>
+	</div>
+</div>

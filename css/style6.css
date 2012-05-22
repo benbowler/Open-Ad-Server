@@ -1,0 +1,145 @@
+@CHARSET "UTF-8";
+
+/*
+@IMPORT url("_commonlib.css");
+
+@IMPORT url("jquery.css");
+@IMPORT url("_elements.css");
+*/
+
+
+
+BODY {
+	margin: 20px;
+	font-size: 12px;
+	font-family: "Arial", "Tahoma", "Verdana";
+}
+
+#logo {
+	width: 293px;
+	height: 36px;
+	padding: 15px 20px 	5px 2px;
+}
+
+#logo .title {
+	width: 293px;
+	height: 36px;
+	background: url("../images/smartppc6/logo.png") no-repeat;
+	margin-top:-8px;
+}
+
+#logo .title .version {
+	float: right;
+	width: 28px;
+	margin-top: -5px;
+	height: 46px;
+}
+
+#logo .subtitle {
+	text-transform: uppercase;
+	/* letter-spacing: -0.03em; */
+	font-size: 9px;
+	font-family: Tahoma;
+	color: #b6b1aD;
+}
+
+#logo a {
+	color: #b6b1aD;
+	text-decoration: none;
+}
+
+
+#footer {
+	clear: both;
+
+	color: #888;
+	display: block;
+}
+
+/*--------------------min width--------------------------------*/
+
+/*-----------menu min width-------------------*/
+/*для всех броузеров тех которые понимают min-width */
+.menu-min-width {
+	width:100%;
+	min-width:956px ;
+ }
+/* для IE */
+* html div.menu-min-widt div.minwidth {
+	 border-left:956px solid #fff;/*min-width*/
+	 position:relative;
+	 float:left;
+	 z-index:1;
+ }
+ * html div.menu-min-widt div.minwidth div.container {
+	 margin-left:-956px; /*-min-width*/
+	 position:relative;
+	 float:left;
+	 z-index:2;
+ }
+/*-----------/menu min width-------------------*/
+
+ /*-----------body min width-------------------*/ 
+ .body-min-width {
+	width:100%;
+	min-width:1027px ;
+ }
+/* для IE */
+* html div.body-min-widt div.minwidth {
+	 border-left:1027px solid #fff;/*min-width*/
+	 position:relative;
+	 float:left;
+	 z-index:1;
+ }
+ * html div.body-min-widt div.minwidth div.container {
+	 margin-left:-1027px; /*-min-width*/
+	 position:relative;
+	 float:left;
+	 z-index:2;
+ }
+ /*-----------body min width-------------------*/
+ .bordImgImg {
+	border:1px solid #CCCCCC;
+	margin:auto;
+	padding:4px;
+}
+
+.new{
+	position:relative;
+}
+
+ div.new div{
+ 	overflow:hidden;
+	position:absolute;
+/*	white-space:nowrap;*/
+	width:100%;
+ }
+ /*---------------------alerts classes------------------------*/
+ .alerts{
+ 	vertical-align: middle;
+ }
+ .alerts img{
+ 	vertical-align: -50%;
+ }
+ .alerts .button{
+	padding-left: 5px;
+ }
+ 
+.safari .alerts{
+	vertical-align: middle;
+ }
+.safari .alerts img{
+	vertical-align: -30%;
+	border:1px solid #F9F2DE;
+ }
+.safari .alerts .button{
+	padding-left: 5px;
+ }
+ 
+.bordImg {
+	border:1px solid #CCCCCC;
+	margin:0 0 8px;
+	padding:4px;
+}
+	 
+#atffc {display: none;}

@@ -1,0 +1,377 @@
+<?php
+/**
+ * @file
+ * Displays Google orbitscriptsads ads on Drupal pages
+ *
+ * This is the core module of the orbitscriptsads package, with the Drupal hooks
+ * and other administrative functions.
+ */
+
+define('ORBITSCRIPTSADS_SITE_NAME','<%SITE_NAME%>');
+define('ORBITSCRIPTSADS_API_KEY_DEFAULT', '<%API_KEY%>');
+define('ORBITSCRIPTSADS_BASE_URL_DEFAULT', '<%BASE_URL%>');
+define('ORBITSCRIPTSADS_SITE_ID_DEFAULT', '<%SITE_ID%>');
+define('ORBITSCRIPTSADS_DISABLE_DEFAULT', 0);
+define('ORBITSCRIPTSADS_ID_MODULE_DEFAULT', 'orbitscriptsads_basic');
+
+/**
+ * Implementation of hook_perm().
+ */
+function orbitscriptsads_perm() {
+  return array('administer orbitscriptsads', 'hide orbitscriptsads', 'use PHP for ad visibility');
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function orbitscriptsads_theme() {
+  return array(
+    'orbitscriptsads_ad' => array(
+      'arguments' => array('ad' => NULL, 'module' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function orbitscriptsads_menu() {
+  $items = array();
+
+  $items['admin/settings/orbitscriptsads'] = array(
+    'title' => 'Orbit Ads',
+    'description' => 'Configure Orbit Ads.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('orbitscriptsads_main_settings'),
+    'access arguments'  => array('administer orbitscriptsads'),
+    'file' => 'orbitscriptsads.admin.inc',
+  );
+  
+  $items['admin/settings/orbitscriptsads/main'] = array(
+    'title' => 'Settings',
+    'weight' => 10,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_requirements().
+ */
+function orbitscriptsads_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  switch ($phase) {
+    // At runtime, make sure that we have a publisher ID
+    case 'runtime':
+      $basic_id = variable_get('orbitscriptsads_basic_id', orbitscriptsads_BASIC_ID_DEFAULT);
+      if (empty($basic_id)) {
+        $requirements['orbitscriptsads_basic_id'] = array(
+          'title' => $t('orbitscriptsads'),
+          'value' => $t('Publisher ID is not set.'),
+          'description' => $t('Please configure it in the <a href="@url">orbitscriptsads settings page</a>.', array('@url' => url('admin/settings/orbitscriptsads'))),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+      break;
+  }
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_filter().
+ */
+function orbitscriptsads_filter($op, $delta = 0, $format = -1, $text = '') {
+  switch ($op) {
+    case 'list':
+      return array(0 => t('orbitscriptsads tag'));
+    case 'no cache':
+      return TRUE;
+    case 'description':
+      return t('Substitutes an orbitscriptsads special tag with an ad.');
+    case 'process':
+      return _orbitscriptsads_process_tags($text);
+    default:
+      return $text;
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function orbitscriptsads_nodeapi(&$node, $op = 'view', $teaser, $page) {
+  switch ($op) {
+    case 'view':
+      if (variable_get('orbitscriptsads_section_targeting', orbitscriptsads_SECTION_TARGETING_DEFAULT)) {
+        $node->content['orbitscriptsads_start'] = array(
+          '#value' => '<!-- google_ad_section_start -->',
+          '#weight' => -5,
+          );
+        $node->content['orbitscriptsads_end'] = array(
+          '#value' => '<!-- google_ad_section_end -->',
+          '#weight' => 5,
+          );
+      }
+  }
+}
+
+/**
+ * Implementation of hook_form_filter_admin_format_form_alter().
+ */
+function orbitscriptsads_form_filter_admin_format_form_alter(&$form, $form_state) {
+  // In Drupal <= 6.9 (or later) the HTML corrector has a bug that causes problems with the use of the orbitscriptsads tag filter
+  sscanf(VERSION, "%d.%d", $major, $minor);
+  if (($major == 6) && ($minor <= 99)) {
+    if ((empty($form_state['post']) && $form['filters']['orbitscriptsads/0']['#default_value'] && $form['filters']['filter/3']['#default_value']) ||
+        ((!empty($form_state['post'])) && ($form_state['post']['filters']['orbitscriptsads/0'] == '1') && ($form_state['post']['filters']['filter/3'] == '1'))) {
+      drupal_set_message(t('The HTML corrector filter has a bug that causes problems with the use of the orbitscriptsads tag. Disabling the HTML corrector filter is recommended.'), 'warning', TRUE);
+    }
+  }
+}
+
+/**
+ * Implementation of hook_filter_tips().
+ */
+function orbitscriptsads_filter_tips($delta, $format, $long = FALSE) {
+  return t('Use the special tag [orbitscriptsads:<em>format</em>:<em>slot</em>] or [orbitscriptsads:<em>format</em>:<em>[group]</em>:<em>[channel]</em><em>[:slot]</em>] or [orbitscriptsads:block:<em>location</em>] to display Google orbitscriptsads ads.');
+}
+
+/**
+ * Helper function to process the orbitscriptsads input filter
+ *
+ * @param $text
+ *   text of the node being processed
+ * @return
+ *   modified text with the orbitscriptsads tags replaced by Google orbitscriptsads ads
+ * @see orbitscriptsads_filter()
+ * @see orbitscriptsads_display()
+ */
+function _orbitscriptsads_process_tags($text) {
+  $patterns = array(
+    'block'  => '/\[orbitscriptsads:block:([^\]]+)\]/x',
+    'oldtag' => '/\[orbitscriptsads:([^:]+):(\d*):(\d*):?(\w*)\]/x',
+    'tag'    => '/\[orbitscriptsads:([^:]+):([^\]]+)\]/x',
+  );
+
+  foreach ($patterns as $mode => $pattern) {
+    if (preg_match_all($pattern, $text, $matches, PREG_SET_ORDER)) {
+      foreach ($matches as $match) {
+        switch ($mode) {
+          case 'block':
+            $mods = array(
+              'orbitscriptsads_managed',
+              'orbitscriptsads_cse',
+              'orbitscriptsads_oldcode',
+              'orbitscriptsads_search',
+            );
+            foreach ($mods as $module) {
+              $module_blocks = module_invoke($module, 'block', 'list');
+              if ($module_blocks) {
+                foreach ($module_blocks as $delta => $block) {
+                  if ($block['info'] == $match[1]) {
+                    // Found the block with the same name as the passed arg
+                    $block = module_invoke($module, 'block', 'view', $delta);
+                    $ad = $block['content'];
+                  }
+                }
+              }
+            }
+            break;
+          case 'oldtag':
+            // If not specified, default group and channel to 1
+            if (empty($match[2])) {
+              $match[2] = 1;
+            }
+            if (empty($match[3])) {
+              $match[3] = 1;
+            }
+            $args = array(
+              'format'  => $match[1],
+              'group'   => $match[2],
+              'channel' => $match[3],
+              'slot'    => $match[4],
+            );
+            $ad = orbitscriptsads_display($args);
+            unset($args);
+            break;
+          case 'tag':
+            $args = array(
+              'format'  => $match[1],
+              'slot'    => $match[2],
+            );
+            $ad = orbitscriptsads_display($args);
+            unset($args);
+            break;
+        }
+        // Replace the first occurance of the tag, in case we have the same
+        // tag more than once.
+        $str = '/\\'. $match[0] .'/';
+        $text = preg_replace($str, $ad, $text, 1);
+      }
+    }
+  }
+
+  return $text;
+}
+
+/**
+ * Provides the Google orbitscriptsads Publisher ID / slot ID to be used in the ad
+ *
+ * If revenue sharing modules are installed, this function will call the
+ * appropriate function in those modules.
+ *
+ * @param $format
+ *   format of the ad being generated (optional)
+ * @return
+ *   If the format parameter is supplied, array with 'client' and 'slot'
+ *   fields, otherwise just the Publisher ID string is returned
+ */
+function orbitscriptsads_get_client_slot_id($format = NULL) {
+  // Get the configured function
+  $function = variable_get('orbitscriptsads_id_module', orbitscriptsads_ID_MODULE_DEFAULT);
+
+  if ($function != orbitscriptsads_ID_MODULE_DEFAULT) {
+    // Call the function
+    if (function_exists($function)) {
+      $client_id = $function('client_id', $format);
+      if ($client_id) {
+        return $client_id;
+      }
+    }
+  }
+  return variable_get('orbitscriptsads_basic_id', orbitscriptsads_BASIC_ID_DEFAULT);
+}
+
+/**
+ * Generates the Google orbitscriptsads Ad
+ *
+ * This function is capable of handling two types of arguments:
+ * 1. an array of arguments (format, group, channel or slot)
+ * 2. 0 to 4 arguments:
+ *   - 1st arg: format  (default '160x600')
+ *   - 2nd arg: group   (default 1)
+ *   - 3rd arg: channel (default 1)
+ *   - 4th arg: slot    (default '')
+ *
+ * A valid format must always be provided. If a slot is provided, the ad is generated by the
+ * new format modules, if not then the 'old' format modules are attempted.
+ *
+ * @return
+ *   Publisher ID string
+ * @see orbitscriptsads_ad_formats()
+ * @see _orbitscriptsads_page_match()
+ * @see _orbitscriptsads_check_if_enabled()
+ * @see _orbitscriptsads_format_box()
+ * @see _orbitscriptsads_can_insert_another()
+ * @see _orbitscriptsads_cse_get_searchbox()
+ * @see _orbitscriptsads_search_get_searchbox()
+ * @see _orbitscriptsads_managed_get_ad()
+ * @see _orbitscriptsads_oldcode_get_ad()
+ */
+function orbitscriptsads_display() {
+   return 'BLAH!';
+}
+
+/**
+ * Default orbitscriptsads ad unit theming. Simply add a div with the orbitscriptsads and $module classes
+ *
+ * @param $ad
+ *   string with the generated ad unit
+ * @param $module
+ *   module used to generate the ad
+ *
+ * @return
+ *   string with the modified ad unit
+ * @ingroup themeable
+ */
+function theme_orbitscriptsads_ad($ad, $module) {
+  return "<div class='orbitscriptsads $module'>\n$ad\n</div>";
+}
+
+/**
+ * Helper function to verify if ads are currently enabled
+ *
+ * @return
+ *   TRUE if ad display is enabled, FALSE otherwise
+ */
+function _orbitscriptsads_check_if_enabled() {
+  if (!variable_get('orbitscriptsads_basic_id', orbitscriptsads_BASIC_ID_DEFAULT)) {
+    // Google orbitscriptsads Publisher ID is not configured
+    return FALSE;
+  }
+  if (variable_get('orbitscriptsads_disable', orbitscriptsads_DISABLE_DEFAULT)) {
+    return FALSE;
+  }
+  if (variable_get('orbitscriptsads_test_mode', orbitscriptsads_TEST_MODE_DEFAULT)) {
+    return TRUE;
+  }
+  if (variable_get('orbitscriptsads_secret_adtest', orbitscriptsads_SECRET_ADTEST_DEFAULT)) {
+    return TRUE;
+  }
+  if (user_access('hide orbitscriptsads')) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Determine if orbitscriptsads has reached limit on this page. As per Google's
+ * policies, a page can have up to 3 ad units and 3 link units.
+ *
+ * @return
+ *   TRUE if we can insert another ad, FALSE if not allowed.
+ */
+function _orbitscriptsads_can_insert_another($type = orbitscriptsads_TYPE_AD) {
+  static $num_ads = array(
+    orbitscriptsads_TYPE_AD     => 0,
+    orbitscriptsads_TYPE_LINK   => 0,
+    orbitscriptsads_TYPE_SEARCH => 0,
+  );
+
+  $max_ads = array(
+    orbitscriptsads_TYPE_AD     => 3,
+    orbitscriptsads_TYPE_LINK   => 3,
+    orbitscriptsads_TYPE_SEARCH => 2,
+  );
+
+  if ($num_ads[$type] < $max_ads[$type]) {
+    $num_ads[$type]++;
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Determine if orbitscriptsads has permission to be used on the current page.
+ *
+ * @return
+ *   TRUE if can render, FALSE if not allowed.
+ */
+function _orbitscriptsads_page_match() {
+  // Do not show ads on secure pages.
+  // This is for two reasons:
+  // Google would most probably not have indexed secure pages
+  // and it also prevents warnings about mixed-content
+
+  if (isset($_SERVER['SERVER_SOFTWARE']) && (stristr($_SERVER['SERVER_SOFTWARE'], 'Apache') !== FALSE) && 
+      isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on')) {
+    return FALSE;
+  }
+    return true;
+}
+
+/**
+ * Generate a box to display instead of the ad when it is disabled
+ *
+ * @return
+ *   string with the HTML text to create the box
+ */
+function _orbitscriptsads_format_box($text, $width, $height) {
+  $dimensions = ((!empty($width)) && (!empty($height)))
+                ? " width:". $width ."px; height:". $height ."px;" : "";
+
+  return "<div class='orbitscriptsads' style='text-align:center;display: table-cell;vertical-align:middle;border:solid 1px;${dimensions}'>${text}</div>";
+}

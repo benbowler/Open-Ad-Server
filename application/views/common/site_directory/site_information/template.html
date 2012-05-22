@@ -1,0 +1,125 @@
+<script type="text/javascript">
+//<!--
+var siteLayoutJson;
+var siteChannelsList;
+var current_site_code='<%SITE_CODE%>';
+var current_channel_code;
+
+function parseX(ch_list, layout){
+
+	try {	ch_list = JSON.parse(ch_list); } catch(e){}
+
+	if (typeof(layout) !='undefined' && layout !='') {
+		var config = JSON.parse(layout);
+		config.formatTable = false;
+		config.resizeCells = false;
+		config.scaledWidth = 600;
+		config.scaledHeight = 600;
+		config.showSizes = false;
+		config.showChannels = true;
+		config.callbackChannels = true;
+		config.manageChannels = false;
+		config.onChannelClick = function(){
+			
+			if (this.ad_type == 'search') {
+				$('#channel_link_search_channel').trigger('click');
+			} else if (this.ad_type == 'intext') {
+				$('#channel_link_intext_channel').trigger('click');
+			} else {
+				for (var i = 0; i < ch_list.length; i++) {
+					if (parseInt(ch_list[i].id_channel) == parseInt(this.id)) {
+						$('#channel_link_' + ch_list[i].channel_code).trigger('click');
+					} 
+				}
+			}
+		};
+		config.onRebuild = function(){
+			$('#wizardHere').parent().css('height', Math.round(this.height * this.scaleRatio) + 'px');
+		};
+
+		var newChannels = new Array();
+		
+		for (i = 0; i < config.channels.length; i++) {
+			for (j = 0; j < ch_list.length; j++) {
+		
+				if ((parseInt(ch_list[j].id_channel) == parseInt(config.channels[i].id)) || (ch_list[j].ad_type == config.channels[i].ad_type &&  
+					    ( ch_list[j].ad_type == 'search' || ch_list[j].ad_type == 'intext'))) {
+					newChannels[newChannels.length] = config.channels[i];
+					break;
+				}
+			}
+		}
+		config.channels = newChannels;
+	
+		$('#wizardHere').gridWizard(config);
+		parseSitesInformation(ch_list, layout);
+	} else {
+		parseSitesInformation(ch_list, layout);
+		$('#wizardHere').next().hide().remove();
+		$('#wizardHere').after('<table class=w100p table><tr><td class=empty>{@Layout does not created for this site@}</td></tr></table>');
+	}
+}
+
+$(function() {
+	<%JSCODE%>
+   parseX('<%SITE_CHANNELS_LIST%>', siteLayoutJson);
+	replaceFormButtons(this.document);
+});
+
+//-->
+</script>
+<div class="p10">
+	<table class="w100p">
+		<tr class="top">
+			<td >
+				<h2 class="pt0">{@General Information@}</h2> 
+				<div class="inlet p5 mb10">
+	            
+	            <table class="mb10 smplTable w100p">
+				      <!-- tr class="top"><td class="w150"><label>{@Traffic Volume@}:</label></td><td><%SITE_VIEWS_COUNT%></td></tr>  -->
+	               <tr class="top"><td><label>{@AdMarket since@}:</label></td><td><%SITE_CREATION_DATE%></td></tr>
+	               <tr class="top"><td><label>{@Categories@}:</label></td><td><%SITE_CATEGORY%></td></tr>
+	               <tr class="top"><td><label>{@Description@}:</label></td><td><%SITE_DESCRIPTION%></td></tr>
+				   </table>
+				</div>
+				<div class="frame p10">
+					<table class="table w100p">
+						<tr>
+							<td><h2 class="">{@Channels@}</h2></td>
+							<td>
+								<img id="channel_information_loading" class="hide floatr pr10 pt10" src="<%SITEURL%>images/loading.gif"/>
+								<h2 class="">{@Channel information@}</h2>
+							</td>
+						</tr>
+						<tr class="top">
+							<td class="w200">
+							   <ul class="channels_list_sd" id="channels_list"></ul>									
+							</td>
+							<td class="">
+					    		<table class="xTable mb10">
+			                  <tr><td class="w50p"><label>{@Channel Name@}:</label></td><td><span id="channel_name"></span></td></tr>
+			                  <tr><td><label>{@Channel Type@}:</label></td><td><span id="channel_type"></span></td></tr>
+			                  <tr><td><label>{@Format@}:</label></td><td><span id="channel_format"></span></td></tr>
+			                  <tr class="top"><td><label>{@Max Ad Slots@}:</label></td><td><span id="channel_slots_count"></span><div class="floatr"><img id='slots_preview'/></div></td></tr>
+                        </table> 
+                        <table class="xTable w100p" cellpadding="0" cellspacing="0">
+	                        <tr class="th"><td colspan="4">{@Cost Models@}<input type="button" id="buyButton1" disabled="disabled" class="guibutton disabled floatr greenBtn ico ico-plusgreen2 mr3" value="{@Buy this site/channel@}" onclick="return BuySiteChannel();"/></td></tr>
+	                        
+                        </table>
+                        <table class="xTable w100p mb5" id="channel_price_table" cellpadding="0" cellspacing="0"></table>
+			               <input type="button" id="buyButton" disabled="disabled" class="guibutton disabled floatr greenBtn ico ico-plusgreen2" value="{@Buy this site/channel@}" onclick="return BuySiteChannel();"/> 
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td class="w10"></td>
+			<td class="w620">
+				<h2 class="pt0">Layout</h2>
+				<div class="w620 h640 inlet p10">
+					<div id="wizardHere"></div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

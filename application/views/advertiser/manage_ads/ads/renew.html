@@ -1,0 +1,47 @@
+<script type="text/javascript">
+$(function(){
+   $('#pl').each(function(){
+	   $('#pl').after('<div class="inlet selectReplacer p3"></div>');
+		if (this.options.length == 1) {
+			$(this).hide();
+			$('div.selectReplacer', $(this).parent()).text($(this.options[0]).text());
+			//$(this).after($(this.options[0]).text());
+			$('div.selectReplacer', $(this).parent()).show();
+		} else {
+			$('div.selectReplacer', $(this).parent()).hide();
+		}
+	});
+})
+</script>
+<h1 class="smaller"><a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads">{@Manage Ads@}</a> &rarr; <%TITLE%> &rarr; {@Renew@}</h1>
+
+<form id="renew_form" name="renew_form" method="post">
+   <input type="hidden" name="group_site_channel">
+   <input type="hidden" name="new_ad_type">
+   <input type="hidden" name="new_program">
+   <div id="error_message_div"></div>
+   <div class="frame p10 mb10">
+	   <div class="hintBox2 p10 mb10"><div class="ico ico-infored"><%DESCRIPTION%></div></div>
+	   <a name="fields_begin"></a>
+	   <table class="table mb10">
+	   	<tr>
+	   		<td><label for="pl">{@Programs@}:</label></td>
+	   		<td class="pl10"><select id="pl" name="program"></select></td>
+	   		</tr>
+	   	<tr>
+	   		<td class="pt10"><label for="ar">{@Auto Renew@}:</label></td>
+	   		<td class="pl10 pt10"><input type="checkbox" id="ar" name="autorenew" value="true"></td>
+	   		</tr>
+	   	</table>
+	   <a name="fields_end"></a>
+	   <a name="submit_begin"></a>
+	   <button class="button w100" title="{@Submit@}" id="okButton" value="{@Save@}" type="submit">
+	      <span class="ico ico-confirm">{@Submit@}</span>
+	   </button>
+	   <a name="submit_end"></a>
+	   
+	   <button class="button w100" title="{@Cancel@}" id="cancelButton" onclick="document.location='<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/group/<%CODE%>/channels'" value="{@Cancel@}" type="button">
+	      <span class="ico ico-cancel">{@Cancel@}</span>
+	   </button>
+   </div>
+</form>

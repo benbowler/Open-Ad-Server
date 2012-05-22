@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+   body,html{margin:0; padding:0}
+   #banner{font:normal 12px Arial, sans-serif;position:absolute;z-index:100;width:{width}px;height:{height}px;background-color:#{background_color};border: 1px #{border_color} solid;vertical-align:middle;}
+   .item{width:{width}px;text-align:left;}
+   .p{padding:0 5px;}
+   .clr{clear:both}
+   .title{font-size:12px;font-style:{title_font_style};font-weight:{title_font_weight};font-family:{title_font};color:#{title_color}}
+   .text{font-size:11px;font-style:{text_font_style};font-weight:{text_font_weight};font-family:{text_font};color:#{text_color}}
+   .url{font-size:10px;overflow:hidden;white-space:pre; text-decoration: underline;font-style:{url_font_style};font-weight:{url_font_weight};font-family:{url_font};color:#{url_color};}
+   a{text-decoration: none;}
+</style>
+</head>
+<body>
+<div id="banner">
+   <table style="border-collapse: collapse; height: {height}px;" border="0" cellpadding="0">
+   {results}
+   <tr valign="middle"><td style="vertical-align: middle;height:{item_height}px;">
+   <div class="item"><div class="p">
+      <div><a target="_blank" href="{click_url}" class="title">{title}</a></div>
+      <div><a target="_blank" href="{click_url}" class="text">{description}</a></div>
+      <div><a target="_blank" href="{click_url}" class="url">{display_url}</a></div>
+   </div></div>
+   {extra}
+   </td></tr>
+   {/results}
+   </table>
+   {your_ad_here_link}
+   	  <a href="{siteurl}guest/site_directory/?site={site_id}&channel={channel_id}#a{site_id}" target="_blank" style="display: block; text-align: center; font-size: 11px; text-decoration: none;">
+      	 {your_ad_here_link_text}
+      </a>
+   {/your_ad_here_link}
+</div>
+<div class="clr"></div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<ul id="menu">
+    <%ITEMS%>
+</ul>
+<div id="menusplitter"></div>
+<%SUBMENUS%>
+<ul id="submenu2">
+	<li style="display:<%HELPDISPLAY%>;">
+		<a href='javascript:openHelpWindow();' class='ico ico-help'>{@Help@}</a>
+	</li>
+	<%ADDITIONAL_HELP%>
+	<li style="display:<%HELPDISPLAY%>;">
+		<a href="<%SITEURL%><%INDEXPAGE%><%HREF%>" target="<%TARGET%>" onclick="<%ONCLICK%>" class='ico ico-help'><%TITLE%></a>
+	</li>
+	<%/ADDITIONAL_HELP%>
+</ul>

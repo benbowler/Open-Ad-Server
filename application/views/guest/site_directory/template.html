@@ -1,0 +1,171 @@
+<script type="text/javascript">
+<!--
+var siteLayoutJson;
+var siteChannelsList;
+var current_site_code;
+
+$(function(){
+	$('div.site_info').addClass('frameBorderless');
+	type_change();
+	$('.xTable td.nohl').each(function(){
+		if (parseInt(this.colSpan) != 3) {
+			 var w = $(this).width();
+			 $(this).css('width', w);
+		} else {
+			$(this).css('min-height', 0);
+			$(this).css('padding', 0);
+			$(this).css('vertical-align', 'top');
+		}
+	});
+
+	
+});
+
+function type_change() {
+	isImage = $('#ad_type_filter').val()=='image';
+	if (isImage) {
+	   $('#image_size_filter').removeAttr('disabled');
+	} else {
+       $('#image_size_filter').val('');
+	    $('#image_size_filter').attr('disabled', 'disabled');		
+	}			
+}
+
+function initCall(){
+	init();
+}
+
+function reset_form() {
+	   $('#keyword_filter').val('');
+	   $('#ad_type_filter').val('');
+	   $('#image_size_filter').val('');
+	   $('#category_filter').val('');
+	   $('#cost_model_filter').val('');
+	   type_change();
+	   $("#site_directory_form").submit();
+	}
+
+function show_site_info(code_site) {
+   if($('div.site_info#'+code_site).html()!='') {
+      $('div.site_info').empty();
+      return;
+   }
+   $('div.site_info').empty();
+
+   //$('div.site_info#'+code_site).html("<iframe src='<%SITEURL%>guest/site_information/index/"+code_site+"'></iframe>");
+   $('div.site_info#'+code_site).load('<%SITEURL%>guest/site_information/index/'+code_site,'',function(){initCall();});
+     
+}
+//-->
+</script>
+
+<h1>{@Site Directory@}</h1>
+<!--  -->
+<form method="post" name="site_directory_form" id="site_directory_form">
+<div class="filterBox p5">
+	<table class="table">
+		<tr>
+			<td class="top pl15">
+				<label>Search by Keyword</label>
+				<table>
+					<tr>
+						<td><input id="keyword_filter" name="keyword_filter" class="w150" type="text" value=""/></td>
+						<td><input type="button" class="guibutton floatl" onclick="filter('keyword/value');" value="Search"></td>
+					</tr>
+				</table>
+			</td>
+			<td class="top pl25">
+				<label class="mb5" for="">{@Type@}: </label>
+					<select class="w100" name="ad_type_filter" id="ad_type_filter" onchange="type_change();">
+					</select>
+			</td>
+         <td class="top pl25">
+            <label class="mb5" for="">{@Image Size@}: </label>
+               <select class="w210" name="image_size_filter" id="image_size_filter">
+               </select>
+         </td>
+			<td class="top pl15">
+				<label class="mb5" for="">{@Cost Model@}: </label>
+					<select class="w100" name="cost_model_filter" id="cost_model_filter">
+					</select>			
+			</td>
+			<td class="top pl15">
+				<label class="mb5" for="">{@Category@}: </label>
+					<select class="w200" name="category_filter" id="category_filter">
+					</select>			
+			</td>
+			<td class="pt16 pl15"><input type="submit" class="guibutton floatl ico ico-arrowreload" value="{@Update@}"  onclick="$('#site_directory_form').submit();"></td>
+			<td class="pt16 pl10"><input type="button" class="guibutton floatl ico ico-delete" value="{@Reset@}" onclick="reset_form();"></td>
+		</tr>
+	</table>
+</div>
+<!--  -->
+<table class="w100p table">
+   <tr class="top">
+      <td class="top w250 hide">
+         <h2 class="pt0">{@Site filters@}</h2>
+         <div class="inlet p10">
+	         <table class="w100p table">
+	            <tr>
+	               <td>
+	                  <%ADTYPEFILTER%>
+	                  <br><hr><br>
+	               </td>
+	            </tr>
+	            <tr>
+	               <td>
+	                  <%COSTMODELFILTER%>
+	                  <br><hr><br>
+	               </td>
+	            </tr>
+	            <tr>
+	               <td>
+	                  <%CATEGORYFILTER%>
+	                  <br><hr><br>
+	               </td>
+	            </tr>
+	            <tr>
+	               <td>
+	                  <%KEYWORDFILTER%>
+	               </td>
+	            </tr>
+	         </table>
+         </div>
+      </td>
+      <td class="w20 hide"></td>
+      <td class="top">
+      	<h2 class="pt0 hide">{@Sites@}</h2>
+            <div class="frame p5">
+             <div class="inlet">
+                <%TABLE%>
+             </div>
+             <%PAGINATION%>
+         </div>
+      </td>
+   </tr>
+</table>
+</form>         
+<script type="text/javascript">
+<!--
+function filter(filt) {
+	strs = filt.split("/");
+	switch(strs[0]) {
+	case 'adtype':
+		$('#ad_type_filter').val(strs[1]);
+		break;
+   case 'imagesize':
+      $('#image_size_filter').val(strs[1]);
+      break;
+   case 'costmodel':
+      $('#cost_model_filter').val(strs[1]);
+      break;
+   case 'category':
+      $('#category_filter').val(strs[1]);
+      break;
+   case 'keyword':
+	      $('#keyword_filter').val($('#keyword_filter_input').val());}
+	$("#site_directory_form").submit();
+	return true;
+}
+//-->
+</script>

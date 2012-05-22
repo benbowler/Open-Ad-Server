@@ -1,0 +1,46 @@
+<script type="text/javascript">
+//<!--
+$(function(){
+
+	try {
+		var message_obj = <%MESSAGE%>;
+		message = message_obj.message;		
+	} catch (e) {
+		message = '';
+	}
+	
+	if ('' != message) {
+		alert(message);
+	}
+}
+);
+//-->
+</script>
+<div class="frameBorderless">
+	<form id="manage_sites_channels_site_<%ID_CHANNEL%>_form" action="<%JFRAME_ACTION%>" name="manage_sites_channels_site_form" method="post">
+	   <input type="hidden" id="manage_sites_channels_site_<%ID_CHANNEL%>_action" name="manage_action">
+		<input type="hidden" id="id_channel" name="id_channel" value="<%ID_CHANNEL%>">
+		<input type="hidden" id="active_tab" name="active_tab" value="sites_to_channel_frame">
+		<div class="pt5 pb5 pl20 frameBorderless">
+			<table class='w100p table'>
+				<tr class='top'>
+					<td class='top'>
+                  <div style="float:right;"><%COLUMNS%></div>
+                  <div class="xTbar"></div>
+						<div class="inlet">
+							<%SITES_TABLE%>
+						</div>
+						<%PAGINATION%>
+					</td>
+					<td class='pl10 w150 top'>
+                  <a name="chan_buttons_begin"></a>            
+						<div class='pt5'><input jframe="no" type="button" class='guibutton floatl ico ico-unlock w180' value='{@Resume Site@}' onclick="return do_action('manage_sites_channels_site_<%ID_CHANNEL%>', 'resume', '', '{@Please select at least one record in the table@}')"></div>
+						<div class='pt5'><input jframe="no" type="button" class='guibutton floatl ico ico-lock w180' value='{@Pause Site@}' onclick="return do_action('manage_sites_channels_site_<%ID_CHANNEL%>', 'pause', '', '{@Please select at least one record in the table@}')"></div>
+						<div class='pt5'><input jframe="no" type="button" class='guibutton floatl ico ico-delete w180' value='{@Delete Site@}' onclick="return do_action('manage_sites_channels_site_<%ID_CHANNEL%>', 'delete', '{@Delete selected sites? Warning notification@}', '{@Please select at least one record in the table@}')"></div>
+                  <a name="chan_buttons_end"></a>            
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>

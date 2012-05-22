@@ -1,0 +1,52 @@
+<form method="post" id="manadschannels_form" name="manadschannels_form">
+   <input type="hidden" name="tab" value="channels">
+
+	<div class="filterBox">
+		<table class="table">
+			<tr>
+				<td class="w50 right"><label>{@Date range@}:</label></td>
+				<td class="pl5">
+					<%DATEFILTER%>
+				</td>
+				<td class="pl10">
+					<label for="filt" class="mb5">
+						{@Filter by status:@}
+					</label>
+					<select name="filt" class="w200">
+					</select>
+				</td>
+				<td class="pl10 bottom">
+					<input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#manadschannels_form').submit();"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+   <input type="hidden" id="manadschannels_action" name="manadschannels_action"/>
+
+	<div class="p5">
+		<div style="margin-top: -45px;float:right;"><%COLUMNS%></div>
+		<div class="xTbar">
+			<div><%BUTTONST%></div>
+			<div class="clr"></div>
+		</div>
+			<div class="inlet">
+				<%CHANNELS%>
+			</div>
+		<div class="xTbar">
+			<%PAGINATION%>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+$('#manadschannels_form .xTable > tbody > tr')
+	.filter(':not(.th):not(.pagetotal):not(.alltotal)')
+	.hover(
+		function(){
+			$(this).addClass('grayed');
+		},
+		function(){
+			$(this).removeClass('grayed');
+		}
+	);
+</script>

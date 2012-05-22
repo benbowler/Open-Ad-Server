@@ -1,0 +1,1260 @@
+/* ==============================================jquery.combobox.css================================================*/
+.comboboxContainer {
+   border-color: #777777 #CCCCCC #CCCCCC #777777;
+   border-style: solid;
+   border-width: 2px 1px 1px 2px;
+}
+
+.comboboxValueContainer {
+   background: transparent url(../images/comboboxDisplayValue.gif)
+      repeat-x scroll left top;
+}
+
+.comboboxValueContent {
+   padding-left: 3px;
+   text-transform: uppercase;
+}
+
+.comboboxDropDownContainer {
+   background: #FFFFFF none repeat scroll 0 0;
+   border-color: #AAAAAA #000000 #000000 #AAAAAA;
+   border-style: solid;
+   border-width: 1px;
+   overflow: hidden;
+   padding-left: 3px;
+}
+
+.comboboxDropDownButton {
+   background-image: url(../images/default-combobox.gif);
+   height: 18px;
+   width: 16px;
+}
+
+.comboboxGroupItemHeader {
+   background: #000000 none repeat scroll 0 0;
+   color: #FFFFFF;
+   display: block;
+}
+
+.comboboxGroupItemContainer {
+   margin-left: 0;
+   padding-left: 0;
+}
+
+.comboboxItem {
+   background: #FFFFFF none repeat scroll 0 0;
+   color: #000000;
+   font-style: normal;
+   font-weight: normal;
+   text-transform: lowercase;
+}
+
+.comboboxItemHover {
+   background-color: #999999;
+   color: #FFFFFF;
+   padding-left: 4px;
+   text-transform: uppercase;
+}
+
+.comboboxGroupItemContainer .comboboxItem {
+   margin-left: 0;
+   padding-left: 20px;
+}
+
+
+/* ===========================================jquery.tooltip.css===========================================*/
+
+#tooltip {
+   position: absolute;
+   z-index: 3000;
+   border: 1px solid;
+   border-color: #e0dcd8 #b9babf #b9babf #e0dcd8;
+   background-color: #f6f3f0;
+   padding: 10px;
+   opacity: 1;
+}
+
+.tooltip {
+   cursor: help;
+}
+
+.tooltipCaption {
+   font-size: 12px;
+   color: #1A487B;
+   font-weight: bold;
+   padding: 2px 0px; 
+}
+#tooltip h3, #tooltip div { margin: 0; }
+
+
+
+/* ==========================================jquery.treeview.css=================================================*/
+
+.treeview, .treeview ul { 
+   padding: 0;
+   margin: 0;
+   list-style: none;
+}
+
+.treeview ul {
+   margin-top: 0px;
+
+}
+
+.treeview .hitarea {
+   background: url(../images/tree/treeview-default.gif) -64px -24px no-repeat;
+   height: 16px;
+   width: 16px;
+   margin-left: -16px;
+   float: left;
+   cursor: pointer;
+}
+/* fix for IE6 */
+* html .hitarea {
+   display: inline;
+   float:none;
+}
+
+.treeview li { 
+   margin: 0;
+   padding: 1px 0pt 1px 16px;
+}
+
+
+.treeview a.selected {
+   background-color: #eee;
+}
+
+#treecontrol { margin: 1em 0; display: none; }
+
+.treeview .hover { color: blue !important; background-color: #E0E0E0 !important; cursor: pointer; }
+
+span.selected_item { background-color: #E0EFFF !important;}
+
+.treeview li { background: url(../images/tree/treeview-default-line.gif) 0 0 no-repeat; }
+
+
+.treeview li.collapsable, .treeview li.expandable { background-position: 0 -176px; }
+
+.treeview .expandable-hitarea { background-position: -80px -2px; }
+
+
+.treeview .collapsable-hitarea { background-position: -64px -24px; }
+
+
+
+.treeview li.last { background-position: 0 -1767px }
+.treeview li.lastCollapsable, .treeview li.lastExpandable { background-image: url(../images/tree/treeview-default.gif); }  
+.treeview li.lastCollapsable { background-position: 0 -111px }
+.treeview li.lastExpandable { background-position: -32px -67px }
+
+.treeview div.lastCollapsable-hitarea, .treeview div.lastExpandable-hitarea { background-position: 0; }
+
+.filetree li { padding: 3px 0 3px 16px; }
+.filetree span.folder, .filetree span.file { 
+   padding: 3px 0 3px 20px;  
+   /*display: block;*/ 
+   }
+
+.filetree span.folder { background: url(../images/tree/folder-open.gif) 0 0 no-repeat;}
+.filetree li.expandable span.folder {background: url(../images/tree/folder.gif) 0 0 no-repeat;}
+.filetree span.file { background: url(../images/tree/leaf.gif) 0 0 no-repeat; cursor: pointer;}
+
+.filetree span.cpm_flatrate { background: url(../images/tree/folder-open-cpm.gif) 0 0 no-repeat;}
+.filetree li.expandable span.cpm_flatrate {background: url(../images/tree/folder-cpm.gif) 0 0 no-repeat;}
+
+.filetree span.cpc { background: url(../images/tree/folder-open-cpc.gif) 0 0 no-repeat;}
+.filetree li.expandable span.cpc {background: url(../images/tree/folder-cpc.gif) 0 0 no-repeat;}
+
+.filetree span.cpa { background: url(../images/tree/folder-open-cpa.gif) 0 0 no-repeat;}
+.filetree li.expandable span.cpa {background: url(../images/tree/folder-cpa.gif) 0 0 no-repeat;}
+
+
+
+
+/* =============================================jquery-ui-custom.css==================================================*/
+
+/*
+* jQuery UI CSS Framework
+* Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+* Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
+*/
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled { cursor: default !important; }
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+/* Corner radius */
+.ui-corner-tl { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; }
+.ui-corner-tr { -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; }
+.ui-corner-bl { -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; }
+.ui-corner-br { -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; }
+.ui-corner-top { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; }
+.ui-corner-bottom { -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; }
+.ui-corner-right {  -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; }
+.ui-corner-left { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; }
+.ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+/*
+* jQuery UI CSS Framework
+* Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+* Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
+* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Verdana,Arial,sans-serif&fwDefault=normal&fsDefault=1.1em&cornerRadius=4px&bgColorHeader=cccccc&bgTextureHeader=03_highlight_soft.png&bgImgOpacityHeader=75&borderColorHeader=aaaaaa&fcHeader=222222&iconColorHeader=222222&bgColorContent=ffffff&bgTextureContent=01_flat.png&bgImgOpacityContent=75&borderColorContent=aaaaaa&fcContent=222222&iconColorContent=222222&bgColorDefault=e6e6e6&bgTextureDefault=02_glass.png&bgImgOpacityDefault=75&borderColorDefault=d3d3d3&fcDefault=555555&iconColorDefault=888888&bgColorHover=dadada&bgTextureHover=02_glass.png&bgImgOpacityHover=75&borderColorHover=999999&fcHover=212121&iconColorHover=454545&bgColorActive=ffffff&bgTextureActive=02_glass.png&bgImgOpacityActive=65&borderColorActive=aaaaaa&fcActive=212121&iconColorActive=454545&bgColorHighlight=fbf9ee&bgTextureHighlight=02_glass.png&bgImgOpacityHighlight=55&borderColorHighlight=fcefa1&fcHighlight=363636&iconColorHighlight=2e83ff&bgColorError=fef1ec&bgTextureError=02_glass.png&bgImgOpacityError=95&borderColorError=cd0a0a&fcError=cd0a0a&iconColorError=cd0a0a&bgColorOverlay=aaaaaa&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=0&opacityOverlay=30&bgColorShadow=aaaaaa&bgTextureShadow=01_flat.png&bgImgOpacityShadow=0&opacityShadow=30&thicknessShadow=8px&offsetTopShadow=-8px&offsetLeftShadow=-8px&cornerRadiusShadow=8px
+*/
+
+
+/* Component containers
+----------------------------------*/
+.ui-widget { font-family: Verdana,Arial,sans-serif; font-size: 1.1em; text-align: center; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
+.ui-widget-content { border: none; color: #222222; background-color: #ffffff; }
+.ui-widget-content a { color: #222222; }
+/*.ui-widget-header { border: 1px solid #aaaaaa; -background: #cccccc url(../images/ui/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }*/
+.ui-widget-header a { color: #222222; }
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default, .ui-widget-content .ui-state-default { border: 1px solid #e2e2e2; background-color: #ffffff; font-weight: normal; color: #555555; outline: none; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555; text-decoration: none; outline: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus { border: 1px solid #999999; background: #f2f2f2; font-weight: normal; color: #212121; outline: none; }
+.ui-state-hover a, .ui-state-hover a:hover { color: #212121; text-decoration: none; outline: none; }
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 1px solid #2462A8; background-color: #ffffff; color: #363636; }
+.ui-state-highlight a, .ui-widget-content .ui-state-highlight a { color: #363636; }
+.ui-state-error, .ui-widget-content .ui-state-error {border: 1px solid #cd0a0a; background: #fef1ec; color: #cd0a0a; }
+.ui-state-error a, .ui-widget-content .ui-state-error a { color: #cd0a0a; }
+.ui-state-error-text, .ui-widget-content .ui-state-error-text { color: #cd0a0a; }
+.ui-state-disabled, .ui-widget-content .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
+.ui-priority-primary, .ui-widget-content .ui-priority-primary { font-weight: bold; }
+.ui-priority-secondary, .ui-widget-content .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
+
+.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #aaaaaa; background-color: #2462A8 !important; font-weight: normal; color: #ffffff !important; outline: none; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #ffffff !important; outline: none; text-decoration: none; }
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { width: 16px; height: 16px; background-image: url(../images/ui/ui-icons_222222_256x240.png); }
+.ui-widget-content .ui-icon {background-image: url(../images/ui/ui-icons_222222_256x240.png); }
+.ui-widget-header .ui-icon {background-image: url(../images/ui/ui-icons_222222_256x240.png); }
+.ui-state-default .ui-icon { background-image: url(../images/ui/ui-icons_888888_256x240.png); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(../images/ui/ui-icons_454545_256x240.png); }
+.ui-state-active .ui-icon {background-image: url(../images/ui/ui-icons_454545_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(../images/ui/ui-icons_2e83ff_256x240.png); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(../images/ui/ui-icons_cd0a0a_256x240.png); }
+
+/* positioning */
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.ui-widget-overlay { background: #aaaaaa url(../images/ui/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); }
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #aaaaaa url(../images/ui/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); -moz-border-radius: 8px; -webkit-border-radius: 8px; }/* Resizable
+/* Datepicker
+----------------------------------*/
+.ui-datepicker { width: 17em; padding: .2em .2em 0; text-align: center; }
+.ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; border-bottom: 1px solid #dad6d2; }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
+.ui-datepicker .ui-datepicker-prev { left:2px; }
+.ui-datepicker .ui-datepicker-next { right:2px; }
+.ui-datepicker .ui-datepicker-prev-hover { left:1px; }
+.ui-datepicker .ui-datepicker-next-hover { right:1px; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
+.ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; color: #2462A8; }
+.ui-datepicker .ui-datepicker-title select { float:left; font-size:1em; margin:1px 0; }
+.ui-datepicker select.ui-datepicker-month-year {width: 100%;}
+.ui-datepicker select.ui-datepicker-month,
+.ui-datepicker select.ui-datepicker-year { width: 49%;}
+.ui-datepicker .ui-datepicker-title select.ui-datepicker-year { float: right; }
+.ui-datepicker table {width: 100%; font-size: 11px; border-collapse: collapse; margin:0 0 .4em; }
+.ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
+.ui-datepicker td { border: 0; padding: 1px; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: 2px; text-align: right; text-decoration: none; }
+.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
+.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
+
+/* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
+.ui-datepicker-cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
+}/* Progressbar
+----------------------------------*/
+.ui-progressbar { height:2em; text-align: left; }
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }/*
+* jQuery UI CSS Framework
+* Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+* Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
+*/
+
+.ui-icon { width: 16px; height: 16px; background-image: url(../images/ui/ui-icons_222222_256x240.png); }
+.ui-widget-content .ui-icon {background-image: url(../images/ui/ui-icons_222222_256x240.png); }
+.ui-widget-header .ui-icon {background-image: url(../images/ui/ui-icons_222222_256x240.png); }
+.ui-state-default .ui-icon { background-image: url(../images/ui/ui-icons_888888_256x240.png); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(../images/ui/ui-icons_454545_256x240.png); }
+.ui-state-active .ui-icon {background-image: url(../images/ui/ui-icons_454545_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(../images/ui/ui-icons_2e83ff_256x240.png); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(../images/ui/ui-icons_cd0a0a_256x240.png); }
+
+.ui-icon-circle-triangle-e { background-position: -48px -192px; }
+.ui-icon-circle-triangle-s { background-position: -64px -192px; }
+.ui-icon-circle-triangle-w { background-position: -80px -192px; }
+.ui-icon-circle-triangle-n { background-position: -96px -192px; }
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled { cursor: default !important; }
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+
+
+/* ==========================================jquery-ui-themeroller.css===================================================*/
+
+/*UI accordion*/
+.ui-accordion {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+   border-bottom: 1px solid #d3d3d3;
+}
+.ui-accordion-group {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   border: 1px solid #d3d3d3;
+   border-bottom: none;
+}
+.ui-accordion-header {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   cursor: pointer;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+}
+.ui-accordion-header a {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   display: block;
+   font-size: 1em;
+   font-weight: normal;
+   text-decoration: none;
+   padding: .5em .5em .5em 1.7em;
+   color: #555555;
+   background: url(../images/ui/888888_7x7_arrow_right.gif) .5em 50% no-repeat;
+}
+.ui-accordion-header a:hover {
+   background: url(../images/ui/454545_7x7_arrow_right.gif) .5em 50% no-repeat;
+   color: #212121;
+}
+.ui-accordion-header:hover {
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   color: #212121;
+}
+.selected .ui-accordion-header, .selected .ui-accordion-header:hover {
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
+}
+.selected .ui-accordion-header a, .selected .ui-accordion-header a:hover {
+   color: #222222;
+   background: url(../images/ui/222222_7x7_arrow_down.gif) .5em 50% no-repeat;
+}
+.ui-accordion-content {
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   color: #222222;
+   font-size: 1em;
+}
+.ui-accordion-content p {
+   padding: 1em 1.7em 0.6em;
+}
+
+
+
+
+
+
+/*UI tabs*/
+.ui-tabs-nav {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+   float: left;
+   position: relative;
+   z-index: 1;
+   border-right: 1px solid #d3d3d3;
+   bottom: -1px;
+}
+.ui-tabs-nav li {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   float: left;
+   border: 1px solid #d3d3d3;
+   border-right: none;
+}
+.ui-tabs-nav li a {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   float: left;
+   font-size: 1em;
+   font-weight: normal;
+   text-decoration: none;
+   padding: .5em 1.7em;
+   color: #555555;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+}
+.ui-tabs-nav li a:hover {
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   color: #212121;
+}
+.ui-tabs-nav li.ui-tabs-selected {
+   border-bottom-color: #ffffff;
+}
+.ui-tabs-nav li.ui-tabs-selected a, .ui-tabs-nav li.ui-tabs-selected a:hover {
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
+   color: #222222;
+}
+.ui-tabs-panel {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   clear:left;
+   border: 1px solid #d3d3d3;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   color: #222222;
+   padding: 1.5em 1.7em;   
+   font-size: 1.1em;
+}
+.ui-tabs-hide {
+   display: none;/* for accessible hiding: position: absolute; left: -99999999px*/;
+}
+
+
+
+
+
+/*slider*/
+.ui-slider {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   border: 1px solid #dddddd;
+   height: .8em;
+   position: relative;
+}
+.ui-slider-handle {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   position: absolute;
+   z-index: 2;
+   top: -3px;
+   width: 1.2em;
+   height: 1.2em;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   border: 1px solid #d3d3d3;
+}
+.ui-slider-handle:hover {
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   border: 1px solid #999999;
+}
+.ui-slider-handle-active, .ui-slider-handle-active:hover {
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
+   border: 1px solid #dddddd;
+}
+.ui-slider-range {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   height: .8em;
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   position: absolute;
+   border: 1px solid #d3d3d3;
+   border-left: 0;
+   border-right: 0;
+   top: -1px;
+   z-index: 1;
+   opacity:.7;
+   filter:Alpha(Opacity=70);
+}
+
+
+
+
+
+
+/*dialog*/
+.ui-dialog {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   color: #222222;
+   border: 4px solid #dddddd;
+   position: relative;
+}
+.ui-resizable-handle {
+   position: absolute;
+   font-size: 0.1px;
+   z-index: 99999;
+}
+.ui-resizable .ui-resizable-handle {
+   display: block; 
+}
+body .ui-resizable-disabled .ui-resizable-handle { display: none; } /* use 'body' to make it more specific (css order) */
+body .ui-resizable-autohide .ui-resizable-handle { display: none; } /* use 'body' to make it more specific (css order) */
+.ui-resizable-n { 
+   cursor: n-resize; 
+   height: 7px; 
+   width: 100%; 
+   top: -5px; 
+   left: 0px;  
+}
+.ui-resizable-s { 
+   cursor: s-resize; 
+   height: 7px; 
+   width: 100%; 
+   bottom: -5px; 
+   left: 0px; 
+}
+.ui-resizable-e { 
+   cursor: e-resize; 
+   width: 7px; 
+   right: -5px; 
+   top: 0px; 
+   height: 100%; 
+}
+.ui-resizable-w { 
+   cursor: w-resize; 
+   width: 7px; 
+   left: -5px; 
+   top: 0px; 
+   height: 100%;
+}
+.ui-resizable-se { 
+   cursor: se-resize; 
+   width: 13px; 
+   height: 13px; 
+   right: 0px; 
+   bottom: 0px; 
+   background: url(../images/ui/222222_11x11_icon_resize_se.gif) no-repeat 0 0;
+}
+.ui-resizable-sw { 
+   cursor: sw-resize; 
+   width: 9px; 
+   height: 9px; 
+   left: 0px; 
+   bottom: 0px;  
+}
+.ui-resizable-nw { 
+   cursor: nw-resize; 
+   width: 9px; 
+   height: 9px; 
+   left: 0px; 
+   top: 0px; 
+}
+.ui-resizable-ne { 
+   cursor: ne-resize; 
+   width: 9px; 
+   height: 9px; 
+   right: 0px; 
+   top: 0px; 
+}
+.ui-dialog-titlebar {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   padding: .5em 1.5em .5em 1em;
+   color: #555555;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   border-bottom: 1px solid #d3d3d3;
+   font-size: 1em;
+   font-weight: normal;
+   position: relative;
+}
+.ui-dialog-title {}
+.ui-dialog-titlebar-close {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   background: url(../images/ui/888888_11x11_icon_close.gif) 0 0 no-repeat;
+   position: absolute;
+   right: 8px;
+   top: .7em;
+   width: 11px;
+   height: 11px;
+   z-index: 100;
+}
+.ui-dialog-titlebar-close-hover, .ui-dialog-titlebar-close:hover {
+   background: url(../images/ui/454545_11x11_icon_close.gif) 0 0 no-repeat;
+}
+.ui-dialog-titlebar-close:active {
+   background: url(../images/ui/222222_11x11_icon_close.gif) 0 0 no-repeat;
+}
+.ui-dialog-titlebar-close span {
+   display: none;
+}
+.ui-dialog-content {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   color: #222222;
+   padding: 1.5em 1.7em;   
+}
+.ui-dialog-buttonpane {
+   position: absolute;
+   bottom: 0;
+   width: 100%;
+   text-align: left;
+   border-top: 1px solid #dddddd;
+   background: #ffffff;
+   left:0px;
+}
+.ui-dialog-buttonpane button {
+   margin: .5em 0 .5em 8px;
+   color: #555555;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   font-size: 1em;
+   border: 1px solid #d3d3d3;
+   cursor: pointer;
+   padding: .2em .6em .3em .6em;
+   line-height: 1.4em;
+}
+.ui-dialog-buttonpane button:hover {
+   color: #212121;
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   border: 1px solid #999999;
+}
+.ui-dialog-buttonpane button:active {
+   color: #222222;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
+   border: 1px solid #dddddd;
+}
+/* This file skins dialog */
+.ui-dialog.ui-draggable .ui-dialog-titlebar,
+.ui-dialog.ui-draggable .ui-dialog-titlebar {
+   cursor: move;
+}
+
+
+
+
+
+
+
+/*datepicker*/
+/* Main Style Sheet for jQuery UI date picker */
+.ui-datepicker-div, .ui-datepicker-inline, #ui-datepicker-div {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   font-size: 1.1em;
+   border: none;
+   width: 15.5em;
+   padding: 1em .5em 0em .5em;
+   position: relative;
+}
+.ui-datepicker-div, #ui-datepicker-div {
+   z-index: 9999; /*must have*/
+   display: none;
+}
+.ui-datepicker-inline {
+  /* float: left;*/
+   display: block;
+	margin: auto;
+}
+.ui-datepicker-control {
+   display: none;
+}
+.ui-datepicker-current {
+   display: none;
+}
+.ui-datepicker-next, .ui-datepicker-prev {
+   position: absolute;
+   left: .5em;
+   top: .5em;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+}
+.ui-datepicker-next {
+   left: 14.6em;
+}
+.ui-datepicker-next:hover, .ui-datepicker-prev:hover {
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+}
+.ui-datepicker-next a, .ui-datepicker-prev a {
+   text-indent: -999999px;
+   width: 1.3em;
+   height: 1.4em;
+   display: block;
+   font-size: 1em;
+   background: url(../images/ui/888888_7x7_arrow_left.gif) 50% 50% no-repeat;
+   border: 1px solid #d3d3d3;
+   cursor: pointer;
+}
+.ui-datepicker-next a {
+   background: url(../images/ui/888888_7x7_arrow_right.gif) 50% 50% no-repeat;
+}
+.ui-datepicker-prev a:hover {
+   background: url(../images/ui/454545_7x7_arrow_left.gif) 50% 50% no-repeat;
+}
+.ui-datepicker-next a:hover {
+   background: url(../images/ui/454545_7x7_arrow_right.gif) 50% 50% no-repeat;
+}
+.ui-datepicker-prev a:active {
+   background: url(../images/ui/222222_7x7_arrow_left.gif) 50% 50% no-repeat;
+}
+.ui-datepicker-next a:active {
+   background: url(../images/ui/222222_7x7_arrow_right.gif) 50% 50% no-repeat;
+}
+.ui-datepicker-header select {
+   border: 1px solid #d3d3d3;
+   color: #555555;
+   background: #e6e6e6;
+   font-size: 1em;
+   line-height: 1.4em;
+   position: absolute;
+   top: .5em;
+   margin: 0 !important;
+}
+.ui-datepicker-header option:focus, .ui-datepicker-header option:hover {
+   background: #dadada;
+}
+.ui-datepicker-header select.ui-datepicker-new-month {
+   width: 7em;
+   left: 2.2em;
+}
+.ui-datepicker-header select.ui-datepicker-new-year {
+   width: 5em;
+   left: 9.4em;
+}
+table.ui-datepicker {
+   width: 15.5em;
+   text-align: right;
+}
+table.ui-datepicker td a {
+   padding: .1em .3em .1em 0;
+   display: block;
+   color: #555555;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   cursor: pointer;
+   border: 1px solid #ffffff;
+}
+table.ui-datepicker td a:hover {
+   border: 1px solid #999999;
+   color: #212121;
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+}
+table.ui-datepicker td a:active {
+   border: 1px solid #dddddd;
+   color: #222222;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
+}
+table.ui-datepicker .ui-datepicker-title-row td {
+   padding: .3em 0;
+   text-align: center;
+   font-size: .9em;
+   color: #222222;
+   text-transform: uppercase;
+}
+table.ui-datepicker .ui-datepicker-title-row td a {
+   color: #222222;
+}
+.ui-datepicker-cover {
+   display: none;
+   display/**/: block;
+   position: absolute;
+   z-index: -1;
+   filter: mask();
+   top: -4px;
+   left: -4px;
+   width: 193px;
+   height: 200px;
+}
+
+
+
+
+/* ui-autocomplete */
+
+.ui-autocomplete-results {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+   z-index: 9999; 
+}
+.ui-autocomplete-results ul, .ui-autocomplete-results li {
+   margin: 0; 
+   padding: 0; 
+   list-style: none;
+}
+.ui-autocomplete-results ul {
+   border: 1px solid #dddddd;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   border-top: 0;
+   border-bottom: 0;
+   margin-bottom: -1px;
+}
+.ui-autocomplete-results li {
+   color: #222222;
+   padding: .4em .5em;
+   font-size: 1em;
+   font-weight: normal;
+   position: relative;
+   margin: 1px 0;
+}
+.ui-autocomplete-results li.ui-hover-state, .ui-autocomplete-results li.ui-active-state {
+   margin: 0;
+}
+
+.ui-autocomplete-results li.ui-autocomplete-over {
+   border-top: 1px solid #999999;
+   border-bottom: 1px solid #999999;
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   color: #212121 !important;
+}
+.ui-autocomplete-results li.ui-autocomplete-active {
+   border-top: 1px solid #dddddd;
+   border-bottom: 1px solid #dddddd;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
+   color: #222222 !important;
+   outline: none;
+}
+.ui-autocomplete-results li:first-child, .ui-autocomplete-results li.first  {
+   margin-top: 0;
+}
+.ui-autocomplete-results li:last-child, .ui-autocomplete-results li.last {
+   margin-bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/*UI ProgressBar */
+.ui-progressbar {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   border: 1px solid #dddddd;
+   position: relative;
+   height: 1.8em;
+}
+.ui-progressbar-bar {
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   overflow: hidden;
+   border: 1px solid #d3d3d3;
+   margin:-1px;
+   z-index: 2;
+   position: relative;
+   height: 1.8em;
+   opacity:.7;
+   filter:Alpha(Opacity=70);
+}
+.ui-progressbar-wrap {
+   position: absolute;
+   top: 0;
+   left: 0;
+}
+.ui-progressbar-text {
+   color: #555555;
+   padding: .2em .5em;
+   font-weight: normal;
+   position: absolute;
+   top: 0;
+   left: 0;
+}
+.ui-progressbar-text-back {
+   color:  #222222;
+   z-index: 0;
+}
+.ui-progressbar-disabled {
+   opacity:.5;
+   filter:Alpha(Opacity=50);
+}
+
+
+
+
+
+
+/*UI Colorpicker */
+.ui-colorpicker {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   border: 4px solid #dddddd;
+   padding: 5px;
+   width: 360px;
+   position: relative;
+}
+.ui-colorpicker-color {
+   float: left;
+   width: 150px;
+   height: 150px;
+   margin-right: 15px;
+}
+.ui-colorpicker-color div { /* is this extra div needed? why not just .ui-colorpicker-color ? */
+   border: 1px solid #d3d3d3;
+   height: 150px;
+   background: url(../images/ui/_x_.);
+   position: relative;
+}
+.ui-colorpicker-color div div {/* shouldn't this have a class like ui-colorpicker-selector ? */
+   width: 11px;
+   height: 11px;
+   background: url(../images/ui/_x_.);
+   position: absolute;
+   border: 0;
+   margin: -5px 0 0 -5px;
+   float: none;
+}
+.ui-colorpicker-hue {
+   border: 1px solid #d3d3d3;
+   float: left;
+   width: 17px;
+   height: 150px;
+   background: url(../images/ui/_x_.);
+   position: relative;
+   margin-right: 15px;
+}
+.ui-colorpicker-hue div {
+   background:transparent url(../images/ui/222222_35x9_colorpicker_indicator.gif.gif); 
+   height:9px;
+   left:-9px;
+   margin:-4px 0 0;
+   position:absolute;
+   width:35px;
+   cursor: ns-resize;
+}
+.ui-colorpicker-new-color, .ui-colorpicker-current-color {
+   float: left;
+   width: 6.5em;
+   height: 30px;
+   border: 1px solid #d3d3d3;
+   margin-right: 5px;
+}
+.ui-colorpicker-current-color {
+   margin-right: 0;
+}
+
+.ui-colorpicker-field, .ui-colorpicker-hex {
+   position: absolute;
+   width: 6em;
+}
+.ui-colorpicker-field label, .ui-colorpicker-field input,
+.ui-colorpicker-hex label, .ui-colorpicker-hex input {
+   font-size: 1em;
+   color: #222222;
+}
+.ui-colorpicker-field label, .ui-colorpicker-hex label {
+   width: 1em;
+   margin-right: .3em;
+}
+.ui-colorpicker-field input, .ui-colorpicker-hex input {
+   border: 1px solid #dddddd;
+   color: #222222;
+   background: #ffffff;
+   width: 4.6em;
+}
+.ui-colorpicker-hex {
+   left: 205px;
+   top: 134px;
+}
+.ui-colorpicker-rgb-r {
+   top: 52px;
+   left: 205px;
+}
+.ui-colorpicker-rgb-g {
+   top: 78px;
+   left: 205px;
+}
+.ui-colorpicker-rgb-b {
+   top: 105px;
+   left: 205px;
+}
+.ui-colorpicker-hsb-h {
+   top: 52px;
+   left: 290px;
+}
+.ui-colorpicker-hsb-s {
+   top: 78px;
+   left: 290px;
+}
+.ui-colorpicker-hsb-b {
+   top: 105px;
+   left: 290px;
+}
+
+.ui-colorpicker-field label {
+   font-weight: normal;
+}
+.ui-colorpicker-field span {
+   width: 7px;
+   background: url(../images/ui/888888_11x11_icon_arrows_updown.gif) 50% 50% no-repeat;
+   right: 5px;
+   top: 0;
+   height: 20px;
+   position: absolute;
+}
+.ui-colorpicker-field span:hover {
+   background: url(../images/ui/454545_11x11_icon_arrows_updown.gif) 50% 50% no-repeat;
+}
+
+.ui-colorpicker-submit {
+   right: 14px;
+   top: 134px;
+   position: absolute;
+}
+
+
+
+
+
+
+
+
+/*
+Generic ThemeRoller Classes
+>> Make your jQuery Components ThemeRoller-Compatible!
+*/
+
+/*component global class*/
+.ui-component {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 1.1em;
+}
+/*component content styles*/
+.ui-component-content {
+   border: 1px solid #dddddd;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_01_flat_0.png) 0 0 repeat-x;
+   color: #222222;
+}
+.ui-component-content a {
+   color: #222222;
+   text-decoration: underline;
+}
+/*component states*/
+.ui-default-state {
+   border: 1px solid #d3d3d3;
+   background: #e6e6e6 url(../images/ui/e6e6e6_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   font-weight: normal;
+   color: #555555 !important;
+}
+.ui-default-state a {
+   color: #555555;
+}
+.ui-default-state:hover, .ui-hover-state {
+   border: 1px solid #999999;
+   background: #dadada url(../images/ui/dadada_40x100_textures_02_glass_75.png) 0 50% repeat-x;
+   font-weight: normal;
+   color: #212121 !important;
+}
+.ui-hover-state a {
+   color: #212121;
+}
+.ui-default-state:active, .ui-active-state {
+   border: 1px solid #dddddd;
+   background: #ffffff url(../images/ui/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
+   font-weight: normal;
+   color: #222222 !important;
+   outline: none;
+}
+.ui-active-state a {
+   color: #222222;
+   outline: none;
+}
+/*icons*/
+.ui-arrow-right-default {background: url(../images/ui/888888_7x7_arrow_right.gif) no-repeat 50% 50%;}
+.ui-arrow-right-default:hover, .ui-arrow-right-hover {background: url(../images/ui/454545_7x7_arrow_right.gif) no-repeat 50% 50%;}
+.ui-arrow-right-default:active, .ui-arrow-right-active {background: url(../images/ui/222222_7x7_arrow_right.gif) no-repeat 50% 50%;}
+.ui-arrow-right-content {background: url(../images/ui/222222_7x7_arrow_right.gif) no-repeat 50% 50%;}
+
+.ui-arrow-left-default {background: url(../images/ui/888888_7x7_arrow_left.gif) no-repeat 50% 50%;}
+.ui-arrow-left-default:hover, .ui-arrow-left-hover {background: url(../images/ui/454545_7x7_arrow_left.gif) no-repeat 50% 50%;}
+.ui-arrow-left-default:active, .ui-arrow-left-active {background: url(../images/ui/222222_7x7_arrow_left.gif) no-repeat 50% 50%;}
+.ui-arrow-left-content {background: url(../images/ui/222222_7x7_arrow_left.gif) no-repeat 50% 50%;}
+
+.ui-arrow-down-default {background: url(../images/ui/888888_7x7_arrow_down.gif) no-repeat 50% 50%;}
+.ui-arrow-down-default:hover, .ui-arrow-down-hover {background: url(../images/ui/454545_7x7_arrow_down.gif) no-repeat 50% 50%;}
+.ui-arrow-down-default:active, .ui-arrow-down-active {background: url(../images/ui/222222_7x7_arrow_down.gif) no-repeat 50% 50%;}
+.ui-arrow-down-content {background: url(../images/ui/222222_7x7_arrow_down.gif) no-repeat 50% 50%;}
+
+.ui-arrow-up-default {background: url(../images/ui/888888_7x7_arrow_up.gif) no-repeat 50% 50%;}
+.ui-arrow-up-default:hover, .ui-arrow-up-hover {background: url(../images/ui/454545_7x7_arrow_up.gif) no-repeat 50% 50%;}
+.ui-arrow-up-default:active, .ui-arrow-up-active {background: url(../images/ui/222222_7x7_arrow_up.gif) no-repeat 50% 50%;}
+.ui-arrow-up-content {background: url(../images/ui/222222_7x7_arrow_up.gif) no-repeat 50% 50%;}
+
+.ui-close-default {background: url(../images/ui/888888_11x11_icon_close.gif) no-repeat 50% 50%;}
+.ui-close-default:hover, .ui-close-hover {background: url(../images/ui/454545_11x11_icon_close.gif) no-repeat 50% 50%;}
+.ui-close-default:active, .ui-close-active {background: url(../images/ui/222222_11x11_icon_close.gif) no-repeat 50% 50%;}
+.ui-close-content {background: url(../images/ui/222222_11x11_icon_close.gif) no-repeat 50% 50%;}
+
+.ui-folder-closed-default {background: url(../images/ui/888888_11x11_icon_folder_closed.gif) no-repeat 50% 50%;}
+.ui-folder-closed-default:hover, .ui-folder-closed-hover {background: url(../images/ui/454545_11x11_icon_folder_closed.gif) no-repeat 50% 50%;}
+.ui-folder-closed-default:active, .ui-folder-closed-active {background: url(../images/ui/222222_11x11_icon_folder_closed.gif) no-repeat 50% 50%;}
+.ui-folder-closed-content {background: url(../images/ui/888888_11x11_icon_folder_closed.gif) no-repeat 50% 50%;}
+
+.ui-folder-open-default {background: url(../images/ui/888888_11x11_icon_folder_open.gif) no-repeat 50% 50%;}
+.ui-folder-open-default:hover, .ui-folder-open-hover {background: url(../images/ui/454545_11x11_icon_folder_open.gif) no-repeat 50% 50%;}
+.ui-folder-open-default:active, .ui-folder-open-active {background: url(../images/ui/222222_11x11_icon_folder_open.gif) no-repeat 50% 50%;}
+.ui-folder-open-content {background: url(../images/ui/222222_11x11_icon_folder_open.gif) no-repeat 50% 50%;}
+
+.ui-doc-default {background: url(../images/ui/888888_11x11_icon_doc.gif) no-repeat 50% 50%;}
+.ui-doc-default:hover, .ui-doc-hover {background: url(../images/ui/454545_11x11_icon_doc.gif) no-repeat 50% 50%;}
+.ui-doc-default:active, .ui-doc-active {background: url(../images/ui/222222_11x11_icon_doc.gif) no-repeat 50% 50%;}
+.ui-doc-content {background: url(../images/ui/222222_11x11_icon_doc.gif) no-repeat 50% 50%;}
+
+.ui-arrows-leftright-default {background: url(../images/ui/888888_11x11_icon_arrows_leftright.gif) no-repeat 50% 50%;}
+.ui-arrows-leftright-default:hover, .ui-arrows-leftright-hover {background: url(../images/ui/454545_11x11_icon_arrows_leftright.gif) no-repeat 50% 50%;}
+.ui-arrows-leftright-default:active, .ui-arrows-leftright-active {background: url(../images/ui/222222_11x11_icon_arrows_leftright.gif) no-repeat 50% 50%;}
+.ui-arrows-leftright-content {background: url(../images/ui/222222_11x11_icon_arrows_leftright.gif) no-repeat 50% 50%;}
+
+.ui-arrows-updown-default {background: url(../images/ui/888888_11x11_icon_arrows_updown.gif) no-repeat 50% 50%;}
+.ui-arrows-updown-default:hover, .ui-arrows-updown-hover {background: url(../images/ui/454545_11x11_icon_arrows_updown.gif) no-repeat 50% 50%;}
+.ui-arrows-updown-default:active, .ui-arrows-updown-active {background: url(../images/ui/222222_11x11_icon_arrows_updown.gif) no-repeat 50% 50%;}
+.ui-arrows-updown-content {background: url(../images/ui/222222_11x11_icon_arrows_updown.gif) no-repeat 50% 50%;}
+
+.ui-minus-default {background: url(../images/ui/888888_11x11_icon_minus.gif) no-repeat 50% 50%;}
+.ui-minus-default:hover, .ui-minus-hover {background: url(../images/ui/454545_11x11_icon_minus.gif) no-repeat 50% 50%;}
+.ui-minus-default:active, .ui-minus-active {background: url(../images/ui/222222_11x11_icon_minus.gif) no-repeat 50% 50%;}
+.ui-minus-content {background: url(../images/ui/222222_11x11_icon_minus.gif) no-repeat 50% 50%;}
+
+.ui-plus-default {background: url(../images/ui/888888_11x11_icon_plus.gif) no-repeat 50% 50%;}
+.ui-plus-default:hover, .ui-plus-hover {background: url(../images/ui/454545_11x11_icon_plus.gif) no-repeat 50% 50%;}
+.ui-plus-default:active, .ui-plus-active {background: url(../images/ui/222222_11x11_icon_plus.gif) no-repeat 50% 50%;}
+.ui-plus-content {background: url(../images/ui/222222_11x11_icon_plus.gif) no-repeat 50% 50%;}
+
+/*hidden elements*/
+.ui-hidden {
+   display: none;/* for accessible hiding: position: absolute; left: -99999999px*/;
+}
+.ui-accessible-hidden {
+    position: absolute; left: -99999999px;
+}
+/*reset styles*/
+.ui-reset {
+   /*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
+}
+/*clearfix class*/
+.ui-clearfix:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
+.ui-clearfix {display: inline-block;}
+/* Hides from IE-mac \*/
+* html .ui-clearfix {height: 1%;}
+.ui-clearfix {display: block;}
+/* End hide from IE-mac */
+
+/* Note: for resizable styles, use the styles listed above in the dialog section */
+
+
+
+
+
+/* =================================== jquery.autocomplete.css====================================================*/
+.ac_results {
+   padding: 0px;
+   border: 1px solid black;
+   background-color: white;
+   overflow: hidden;
+   z-index: 99999;
+}
+
+.ac_results ul {
+   width: 100%;
+   list-style-position: outside;
+   list-style: none;
+   padding: 0;
+   margin: 0;
+}
+
+.ac_results li {
+   margin: 0px;
+   padding: 2px 5px;
+   cursor: default;
+   display: block;
+   /* 
+   if width will be 100% horizontal scrollbar will apear 
+   when scroll mode will be used
+   */
+   /*width: 100%;*/
+   font: menu;
+   font-size: 12px;
+   /* 
+   it is very important, if line-height not setted or setted 
+   in relative units scroll will be broken in firefox
+   */
+   line-height: 16px;
+   overflow: hidden;
+}
+
+.ac_loading {
+   background: white url('indicator.gif') right center no-repeat;
+}
+
+.ac_odd {
+   background-color: #eee;
+}
+
+.ac_over {
+   background-color: #0A246A;
+   color: white;
+}

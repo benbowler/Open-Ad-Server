@@ -1,0 +1,53 @@
+<script type="text/javascript">
+   jQuery('document').ready(function(){
+	   jQuery('#manage_tags_quicksearch').keyup(function(e){
+		   if (e.keyCode == 13) jQuery('#manage_tags_form').submit();
+		});
+	});
+
+	function edit(tagCode) {
+		if (tagCode) {
+			location.href = site_url + '<%ROLE%>/edit_tag/index/' + tagCode;
+		}
+
+		return false;
+	}
+
+	function create() {
+	   location.href = site_url + '<%ROLE%>/edit_tag/';
+	   return false;
+	}
+</script>
+<h1>{@Manage Tags@}</h1>
+<%NOTIFICATION%>
+<form method="post" id="manage_tags_form" name="manage_tags_form">
+   <input type="hidden" id="manage_tags_action" name="manage_tags_action"/>
+   <div class="filterBox">
+      <table  class="table" border="0">
+      <tr>
+         <td class="pl10">
+            <label for="filt" class="mb5">{@Filter by status@}</label>
+            <select name="manage_tags_status_filter" id="manage_tags_status_filter"></select>
+         </td>
+         <td class="pl10">
+            <label for="quicksearch" class="mb5">
+               {@Quick Search@}
+               <span style="font-size: 0.8em">({@ID@}, {@Title@}, {@Dimension@})</span>
+            </label>
+            <input type="text" name="manage_tags_quicksearch" id="manage_tags_quicksearch" class="w400" value="" />
+         </td>
+         <td class="pl10 bottom">
+            <input type="submit" value="{@Update@}"  class="guibutton floatl ico ico-arrowreload"  onclick="$('#manage_tags_form').submit()" />
+         </td>
+      </tr>
+      </table>
+   </div>
+   <div class="frame mb10 p5">
+      <%COLUMNS%>
+      <%BUTTONS%>
+      <div class='inlet'>
+         <%TAGS%>
+      </div>
+      <%PAGINATION%>
+   </div>
+</form>

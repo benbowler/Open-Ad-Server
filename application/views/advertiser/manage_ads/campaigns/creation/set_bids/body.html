@@ -1,0 +1,875 @@
+<script type="text/javascript">
+//<!--
+
+var selectedId = '';
+
+var money_format = '<%MONEYFORMAT%>';
+var number_format = '<%NUMBERFORMAT%>';
+var dec_digits = new Number(number_format.charAt(0));
+var dot_char = number_format.charAt(1);
+var thousand_separator = number_format.charAt(2);
+
+function str_to_float(float_str){
+    chars = '0123456789'+dot_char+thousand_separator;
+    len = float_str.length;
+    if (len == 0) {
+       return Number.NaN;
+    }
+    digits = 0;
+    dec_part = true;
+    for (i = len-1; i >= 0; i--) {         
+       pos = chars.indexOf(float_str.charAt(i));
+       if (pos == -1) {
+          return Number.NaN;        
+       } else if (pos < 10) {
+          digits ++;
+       } else if (pos == 10) {
+          if (!dec_part) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       } else {
+          if (digits != 3) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       }
+    }
+    float_str = float_str.replace(dot_char, '.');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    return new Number(float_str);
+ }
+
+function float_to_str(float_number){      
+    num_string = float_number.toFixed(dec_digits);
+    num_string =  num_string.replace('.', dot_char);
+    pos = num_string.indexOf(dot_char);
+    len = num_string.length;
+    if (pos == -1) {
+       pos = len; 
+    }
+    pos--;
+    digits = 0;
+    num_str = '';      
+    for (i = pos; i >= 0; i-=3) {
+       if (num_str != '') {
+          num_str = thousand_separator+num_str;
+       }
+       start = i-2;
+       if (start < 0) {
+          start = 0;
+       }
+       num_str = num_string.substring(start,i+1)+num_str;
+    }
+    if (pos+1 != len) {
+       num_str = num_str+num_string.substring(pos+1,len);
+    }         
+    return num_str;     
+ }
+
+function money(value) {
+    return money_format.replace("%", float_to_str(value)); 
+ }
+
+function onSubmit() {
+	   post_checkSitesRequirements();
+}
+
+function post_checkSitesRequirements() {
+	   $.post("<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_set_bids/check_sites_requirements",function (data) {
+		   if (!checkAjaxLogin(data)) { 
+			   try {
+                   var response = JSON.parse(data);
+            }
+            catch (e) { 
+            	  alert("Invalid server reply");
+                 return; 
+            } 
+               if (false == response.error_flag) {
+                 $('#form_type').val('save');
+                 $('#set_bids_form').submit();
+               } else
+               {alert(response.error_message)}
+           }
+	   });
+}
+
+$(function(){
+	   hookDocumentClick('edit_your_bid_container','edit_bid_caller','fast');
+	   hookDocumentClick('edit_your_position_container','edit_position_caller','fast');
+	   updateAddedSitesTable();
+
+	   $('span.editable').css('display', 'block');
+});
+
+var default_bid = str_to_float('<%YOUR_BID_VALUE%>');
+var default_bid_image = str_to_float('<%YOUR_BID_IMAGE_VALUE%>');
+var daily_budget = str_to_float('<%DAILY_BUDGET%>');
+
+function UpdateTotalString() {
+	var clicks = 0;
+	
+	$('tr[id_site]:not(.deleted_row)', '#set_cpc_bids_form').each(function() {
+		var clicks_volume = parseInt($('td > span.cell_clicks_value', this).text());
+		if (!isNaN(clicks_volume)) {
+	      clicks+=clicks_volume;
+		}  
+	}
+	);
+
+   if (clicks > 0) {
+	   if (clicks < 100) {             
+		   clicks = '< 100';
+      } else if (clicks < 1000) {             
+        	 clicks = '~ '+(Math.round(clicks/100)*100);
+      } else if (clicks < 10000) {
+        	 clicks = '~ '+Math.round(clicks/1000) +' K';
+      } else {
+          clicks = '~ '+Math.round(clicks/5000)*5 +' K';
+      }
+	 
+	 $('td.total_clicks', '#set_cpc_bids_form').text(clicks);
+   } else {
+	   $('td.total_clicks', '#set_cpc_bids_form').text('{@N/A@}');
+   }
+}
+
+function onAddedSitesTableLoad() {
+	var container = $('#added_sites_container');
+	if(!checkAjaxLogin(container.html())) {
+		replaceFormButtons(container.document); 
+		parseTables(container);
+		highlightUnavailableBidsAddedSites();
+		$('#added_sites_table_process').hide();
+		container.show();
+
+		$('tr[id_site]', $('#set_cpc_bids_form')).css('height', '55px');
+		
+		$('tr[id_site]', $('#set_cpc_bids_form')).hover(
+			function(el){
+				if ($('#edit_your_bid_container:visible').length == 0 && $('#edit_your_position_container:visible').length == 0) {
+					$('tr.grayed').removeClass('grayed');
+					$(this).addClass('grayed');
+					selectedId = $(this).attr('id_site');
+				}
+			}, 
+			function(el){
+				if ($('#edit_your_bid_container:visible').length == 0 && $('#edit_your_position_container:visible').length == 0) {
+					if (el.relatedTarget)
+						if($(el.relatedTarget.offsetParent).hasClass('.xTable') && !$(el.relatedTarget.parentNode).hasClass('.th'))
+							$(this).removeClass('grayed');
+				}
+			}
+		).click(function(){
+			if ($('#edit_your_bid_container:visible').length == 0 && $('#edit_your_position_container:visible').length == 0) {
+				$('tr.grayed').removeClass('grayed');
+				$(this).addClass('grayed');
+				selectedId = $(this).attr('id_site');
+			}
+		});
+	}
+	UpdateTotalString();
+	$('#hintSites').removeClass('hide');
+}
+
+function delSiteFromGroup(id_site) {
+	  if (!confirm('{@Are you sure to delete this site from Selected Sites?@}')) {
+	      return;
+	   }
+	   $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_set_bids/del_site_from_group',
+	         {id_site: id_site},
+	         function(data) {
+	            if (!checkAjaxLogin(data)) {
+	            	      try {
+	            	    	  var reply = JSON.parse(data);
+	            	      }
+	            	      catch (e) { 
+	            	    	   alert("Invalid server reply");
+	            	    	   return; 
+	            	    	} 
+	                     if(reply.message == 'OK') {
+	                    	 $('#added_sites_container').find('tr[id_site='+id_site+']').remove();
+	                    	 if($('#added_sites_container').find('tr[id_site]').size() == 0) {
+	                    		 $('#added_sites_container').find('td.nodata').show();
+	                    		 $('#added_sites_container').find('tr.alltotal').remove();
+	                    	 }
+	                    	 UpdateTotalString();
+	                     } else {
+	                        alert(reply.message);
+	                     }
+	                  }
+	            
+	         });
+	}
+
+function updateAddedSitesTable() {
+	$('#added_sites_table_process').show(); 
+   $('#added_sites_container').hide();
+	$("#added_sites_container").loadJFrame('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_set_bids/get_added_sites');
+}
+
+function UpdatePriceField(id) {
+    var price_val;
+    price_val = str_to_float($('#'+id).val());
+    $('#'+id).val(float_to_str(price_val));
+ }
+
+function updateYourBidAndBudget() {
+   var error_flag = false;
+
+	var price;
+	var price_float;
+	var price_image;
+	var price_image_float;
+	var budget;
+	var budget_float;
+
+	price = $('#your_bid').val();
+	price_image = $('#your_bid_image').val();
+	budget = $.trim($('#your_budget').val());
+
+   price_float = str_to_float(price);
+     if (isNaN(price_float)) {
+        if (false == $('#your_bid').hasClass('invalidfield')) {
+          $('#your_bid').addClass('invalidfield').after('<p class="errorP">{@Incorrect price value specified!@}</p>');   
+        }
+        $('#your_bid').focus();
+        error_flag = true;   
+     } else {
+    	 if ($('#your_bid').hasClass('invalidfield')) {
+             $('#your_bid').removeClass('invalidfield').next('p.errorP:first').remove();
+       }
+    	 UpdatePriceField('your_bid');
+     }
+     
+     price_image_float = str_to_float(price_image);
+     if (isNaN(price_image_float)) {
+        if (false == $('#your_bid_image').hasClass('invalidfield')) {
+          $('#your_bid_image').addClass('invalidfield').after('<p class="errorP">{@Incorrect price value specified!@}</p>');   
+        }
+        $('#your_bid_image').focus();
+        error_flag = true;   
+     } else {
+       if ($('#your_bid_image').hasClass('invalidfield')) {
+             $('#your_bid_image').removeClass('invalidfield').next('p.errorP:first').remove();
+       }
+       UpdatePriceField('your_bid_image');
+     }
+     
+     if ('' != budget) {
+         budget_float = str_to_float(budget); 
+         if (isNaN(budget_float)) {
+              if (false == $('#your_budget').hasClass('invalidfield')) {
+                $('#your_budget').addClass('invalidfield').after('<p class="errorP">{@Incorrect budget value specified!@}</p>');   
+              }
+              $('#your_budget').focus();
+              error_flag = true; 
+         } else {
+        	    if ($('#your_budget').hasClass('invalidfield')) {
+                 $('#your_budget').removeClass('invalidfield').next('p.errorP:first').remove();
+             }
+             UpdatePriceField('your_budget');
+            if (budget_float < price_float) {
+                  $('#your_bid').addClass('invalidfield');
+                  $('#your_budget').addClass('invalidfield');
+                  alert("{@Daily Budget cannot be less than Default Bid!@}");
+                  error_flag = true; 
+            }      
+            if (budget_float < price_image_float) {
+                $('#your_bid_image').addClass('invalidfield');
+                $('#your_budget').addClass('invalidfield');
+                if (!error_flag) {
+              	   alert("{@Daily Budget cannot be less than Default Bid for Images!@}");
+                }
+                error_flag = true; 
+            }
+
+                  
+         }
+       } else {
+    	   if ($('#your_budget').hasClass('invalidfield')) {
+               $('#your_budget').removeClass('invalidfield').next('p.errorP:first').remove();
+         }
+       }
+
+     if (!error_flag) {
+
+       $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_set_bids/update_default_bid_and_budget',
+    	       {bid: price,
+    	        bid_image: price_image,
+    	        budget: budget},
+    	       function(data) {
+    	    	   if (!checkAjaxLogin(data)) {
+    	    		   try {
+                           var response = JSON.parse(data);
+                      }
+                   catch (e) { 
+                       alert("Invalid server reply");
+                       return; 
+                   } 
+
+                   if ('' != response.message) {
+                	   alert(response.message);
+                   }
+                   
+                   if (response.result != 'OK') {
+                       return;
+                   }
+
+                   
+        	    	   //$("#added_sites_container").find("span.default_value").text(response.cell_bid_text);
+        	    	   $("#added_sites_container").find("span.default_value").filter('.cell_bid_text').text(response.cell_bid_text);
+        	    	   $("#added_sites_container").find("span.default_value").filter('.cell_image_bid_text').text(response.cell_image_bid_text);
+
+        	    	   $.each(response.positions,function(id_site,n) {
+        	    		   var site_row = $("#added_sites_container").find("tr[id_site="+id_site+"]");
+            	    	if (site_row.find("span.default_value").filter('.cell_position_text').size() > 0) {
+                	    	   site_row.find("span.cell_position_value").text(n.cell_position_value);
+                	    	   site_row.find("span.cell_position_text").text(n.cell_position_text);
+                     }
+            	    	if (site_row.find("span.default_value").filter('.cell_image_position_text').size() > 0) {
+                            site_row.find("span.cell_image_position_value").text(n.cell_image_position_value);
+                            site_row.find("span.cell_image_position_text").text(n.cell_image_position_text);
+                     }
+        	    	   });        	    	
+        	    	   
+        	    	   default_bid = price_float;
+        	    	   default_bid_image = price_image_float;
+        	    	   highlightUnavailableBidsAddedSites();
+        	    	   UpdateTotalString();
+    	    	   }
+        	    });
+       
+     }
+}
+
+function highlightUnavailableBidsAddedSites() {
+	$('#added_sites_container tr[id_site]').each(
+	      function () {
+				var site_bid_value = $(this).find('span.min_bid_value');
+				var site_image_bid_value = $(this).find('span.min_image_bid_value');
+
+		            var site_bid = str_to_float(site_bid_value.text());
+				var site_image_bid = str_to_float(site_image_bid_value.text());
+
+				var span_your_bid = $(this).find('span.cell_bid_text');
+				var span_your_bid_image = $(this).find('span.cell_image_bid_text');
+		            
+				if (span_your_bid.hasClass('default_value')) {
+					var your_bid = default_bid;	
+				} else {
+					var your_bid_value = $(this).find('span.cell_bid_value');
+                  var your_bid = str_to_float(your_bid_value.text());
+				}
+
+				if (span_your_bid_image.hasClass('default_value')) {
+		          var your_image_bid = default_bid_image;   
+		      } else {
+		          var your_image_bid_value = $(this).find('span.cell_image_bid_value');
+		          var your_image_bid = str_to_float(your_image_bid_value.text());
+		      }
+
+				if ((your_bid < site_bid) && (your_image_bid < site_image_bid)) {
+		                  $(this).addClass('deleted_row');
+		            } else {
+		                  $(this).removeClass('deleted_row');
+		            }
+			}
+	);
+ }
+
+function showSiteBidEditor(id_site,bid_type,sender) {
+	   switch (bid_type) {
+	      case 'text':
+	          var class_bid_value = 'cell_bid_value';
+	      break;
+	      case 'image':
+	          var class_bid_value = 'cell_image_bid_value';
+	      break;
+	      default:
+	          return false;
+	}
+
+
+	$('tr.grayed').removeClass('grayed');
+	$('tr[id_site='+id_site+ ']').addClass('grayed');
+	selectedId = id_site;
+
+	$(sender).addClass('edit_bid_caller');
+	$("#edit_your_bid_container").find("#site_id").val(id_site);
+	   $("#edit_your_bid_container").find("#bid_type").val(bid_type);
+	   $('#new_bid').val($("#added_sites_container").find("tr[id_site="+id_site+"]").find("span."+class_bid_value).text());
+	showContainer('edit_your_bid_container', sender);
+	$('#new_bid').focus();
+	return false;
+}
+
+function showSitePostionEditor(id_site,position_type,sender) {
+
+	   switch (position_type) {
+	    case 'text':
+	      var class_position_value = 'cell_position_value';
+	    break;
+	    case 'image':
+	      var class_position_value = 'cell_image_position_value';
+	    break;
+	    default:
+	        return false;
+	   }
+
+	$('tr.grayed').removeClass('grayed');
+	$('tr[id_site='+id_site+ ']').addClass('grayed');
+	selectedId = id_site;
+
+		$(sender).addClass('edit_position_caller');
+	   $("#edit_your_position_container").find("#site_id").val(id_site);
+	      $("#edit_your_position_container").find("#position_type").val(position_type);
+	      $('#new_position').val($("#added_sites_container").find("tr[id_site="+id_site+"]").find("span."+class_position_value).text());
+	   $('#edit_your_position_container').show();
+	   showContainer('edit_your_position_container', sender);
+	   $('#new_position').focus();
+	   return false;
+	}
+
+function updateSiteBid() {
+	   
+	var price;
+	var id_sites = [];
+	   var bid_type = $("#edit_your_bid_container").find("#bid_type").val();
+
+	id_sites[0] = $("#edit_your_bid_container").find("#site_id").val();
+	
+   price = $('#new_bid').val();
+
+   
+     if ((price != '') && (isNaN(str_to_float(price)))) {
+        if (false == $('#new_bid').hasClass('invalidfield')) {
+          $('#new_bid').addClass('invalidfield').after('<p class="errorP">{@Incorrect price value specified!@}</p>');    
+        }
+        $('#new_bid').focus();
+        return false;
+     } 
+
+     if (price != '') { 
+       UpdatePriceField('new_bid');
+     }
+       if ($('#new_bid').hasClass('invalidfield')) {
+           $('#new_bid').removeClass('invalidfield').next('p.errorP:first').remove();
+         }
+
+	       $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_bid',
+	             {new_bid: price, bid_type: bid_type, id_sites: JSON.stringify(id_sites)},
+    	       function(data) {
+        	      if (!checkAjaxLogin(data)) {
+        	    	  try {
+                          var response = JSON.parse(data);
+                     }
+                  catch (e) { 
+                      alert("Invalid server reply");
+                      return false; 
+                  } 
+
+	                  if (response.message != '') {
+	                      alert(response.message);
+	                   }
+	                  
+                  if (response.result != 'OK') {
+                      return false;
+                  }
+
+
+	                 switch (bid_type) {
+	                  case 'text':
+	                      var class_cell_bid_value = 'cell_bid_value';
+	                      var class_cell_bid_text = 'cell_bid_text';
+	                      var class_cell_position_value = 'cell_position_value';
+	                      var class_cell_position_text = 'cell_position_text';
+	                  break;
+	                  case 'image':
+	                      var class_cell_bid_value = 'cell_image_bid_value';
+	                      var class_cell_bid_text = 'cell_image_bid_text';
+	                      var class_cell_position_value = 'cell_image_position_value';
+	                      var class_cell_position_text = 'cell_image_position_text';
+	                  break;
+                   }
+                  
+	                  
+            	  $.each(response.updated_values, function(id_site,new_bid_info) {
+                	  var site_row = $("tr[id_site="+id_sites[0]+"]","#added_sites_container");
+	                    var span_cell_bid_text = site_row.find("span."+class_cell_bid_text);
+	                    site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+	                    span_cell_bid_text.text(new_bid_info.cell_text);
+	                    site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+	                    site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+            		  if (new_bid_info.is_default_bid) {
+	                       span_cell_bid_text.addClass('default_value');
+	                       span_cell_bid_text.removeClass('custom_value');
+            			  
+            		  }
+            		  else {
+	                       span_cell_bid_text.addClass('custom_value');
+	                       span_cell_bid_text.removeClass('default_value');
+            		  }
+            	  });
+            	  hideContainer('edit_your_bid_container');
+        	    	  highlightUnavailableBidsAddedSites(); 
+        	    	  UpdateTotalString();     
+        	      } 
+        	    });
+	    return false;
+}
+
+function cancelSiteBid() {
+
+    if ($('#new_bid').hasClass('invalidfield')) {
+        $('#new_bid').removeClass('invalidfield').next('p.errorP:first').remove();
+    }
+	hideContainer('edit_your_bid_container');
+	
+	return true;
+}
+
+function isInteger (s)
+{
+   var i;
+
+   if (isEmpty(s))
+   if (isInteger.arguments.length == 1) return 0;
+   else return (isInteger.arguments[1] == true);
+
+   for (i = 0; i < s.length; i++)
+   {
+      var c = s.charAt(i);
+
+      if (!isDigit(c)) return false;
+   }
+
+   return true;
+}
+
+function isEmpty(s)
+{
+   return ((s == null) || (s.length == 0))
+}
+
+function isDigit (c)
+{
+   return ((c >= "0") && (c <= "9"))
+}
+
+function updateSitePosition() {
+	   var price;
+	   var id_sites = [];
+
+    var position_type = $("#edit_your_position_container").find("#position_type").val();
+    
+	   id_sites[0] = $("#edit_your_position_container").find("#site_id").val();
+
+	   var position_integer = $('#new_position').val();
+	   if (!isInteger(position_integer)) {
+		   position_integer = 0;
+	   }
+	   
+	     if (position_integer < 1) {
+	        if (false == $('#new_position').hasClass('invalidfield')) {
+	          $('#new_position').addClass('invalidfield').after('<p class="errorP">{@Incorrect position value specified!@}</p>');   
+	        }
+	        $('#new_position').focus();
+	        return false;
+	     } 
+
+	       if ($('#new_position').hasClass('invalidfield')) {
+	           $('#new_position').removeClass('invalidfield').next('p.errorP:first').remove();
+	         }
+	       
+        $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_position',
+              {new_position: position_integer, position_type: position_type, id_sites: JSON.stringify(id_sites)},
+	             function(data) {
+	               if (!checkAjaxLogin(data)) {
+	            	   try {
+	                       var response = JSON.parse(data);
+	                  }
+		               catch (e) { 
+		                   alert("Invalid server reply");
+		                   return; 
+		               } 
+
+		               if (response.message != '') {
+		                   alert(response.message);
+		              }
+		                 
+		              if (response.result != 'OK') {
+		                   return false;
+		              }
+
+                  switch (position_type) {
+                   case 'text':
+                       var class_cell_bid_value = 'cell_bid_value';
+                       var class_cell_bid_text = 'cell_bid_text';
+                       var class_cell_position_value = 'cell_position_value';
+                       var class_cell_position_text = 'cell_position_text';
+                   break;
+                   case 'image':
+                       var class_cell_bid_value = 'cell_image_bid_value';
+                       var class_cell_bid_text = 'cell_image_bid_text';
+                       var class_cell_position_value = 'cell_image_position_value';
+                       var class_cell_position_text = 'cell_image_position_text';
+                   break;
+                  }
+                  
+	                 $.each(response.updated_values, function(id_site,new_bid_info) {
+		                var site_row = $("tr[id_site="+id_sites[0]+"]","#added_sites_container");
+                    site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+                    site_row.find("span."+class_cell_bid_text).text(new_bid_info.cell_text);
+                    site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+                    site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+                    site_row.find("span."+class_cell_bid_text).removeClass('default_value');
+                    site_row.find("span."+class_cell_bid_text).addClass('custom_value');
+	                 });
+	                 hideContainer('edit_your_position_container');
+	                 highlightUnavailableBidsAddedSites();  
+	                 UpdateTotalString();    
+	               } 
+	             });
+	       return false;
+	}
+
+function cancelSitePosition() {
+    if ($('#new_position').hasClass('invalidfield')) {
+        $('#new_position').removeClass('invalidfield').next('p.errorP:first').remove();
+    }
+	hideContainer('edit_your_position_container');
+	return true;
+}
+
+function updateAllSitesBid(id_site, bid_type) {
+	 switch (bid_type) {
+	    case 'text':
+	       var class_bid_value = 'cell_bid_value'; 
+	    break;
+	    case 'image':
+	       var class_bid_value = 'cell_image_bid_value'; 
+	    break;
+	    default:
+	        return true;
+	 }
+	   
+ if (!confirm('{@Are you sure to change bid for all Selected Sites?@}')) {
+	 return true;
+ }
+	
+	 
+	   
+	 var price = $("tr[id_site="+id_site+"]","#added_sites_container").find("span."+class_bid_value).text();
+ var id_sites = [];
+
+ $("tr[id_site]:not([id_site="+id_site+"])","#added_sites_container").each(function() {
+	 id_sites[id_sites.length] = $(this).attr('id_site');
+ });
+
+	 $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_bid',
+	         {new_bid: price, bid_type: bid_type, id_sites: JSON.stringify(id_sites)},
+         function(data) {
+           if (!checkAjaxLogin(data)) {
+        	   try {
+                   var response = JSON.parse(data);
+              }
+	           catch (e) { 
+	               alert("Invalid server reply");
+	               return; 
+	           } 
+
+	           if (response.message != '') {
+                   alert(response.message);
+              }
+                 
+              if (response.result != 'OK') {
+                   return false;
+              }
+
+	              switch (bid_type) {
+	                 case 'text':
+	                     var class_cell_bid_value = 'cell_bid_value';
+	                     var class_cell_bid_text = 'cell_bid_text';
+	                     var class_cell_position_value = 'cell_position_value';
+	                     var class_cell_position_text = 'cell_position_text';
+	                 break;
+	                 case 'image':
+	                     var class_cell_bid_value = 'cell_image_bid_value';
+	                     var class_cell_bid_text = 'cell_image_bid_text';
+	                     var class_cell_position_value = 'cell_image_position_value';
+	                     var class_cell_position_text = 'cell_image_position_text';
+	                 break;
+	              }
+	           
+             $.each(response.updated_values, function(id_site,new_bid_info) {
+                 var site_row = $("tr[id_site="+id_site+"]","#added_sites_container");
+	                 var span_cell_bid_text = site_row.find("span."+class_cell_bid_text);
+	                 site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+	                 span_cell_bid_text.text(new_bid_info.cell_text);
+                if (new_bid_info.is_default_bid) {
+	                  span_cell_bid_text.addClass('default_value');
+	                  span_cell_bid_text.removeClass('custom_value');
+                }
+                else {
+	                  span_cell_bid_text.addClass('custom_value');
+	                  span_cell_bid_text.removeClass('default_value');
+                }
+
+	                site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+	                site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+                
+             });
+             highlightUnavailableBidsAddedSites();  
+             UpdateTotalString(); 
+           } 
+         });
+}
+
+function updateAllSitesPosition(id_site, position_type) {
+    switch (position_type) {
+     case 'text':
+        var class_position_value = 'cell_position_value'; 
+     break;
+     case 'image':
+        var class_position_value = 'cell_image_position_value'; 
+     break;
+     default:
+         return true;
+  }
+  
+	 if (!confirm('{@Are you sure to change bid for all Selected Sites?@}')) {
+	    return true;
+	 }
+	   
+  var position = $("#added_sites_container").find("tr[id_site="+id_site+"]").find("span."+class_position_value).text();
+	 var id_sites = [];
+
+	 $("#added_sites_container").find("tr[id_site]:not([id_site="+id_site+"])").each(function() {
+	    id_sites[id_sites.length] = $(this).attr('id_site');
+	 });
+
+ $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_position',
+          {new_position: position, position_type: position_type,id_sites: JSON.stringify(id_sites)},
+	         function(data) {
+	           if (!checkAjaxLogin(data)) {
+	        	   try {
+                       var response = JSON.parse(data);
+                  }
+               catch (e) { 
+                   alert("Invalid server reply");
+                   return; 
+               } 
+
+               if (response.message != '') {
+                   alert(response.message);
+               }
+                 
+               if (response.result != 'OK') {
+                   return false;
+               }
+              
+             switch (position_type) {
+                case 'text':
+                    var class_cell_bid_value = 'cell_bid_value';
+                    var class_cell_bid_text = 'cell_bid_text';
+                    var class_cell_position_value = 'cell_position_value';
+                    var class_cell_position_text = 'cell_position_text';
+                break;
+                case 'image':
+                    var class_cell_bid_value = 'cell_image_bid_value';
+                    var class_cell_bid_text = 'cell_image_bid_text';
+                    var class_cell_position_value = 'cell_image_position_value';
+                    var class_cell_position_text = 'cell_image_position_text';
+                break;
+             }
+            
+	             $.each(response.updated_values, function(id_site,new_bid_info) {
+		             var site_row = $("tr[id_site="+id_site+"]","#added_sites_container");
+                 var span_bid_text = site_row.find("span."+class_cell_bid_text);
+                 site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+                 span_bid_text.text(new_bid_info.cell_text);
+                 site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+                 site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+
+                 span_bid_text.removeClass('default_value');
+                 span_bid_text.addClass('custom_value');
+	             });
+	             highlightUnavailableBidsAddedSites();   
+	             UpdateTotalString();
+	           } 
+	         });
+	}
+//-->
+</script>
+
+<%FORM_TITLE%>
+<%PROGRESS_BAR%>
+
+<form name="set_bids_form" id="set_bids_form" method="post">
+   <div id="error_message_div"></div>
+   <input type="hidden" id="review_mode" name="review_mode" value="<%REVIEW_MODE%>">
+   <input type="hidden" name="form_type" id="form_type">
+   <input type="hidden" name="dummy">
+</form>
+      <table class="w100p">
+         <tr class="top">
+            <td>
+	               <h2 class="pt0" style="margin-top:-5px;">{@Selected Sites@}</h2>
+	               <div class="filterBox">
+	               <table>
+	               	<tr>
+		               	<td><label class="inline" for="your_bid">{@Your default bid@}, {@$@}</label></td>
+		               	<td><input type="text" class="text w50" id="your_bid" name="your_bid" value="<%YOUR_BID_VALUE%>"></td>
+		               	<td><label class="inline" for="your_bid_image">{@Your default bid for images@}, {@$@}</label></td>
+		               	<td><input type="text" class="text w50" id="your_bid_image" name="your_bid_image" value="<%YOUR_BID_IMAGE_VALUE%>"></td>
+	                     <td class="pl10"><label class="inline" for="your_budget">{@Daily Budget@}, {@$@}</label></td>
+	                     <td><input type="text" class="text w50" id="your_budget" name="budget" value="<%DAILY_BUDGET%>"></td>
+	                     <td class="pl10"><a id="update_your_bid_and_budget_btn" href="#" value="{@Update@}" title="{@Update@}" class="guibutton floatl ico ico-arrowreload" jframe="no" onclick="return updateYourBidAndBudget();">{@Update@}</a></td>
+                     </tr>
+	               </table>
+	               </div>
+	               
+            </td>
+         </tr>
+         <tr>
+         <td class="">
+         
+                   <div class="center"><img style="display: none;" src="<%SITEURL%>images/loading_animation.gif" id="added_sites_table_process"/></div>
+                   <div id="added_sites_container" class="w100p" src="#" onload="onAddedSitesTableLoad();"></div>
+                 <div class="hintBox mt10 hide" id='hintSites'>
+                  {@Unavailable sites highlight hint@}
+               </div>
+                 
+                 
+                 <div class="w200 hide frame p3" id="edit_your_bid_container" style="">
+                    <input type="hidden" id="site_id" name="site_id">
+                    <input type="hidden" id="bid_type" name="bid_type">
+                    <div class="frame p3 right"><label class="inline" for="new_bid">{@Your Bid@}, {@$@}</label> <input type="text" class="text w50" id="new_bid"  onkeydown="if(event.keyCode==13) $('#saveBid_btn').click();if(event.keyCode==27) $('#cancelBid_btn').click();"></div>
+                    <div class="hintBox"><span>{@Set your bid for this Site. Leave blank to use default bid value.@}</span></div>
+                    <div class="xTbar right"><table class="floatr"><tr><td align="center">
+                     <a id="saveBid_btn" value="{@Save@}" title="{@Save@}" class="guibutton floatl" href="#" jframe="no" onclick="return updateSiteBid();">{@Save@}</a>
+                     <a id="cancelBid_btn" value="{@Cancel@}" title="{@Cancel@}" class="guibutton floatl" href="#" jframe="no" onclick="return cancelSiteBid();">{@Cancel@}</a>
+                    </td></tr></table>
+                    </div>
+                 </div>
+                 
+                 <div class="w200 hide frame p3" id="edit_your_position_container" >
+                    <input type="hidden" id="site_id" name="site_id">
+                    <input type="hidden" id="position_type" name="position_type">
+                    <div class="frame p3 right"><label class="inline" for="new_position">{@Your Position@}</label> <input type="text" class="text w50" id="new_position"></div>
+                    <div class="hintBox"><span>{@Set your position for this Site.@}</span></div>
+                    <div class="xTbar right"><table class="floatr"><tr><td align="center">
+                       <a id="savePosition_btn" value="{@Save@}" title="{@Save@}" class="guibutton floatl" href="#" jframe="no" onclick="return updateSitePosition();">{@Save@}</a>
+                      <a id="cancelPosition_btn" value="{@Cancel@}" title="{@Cancel@}" class="guibutton floatl" href="#" jframe="no" onclick="return cancelSitePosition();">{@Cancel@}</a>
+                    </td></tr></table>
+                 </div>
+         </td>
+         </tr>
+      </table>
+     
+      <%NAVIGATION_BAR%>

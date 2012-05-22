@@ -1,0 +1,294 @@
+<div id="drp<%FORM%>">
+<div class="hide drp_hidden">
+   <input type="hidden" name="changeTrigger" id="<%FORM%>changeTrigger"/>
+   <input type="hidden" name="callbackTrigger" id="<%FORM%>callbackTrigger"/>
+   <input type="hidden" name="datepicker_flag" value="<%FORM%>"/>
+	<input type="radio" name="mode" id="<%FORM%>types" value="select"/>
+	<input type="radio" name="mode" id="<%FORM%>typer" value="range"/>
+	<input type="text" name="from" id="<%FORM%>from"/>
+ 	<input type="text" name="to" id="<%FORM%>to"/>
+	<input type="hidden" name="<%FORM%>currentIndex" id="<%FORM%>currentIndex" value=""/>
+	<select name="period" id='<%FORM%>cld' jframe="no"></select>
+</div>
+<div id='drp<%FORM%>placeholder'></div>
+</div>
+
+<script type="text/javascript">
+//<!--
+
+// script depencies 
+// j.js
+// jquery-ui-custom.js
+// date.js
+// jquery-ui-custom.css
+// 
+
+	var form<%FORM%>_from = $('#<%FORM%>from');
+	var form<%FORM%>_to = $('#<%FORM%>to');
+	var form<%FORM%>_cld = $('#<%FORM%>cld');
+	var form<%FORM%>_typer = $('#<%FORM%>typer');
+	var form<%FORM%>_types = $('#<%FORM%>types');
+
+	Date.format = <%DPDATEFORMAT%> + 'yy';
+
+	var weekStart = <%DPWEEKSTART%>;
+	var dpWS = (weekStart == 7) ? 0 : 1;
+	var cDate = new Date();
+	var Today = new Date();
+	var Yesterday = new Date(cDate.getFullYear(),cDate.getMonth(),cDate.getDate()-1);
+	var PrevWeekStart = new Date(cDate.getFullYear(),cDate.getMonth(),(cDate.getDate() - cDate.getDay() - 7 - dpWS));
+	var PrevWeekEnd = new Date(cDate.getFullYear(),cDate.getMonth(),(cDate.getDate() - cDate.getDay() - dpWS - 1));
+	var PrevBWeekStart = new Date(cDate.getFullYear(),cDate.getMonth(),(cDate.getDate() - cDate.getDay() - 6 - dpWS));
+	var PrevBWeekEnd = new Date(cDate.getFullYear(),cDate.getMonth(),(cDate.getDate() - cDate.getDay() - dpWS - 2));
+	var ThisMonthStart = new Date(cDate.getFullYear(),cDate.getMonth(),1);
+	var ThisMonthEnd = new Date();
+	var LastMonthStart = new Date(cDate.getFullYear(),cDate.getMonth()-1,1);
+	var LastMonthEnd = new Date(cDate.getFullYear(),cDate.getMonth(),1-1);
+	var AllTimeStart = new Date(2008,0,1);
+	var AllTimeEnd = new Date();
+	
+	
+	var <%FORM%>OldDateStart = (form<%FORM%>_from.val() != '') ? Date.fromString(form<%FORM%>_from.val()) : new Date();
+	var <%FORM%>OldDateEnd = (form<%FORM%>_to.val() != '') ? Date.fromString(form<%FORM%>_to.val()) : new Date(); 
+
+	var rangesOptions = {
+		'today':				{'name': 'today',				'title': '{@Today@}',					'start' : Today,	'end' : Today },
+		'yesterday':		{'name': 'yesterday',		'title': '{@Yesterday@}',				'start' : Yesterday,'end' : Yesterday},
+		'lastweek': 		{'name': 'lastweek',			'title': ((weekStart == 1) ? '{@Last week (Mon-Sun)@}' : '{@Last week (Sun-Sat)@}') ,'start' : PrevWeekStart,'end' : PrevWeekEnd},
+		'lastbusinessweek':	{'name': 'lastbusinessweek','title': '{@Last business week (Mon-Fri)@}', 'start' : PrevBWeekStart, 'end' : PrevBWeekEnd},
+		'thismonth':		{'name': 'thismonth',		'title': '{@This month@}', 			'start' : ThisMonthStart, 'end' : ThisMonthEnd},
+		'lastmonth':		{'name': 'lastmonth',		'title': '{@Last month@}', 			'start' : LastMonthStart, 'end' : LastMonthEnd},
+		'alltime':			{'name': 'alltime',			'title': '{@All time@}', 				'start' : AllTimeStart, 'end' : AllTimeEnd},
+		'custom':			{'name': 'custom',			'title': '{@Custom date range@}', 	'start' : <%FORM%>OldDateStart, 'end' : <%FORM%>OldDateEnd}
+	}
+
+	var <%FORM%>obArr = new Array(rangesOptions.today,rangesOptions.yesterday,rangesOptions.lastweek,rangesOptions.lastbusinessweek,rangesOptions.thismonth,rangesOptions.lastmonth,rangesOptions.alltime,rangesOptions.custom);
+
+	var <%FORM%>container = 	document.createElement("div");
+	var <%FORM%>containertbl = document.createElement("table");
+	var <%FORM%>containertbltr = document.createElement("tr");
+	var <%FORM%>containertbltd1 = document.createElement("td");
+	var <%FORM%>containertbltd2 = document.createElement("td");
+
+	var <%FORM%>pickers = 		document.createElement("div");
+	var <%FORM%>picker1 = 		document.createElement("div");
+	var <%FORM%>picker2 = 		document.createElement("div");
+	var <%FORM%>ranges = 		document.createElement("div");
+	var <%FORM%>drp_input = 	document.createElement("div");
+	var <%FORM%>drp_inputKey = document.createElement("div");
+	var <%FORM%>rangeTitle = 	document.createElement("div");
+	var <%FORM%>rangeDates = 	document.createElement("div");
+	var <%FORM%>submitDiv = 	document.createElement("div");
+
+	var <%FORM%>Header = document.createElement("h2");
+	//var submitB = document.createElement("button");
+
+	var <%FORM%>inputPicker1 = document.createElement("input");
+	var <%FORM%>inputPicker2 = document.createElement("input");
+
+	var <%FORM%>currentIndex = document.createElement("input");
+
+	var <%FORM%>table = document.createElement("table");
+	var <%FORM%>newRow = <%FORM%>table.insertRow(-1);
+	var <%FORM%>pickCell1 = <%FORM%>newRow.insertCell(0);
+	var <%FORM%>pickCell15 = <%FORM%>newRow.insertCell(1);
+	var <%FORM%>pickCell2 = <%FORM%>newRow.insertCell(2);
+
+	var <%FORM%>submitB =  "<button onclick='<%FORM%>submitSelection(this);' jframe='no' type='button' class='button w200'><span class='ico ico-ok'>{@Select@}</span></button>";
+
+	$(<%FORM%>containertbltr).append(<%FORM%>containertbltd1, <%FORM%>containertbltd2);
+	$(<%FORM%>containertbl).addClass('table').append(<%FORM%>containertbltr);
+	
+
+	$(<%FORM%>table).addClass('table w100p');
+	$(<%FORM%>pickCell1).attr('align','center');
+	$(<%FORM%>pickCell15).attr('width','5');
+	$(<%FORM%>pickCell2).attr('align','center');
+	$(<%FORM%>rangeTitle).addClass('drp<%FORM%>RangeTitle drpRangeTitle');
+	$(<%FORM%>rangeDates).addClass('drp<%FORM%>RangeDates drpRangeDates');
+	$(<%FORM%>pickers).addClass('drp<%FORM%>_pickers_container drp_pickers_container inlet p5');
+	$(<%FORM%>inputPicker1).attr('id','drp<%FORM%>_picker1_field').attr('value','').attr('readonly','readonly').attr('title', Date.format).addClass('text w100 center disabled');
+	$(<%FORM%>inputPicker2).attr('id','drp<%FORM%>_picker2_field').attr('value','').attr('readonly','readonly').attr('title', Date.format).addClass('text w100 center disabled');
+	$(<%FORM%>picker1).addClass('drp_picker').attr('id','drp<%FORM%>_picker1');
+	$(<%FORM%>picker2).addClass('drp_picker').attr('id','drp<%FORM%>_picker2');
+	$(<%FORM%>Header).append('{@Select date range@}:');
+
+	function <%FORM%>submitSelection(el){
+		$('.drp<%FORM%>_container').toggle();
+		//form<%FORM%>_cld.val($('#<%FORM%>currentIndex').val());
+	}
+
+	function <%FORM%>selOther(){
+		var event = {'data':{'index': 7, 'obj' : <%FORM%>obArr, 'byCal' : true}};
+		form<%FORM%>_from.val($(<%FORM%>inputPicker1).val());
+		form<%FORM%>_to.val($(<%FORM%>inputPicker2).val());
+		return <%FORM%>selectHandler(event);
+	}
+
+	function <%FORM%>initDrp(form, useCallback){
+		useCallback = useCallback || false;
+		if ($('#' + form + 'typer').is(':checked')) {
+			var event = {'data':{'index': 7, 'obj' : <%FORM%>obArr, 'useCallback' : useCallback}};
+			if ($('#' + form + 'from').val() =='') {
+				 $('#' + form + 'from').val($('#drp' + form + '_picker1_field').val());
+			}
+			
+			if ($('#' + form + 'to').val() =='') {
+				$('#' + form + 'to').val($('#drp' + form + '_picker2_field').val());
+			}
+			return <%FORM%>selectHandler(event);
+			
+		} else {
+			for (var i = 0; i < <%FORM%>obArr.length; i++) {
+				if (<%FORM%>obArr[i].name == $('#' + form + 'cld').val()) {
+					var event = {'data':{'index': i, 'obj' : <%FORM%>obArr, 'useCallback' : useCallback}};
+					return <%FORM%>selectHandler(event);
+				}; 
+			}
+		}
+	};
+
+	function <%FORM%>selectHandler(event) {
+//		alert (1);
+		var <%FORM%>container_filter = $('#drp<%FORM%>placeholder');
+		$('.drp_preset_link', <%FORM%>container_filter).removeClass('selected');
+		$(<%FORM%>rangeTitle).text(event.data.obj[event.data.index].title);
+		$('.<%FORM%>drp_preset_link_'+event.data.obj[event.data.index].name).addClass('selected');
+		
+		form<%FORM%>_cld.val(event.data.obj[event.data.index].name);
+		$(<%FORM%>currentIndex).val(event.data.index);
+
+		var Start = (form<%FORM%>_from.val() != '') ? Date.fromString(form<%FORM%>_from.val()) : event.data.obj[event.data.index].start;
+		var End = (form<%FORM%>_to.val() != '') ? Date.fromString(form<%FORM%>_to.val()) : event.data.obj[event.data.index].end;
+
+		if (!event.data.byCal) {
+			switch(event.data.obj[event.data.index].name) {
+				case 'today' :
+				case 'yesterday' :
+					$(<%FORM%>inputPicker1).val(Start.asString())
+					break;
+				default :
+					$(<%FORM%>inputPicker1).val(Start.asString())
+					$(<%FORM%>inputPicker2).val(End.asString())
+					break;
+			}
+		}
+
+		switch(event.data.obj[event.data.index].name) {
+			case 'today' :
+			case 'yesterday' :
+				if ($(<%FORM%>picker1).is('.hasDatepicker')) $(<%FORM%>picker1).datepicker('setDate', event.data.obj[event.data.index].start);
+				if ($(<%FORM%>picker2).is('.hasDatepicker')) $(<%FORM%>picker2).datepicker('setDate', event.data.obj[event.data.index].end);
+				form<%FORM%>_cld.val(event.data.obj[event.data.index].name);
+				$('#<%FORM%>types').click();
+				$(<%FORM%>rangeDates).text((event.data.obj[event.data.index].start).asString());
+				break;
+			case 'custom' :
+				if ($(<%FORM%>picker1).is('.hasDatepicker')) $(<%FORM%>picker1).datepicker('setDate', Start);
+				if ($(<%FORM%>picker2).is('.hasDatepicker')) $(<%FORM%>picker2).datepicker('setDate', End);
+				form<%FORM%>_from.val($(<%FORM%>inputPicker1).val());
+				form<%FORM%>_to.val($(<%FORM%>inputPicker2).val());
+				$('#<%FORM%>typer').click();
+				$(<%FORM%>rangeDates).text($(<%FORM%>inputPicker1).val() + ' - ' + $(<%FORM%>inputPicker2).val());
+				break;
+			default:		
+				if ($(<%FORM%>picker1).is('.hasDatepicker')) $(<%FORM%>picker1).datepicker('setDate', event.data.obj[event.data.index].start);
+				if ($(<%FORM%>picker2).is('.hasDatepicker')) $(<%FORM%>picker2).datepicker('setDate', event.data.obj[event.data.index].end);
+				form<%FORM%>_cld.val(event.data.obj[event.data.index].name);
+				$('#<%FORM%>types').click();
+				$(<%FORM%>rangeDates).text((event.data.obj[event.data.index].start).asString() + ' - ' + (event.data.obj[event.data.index].end).asString());
+				break;
+			}
+		if (!event.data.useCallback) {
+			$('#<%FORM%>changeTrigger').change();
+		}
+		return false;
+		
+	}
+
+	function drp<%FORM%>(){
+
+		$(<%FORM%>drp_inputKey).addClass('drp_inputKey drp<%FORM%>inputKey');
+			
+		$(<%FORM%>drp_input).addClass('drp_input frame selectBg').append(<%FORM%>drp_inputKey, <%FORM%>rangeTitle, <%FORM%>rangeDates);
+
+		$(<%FORM%>drp_input).click(function(e){
+			$(<%FORM%>container).toggle();
+
+			$(<%FORM%>picker1).datepicker({
+				dateFormat: <%DPDATEFORMAT%>,
+				firstDay : dpWS,
+				altFormat: <%DPDATEFORMAT%>,
+				altField: '#drp<%FORM%>_picker1_field',
+				onSelect: <%FORM%>selOther
+			});
+			
+			$(<%FORM%>picker2).datepicker({
+				dateFormat: <%DPDATEFORMAT%>,
+				firstDay : dpWS,
+				altFormat: <%DPDATEFORMAT%>,
+				altField: '#drp<%FORM%>_picker2_field',
+				onSelect: <%FORM%>selOther
+			});
+			
+			if (form<%FORM%>_typer.is(':checked')) {
+				var event = {'data':{'index': 7, 'obj' : <%FORM%>obArr, 'useCallback':true}};
+				<%FORM%>selectHandler(event);
+			} else {
+				for (var i = 0; i < <%FORM%>obArr.length; i++) {
+					if (<%FORM%>obArr[i].name == form<%FORM%>_cld.val()) {
+						var event = {'data':{'index': i, 'obj' : <%FORM%>obArr, 'useCallback':true}};
+						<%FORM%>selectHandler(event);
+					}; 
+				}
+			}
+		});
+		
+		
+		for (var i = 0; i < <%FORM%>obArr.length; i++) {
+			var <%FORM%>el = document.createElement("a");
+			$(<%FORM%>el)
+				.append(<%FORM%>obArr[i].title)
+				.addClass('cursor-hand u drp_preset_link <%FORM%>drp_preset_link_' + <%FORM%>obArr[i].name)
+				//.attr('href','#')
+				.attr('jframe','no')
+				.attr('onclick','return <%FORM%>selectHandler({\'data\':{\'index\':' + i + ',\'obj\':<%FORM%>obArr}});')
+				.bind('click', {'index': i, 'obj' : <%FORM%>obArr}, <%FORM%>selectHandler);
+			$(<%FORM%>ranges).append(<%FORM%>el);
+		}
+
+		$(<%FORM%>submitDiv).addClass('drp_submit').append(<%FORM%>submitB);
+		
+		$(<%FORM%>ranges).addClass('drp_ranges').append(<%FORM%>submitDiv);
+		$(<%FORM%>pickCell1).append('<label class=\'drp_label\'>&nbsp;</label>').append(<%FORM%>picker1).append(<%FORM%>inputPicker1);
+		$(<%FORM%>pickCell2).append('<label class=\'drp_label\'>&nbsp;</label>').append(<%FORM%>picker2).append(<%FORM%>inputPicker2);
+		$(<%FORM%>pickers).append(<%FORM%>table);
+		$(<%FORM%>containertbltd1).append(<%FORM%>ranges);
+		$(<%FORM%>containertbltd2).append(<%FORM%>pickers);
+		$(<%FORM%>container).addClass('drp<%FORM%>_container drp_container frame').append(<%FORM%>containertbl);
+		
+		//.append(<%FORM%>pickers).append(<%FORM%>ranges);
+
+		$('#drp<%FORM%>placeholder').append(<%FORM%>drp_input).append(<%FORM%>container);
+
+		$('#<%FORM%>callbackTrigger').bind('change', function(){
+			<%FORM%>initDrp('<%FORM%>', true);
+		});
+		
+		<%FORM%>initDrp('<%FORM%>');
+		
+	}
+
+	$(document).click(function(e){
+		if ($(e.target).parents().filter('#drp<%FORM%>').length != 1 && $(e.target).parents().filter('.ui-datepicker-calendar').length != 1  && $(e.target).parents().filter('.ui-datepicker-header').length != 1 ) {
+			$(<%FORM%>container).hide();
+		}
+	});
+	
+	$(function(){
+		drp<%FORM%>();
+	});
+
+	
+//-->
+</script>

@@ -1,0 +1,3476 @@
+@CHARSET "UTF-8";
+
+
+/*======================================_gui.css ================================================*/
+
+
+#alerts {
+   background: #f9f2de;
+   border: 1px solid #d2d2d2;
+   padding: 10px; 
+}
+
+#alerts h1.title {
+   background: #f9f2de url("../images/smartppc6/bg-fade-top1.png") repeat-x top left;
+   border: 1px solid;
+   border-color: #d2d2d2 #d2d2d2 transparent #d2d2d2;
+   padding: 0px;
+   font-size: 18px;
+   padding: 2px 10px;
+   float:right;
+   display: inline;
+   position: relative;
+   margin-top:-38px;
+}
+.mozilla #alerts h1.title,
+.safari #alerts h1.title {
+   margin-top:-38px;
+}
+.opera #alerts h1.title {
+   margin-top:-37px;
+}
+.msie #alerts h1.title {
+   margin-top:-36px;
+   
+}
+
+#alerts .alertTitle {
+   font-weight: bold;
+   font-size: 12px;   
+   clear:both;
+}
+
+#alerts .alertTitle a{
+   background: url("../images/smartppc6/icons/cross_small.png") no-repeat;
+   height: 16px;
+   display:block;
+}
+
+
+
+#alerts .alertDescription {
+   font-weight: normal;
+}
+
+.filterBox, .filterBox2 {
+   padding: 5px;
+   background: #e6eff8 url("../images/smartppc6/table-row-bg-fade2.png") repeat-x 0 0;
+   border: 1px solid #b9b9b9;
+}
+
+
+.tabdiv > .filterBox, 
+.tabdiv > div > .filterBox,
+.tabdiv > form > .filterBox
+{
+   background-image: none;
+   border: 1px solid;
+   border-color: #e6eff8 #e6eff8 #b9b9b9 #e6eff8;
+}
+
+.filterBox label {
+   color: #888;
+   font-size: 11px;
+}
+
+.filterBoxMark {
+   background: transparent url("../images/smartppc6/filterBoxMark.png") no-repeat 0 0;
+   width: 23px;
+   height: 13px;
+   margin-top: -1px;
+   margin-left: 50px;
+}
+
+* html .filterBoxMark {
+   background: transparent url("../images/smartppc6/filterBoxMark.png") no-repeat 0 0;
+   width: 23px;
+   height: 13px;
+   margin-top: -1px;
+   margin-left: 50px;
+}
+
+.devider {
+   border-bottom: 1px solid #d2d2d2;
+   margin: 10px 0;
+}
+
+h1.progressBar {
+   z-index: 2;
+      padding: 30px 0px 0px 0px;
+}
+
+*+html h1.progressBar {
+      padding: 50px 0px 0px 0px ;
+}
+
+.progressBar .current {
+   color: #000000;
+   margin-top: 16px/*22px*/;
+   margin-bottom:-7px;
+   white-space:nowrap;
+}
+
+*+html .progressBar .current {
+   margin-top: 16px/*9px*/;
+   margin-bottom:-4px;
+}
+
+.progressBar .done {
+   font-size: 14px;
+   font-family: Arial;
+   font-weight: normal;
+   color: #999;
+   margin-top:30px;
+   margin-bottom:-1px;
+   white-space:nowrap;
+}
+
+*+html .progressBar .done {
+   margin-bottom:-10px;
+}
+
+.progressBar .incomplete {
+   color: #999;
+   font-family: Arial;
+   font-size: 14px;
+   margin-top:30px;
+   margin-bottom:-1px;
+   white-space:nowrap;
+}
+*+html .progressBar .incomplete {
+    margin-bottom:-10px;
+}
+
+.progressBar .spacer {
+   color: #aaa;
+   font-size: 22px;
+   padding: 21px 2px 0px 2px;
+   margin-bottom:0px;
+}
+
+.currentTab {
+   background: #f6f3f0;
+}
+
+.ССardBack {
+   
+}
+
+a.more {
+   padding: 2px 16px 2px 0;
+   background: url("../images/smartppc6/icons/star2.png") right bottom no-repeat;
+}
+
+.loading {
+   background-image: url("../images/loading.gif") !important;
+   background-repeat: no-repeat  !important;
+   background-position: center !important;
+}
+.loading_top {
+   background-image: url("../images/loading.gif") !important;
+   background-repeat: no-repeat  !important;
+   background-position:  38px 59px!important;
+}
+.loading-big {
+   background-image: url("../images/loading_animation.gif") !important;
+   background-repeat: no-repeat  !important;
+   background-position: center !important;
+}
+
+.buttonGreen {
+   background-image: url("../images/smartppc6/buttongreen2.gif");
+   background-repeat: no-repeat;
+   width:169px;
+   margin-left:4px;
+   line-height:18px;
+   float:right;
+   cursor: pointer;
+   height:25px;
+   color: #000000;
+   padding-top: 9px;
+   margin-top: -5px;
+   text-align: center;
+}
+/* Opera 9 */
+   @media all and (width) {
+   
+   }
+/* /Opera 9 */  
+
+
+#presetsTable .thumb {
+   padding: 10px;
+   border: 1px solid transparent;
+   text-align: center;
+   cursor: pointer;
+   margin: 5px;
+}
+
+#selectedThumb {
+   border: 1px solid #b2b2b2;
+   padding: 10px;
+}
+
+#selectedThumb .custom {
+   width: 130px;
+   height: 80px;
+   color: #888;
+}
+
+#presetsTable .thumb:hover {
+   border: 1px solid #888;
+}
+
+#presetsTable .selected {
+   background: #e6eff8 url("../images/smartppc6/table-row-bg-fade2.png") repeat-x 0 0;
+   border: 1px solid #b9b9b9;
+}
+
+#presetsTable .custom {
+   width: 130px;
+   height: 80px;
+   color: #888;
+}
+/*----------------------------------------*/
+.thumb {
+   padding: 10px;
+   border: 1px solid transparent;
+   text-align: center;
+   cursor: pointer;
+   margin: 5px;
+}
+.thumb:hover {
+   border: 1px solid #888;
+}
+
+.gadget-box {
+   border: 1px solid transparent;
+}
+
+.gadget-box.selectedBox .add-button {
+   display: block;
+} 
+
+.selectedBox {
+   border: 1px solid #b9b9b9;
+}
+
+.selectedThumb {
+   background: #e6eff8 url("../images/smartppc6/table-row-bg-fade2.png") repeat-x 0 0;
+   border: 1px solid #b9b9b9;
+}
+
+.custom {
+   width: 130px;
+   height: 80px;
+   color: #888;
+}
+
+#channels_list {
+
+}
+
+#channels_list ul li{
+   list-style: none;
+   margin: 2px;
+   padding: 0 0 5px 0;
+   
+}
+
+#channels_list > ul > li > div > span{
+   display: block;
+   margin-top: -3px;
+}
+
+#channels_list > ul > li > div.ui-draggable-dragging {
+   /* padding: 5px; */
+   background-color: #fff;
+   border: 1px solid #b9b9b9;
+}
+
+
+
+/*------ul------------*/
+ul.channels_list_sd li{ 
+   list-style-type: none;
+   height:25px;
+   cursor:pointer;
+   line-height: 25px;
+   overflow: hidden;
+   padding: 0 0 0 10px;
+   border-left: 1px solid transparent;
+}
+
+ul.channels_list_sd li.active2 {
+   background: url(../images/smartppc6/channelbg.png) no-repeat top right;
+   border-left: 1px solid #b9b9b9;
+   
+}
+
+.empty {
+   height: 60px;
+   text-align: center;
+   color: #888;
+   font-style: italic;
+   font-size: 12px;
+}
+
+
+/*======================================_menus.css ================================================*/
+
+/*************** MAIN */
+
+
+ul#menu, ul#submenu, ul#submenu2 {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+   white-space: nowrap;
+   letter-spacing: -0.01em;
+   font-size: 14px;
+   font-family: Arial, "Tahoma", "Verdana";
+}
+
+ul#submenu {
+   font-weight: normal;
+   font-size: 11px;
+}
+
+ul#submenu2 {
+   float: right;
+   font-weight: normal;
+   font-size: 11px;
+}
+
+ul#menu li, 
+ul#submenu li,
+ul#submenu2 li {
+   float: left;
+   background: #000000 url("../images/smartppc6/menucorners.png") 0 0 no-repeat;
+   padding: 0;
+   vertical-align: middle;
+   margin: 0 1px 0 0;
+   height: 30px;
+}
+
+ul#submenu2 li {
+   margin: 0 0 0 1px ;
+}
+
+
+ul#submenu li, ul#submenu2 li  {
+   background-position: left bottom !important;
+}
+
+ul#submenu li.sel {
+   background-color: #ffcc00;
+}
+
+ul#menu li.sel, ul#submenu li.sel  {
+   background-color: #ffcc00;
+}
+
+ul#menu li a, ul#submenu li a, ul#submenu2 li a {
+   display: block;
+   text-decoration: none;
+   padding: 7px 10px 0 10px;
+   height: 30px;
+   background: url("../images/smartppc6/menucorners.png") right 0 no-repeat;
+   color: white;
+}
+
+ul#submenu li a, ul#submenu2 li a {
+   background-position: right -70px ;
+   padding-top: 7px;
+   padding-bottom: 0px;
+}
+
+#menusplitter {
+   clear: both;
+   height: 9px;
+   background-color: #ffcc00;
+}
+
+ul#submenu2 li a.ico {
+   padding-left:22px;
+   background-position: 2px 7px !important;
+}
+
+#menuUser {
+   background: url("../images/smartppc6/menucorners.png") -2px 0 no-repeat;
+   margin-left: 10px;
+}
+
+#menuUser .bonus {
+color:yellow;
+}
+
+#menuUser .wrapper {
+   display: block;
+   clear: both;
+   height: 47px;
+   padding: 10px 10px;
+   color: #fff;
+   font-size: 12px;
+   font-family: "Segoe UI","Tahoma", "Calibri", "Verdana";
+   
+}
+
+#menuUser .wrapper .line {
+   line-height: 16px;
+}
+
+#menuUser .wrapper a {
+   color: #fff;
+}
+
+#menuUser .userName {
+   font-weight: bold;
+}
+
+#menuUser .userNav {
+   color: #aaf;
+}
+
+#menuUser .wrapper .ico {
+   background-position: 0px 1px !important;
+}
+
+#menuUser .footer {
+   display: block;
+   clear: both;
+   height: 2px;
+   background: url("../images/smartppc6/menucorners.png") right -98px no-repeat;
+}
+
+#menuRole .wrapper {
+   height: 30px;
+   background: #000000 url("../images/smartppc6/menucorners.png") 0 0 no-repeat;
+   vertical-align: middle;
+   color: #fff;
+   font-size: 13px;
+   font-family: "Segoe UI", "Tahoma", "Calibri", "Helvetica", "Verdana";
+}
+
+#menuRole .wrapper2 {
+   background: transparent url("../images/smartppc6/menucorners.png") right 0 no-repeat;
+   height: 30px;
+   display: block;
+   padding-top: 4px;
+}
+
+#menuRole .wrapper .roleSelector, #menuRole .wrapper .roleTitle {
+    padding: 2px 5px 2px 5px;    
+}
+
+* html #menuRole .wrapper .roleTitle {
+   padding-top: 0px;
+}
+
+#menuRole .wrapper .roleSelector select {
+   /*height: 24px; */
+   width: 200px;
+}
+
+* html #menu li a, * html #submenu li a, * html #submenu2 li a {
+   display: inline-block;
+}
+
+* html ul#submenu li a, * html ul#submenu2 li a {
+   height: 23px;
+   padding-top: 7px;
+}
+
+
+
+/*======================================  _icons.css ================================================*/
+
+
+.ico {
+   padding-left: 18px !important;
+   padding-bottom: 3px !important;
+   background-position: 0px 0px;
+   background-repeat: no-repeat;
+   
+}
+
+.ico-right {
+   padding-right: 20px !important;
+   padding-bottom: 3px !important;
+   background-position: top right;
+   background-repeat: no-repeat;
+}
+
+.ico-center {
+   height:16px;
+   background-position: center !important;
+   background-repeat: no-repeat;
+}
+   
+.ico-help {       background-image: url("../images/smartppc6/icons/ico-help-blue.png") !important; }
+.ico-user {       background-image: url("../images/smartppc6/icons/user_business.png") !important; }
+.ico-mail {       background-image: url("../images/smartppc6/icons/ico-mail-blue.png") !important; }
+.ico-money {      background-image: url("../images/smartppc6/icons/money.png") !important;}
+.ico-labelgreen { background-image: url("../images/smartppc6/icons/ico-labelgreen.png") !important; }
+.ico-plusgreen {  background-image: url("../images/smartppc6/icons/plus-green.png") !important;}
+.ico-plusgreen2 { background-image: url("../images/smartppc6/icons/plus-green2.png") !important;}
+.ico-createReportplus { background-image: url("../images/smartppc6/icons/createReportplus.png") !important;}
+.ico-loading {    background-image: url("../images/smartppc6/icons/loading.gif") !important;}
+.ico-confirm {    background-image: url("../images/smartppc6/icons/confirm.png") !important;}
+.ico-cancel {     background-image: url("../images/smartppc6/icons/slash.png") !important;}
+.ico-delete {     background-image: url("../images/smartppc6/icons/cross.png") !important;}
+.ico-deletesmall {background-image: url("../images/smartppc6/icons/cross_small.png") !important;}
+.ico-arrowfirst { background-image: url("../images/smartppc6/icons/arrow-first.png") !important;}
+.disabled.ico-arrowfirst {background: url("../images/smartppc6/icons/arrow-first.png") 0px -17px no-repeat !important;}
+.ico-arrowlast {  background-image: url("../images/smartppc6/icons/arrow-last.png") !important;}
+.disabled.ico-arrowlast {  background: url("../images/smartppc6/icons/arrow-last.png") 0px -16px no-repeat !important;}
+.ico-arrowleft {  background-image: url("../images/smartppc6/icons/arrow-left.png") !important;}
+.disabled.ico-arrowleft {  background: url("../images/smartppc6/icons/arrow-left.png") 0px -17px no-repeat !important;}
+.ico-arrowright { background-image: url("../images/smartppc6/icons/arrow-right.png") !important;}
+.disabled.ico-arrowright {background: url("../images/smartppc6/icons/arrow-right.png")  0px -17px no-repeat !important;}
+.ico-arrowreload {   background-image: url("../images/smartppc6/icons/arrows-reload.png") !important;}
+.ico-right2 {     background-image: url("../images/smartppc6/icons/arrow_right_double.png") !important;}
+.ico-left2     {  background-image: url("../images/smartppc6/icons/arrow_left_double.png") !important;}
+.ico-arrowreload {   background-image: url("../images/smartppc6/icons/arrows-reload.png") !important;}
+.ico-play {       background-image: url("../images/smartppc6/icons/play.png") !important;}
+.ico-pause {      background-image: url("../images/smartppc6/icons/pause.png") !important;}
+.ico-copy {       background-image: url("../images/smartppc6/icons/folders.png") !important;}
+.ico-edit {       background-image: url("../images/smartppc6/icons/edit.png") !important;}
+.ico-notesplus {  background-image: url("../images/smartppc6/icons/notebooks_plus.png") !important;}
+.ico-pageapply {  background-image: url("../images/smartppc6/icons/page_tick.gif") !important;}
+.ico-pagedeny {      background-image: url("../images/smartppc6/icons/page_cross.gif") !important;}
+.ico-report {     background-image: url("../images/smartppc6/icons/report.png") !important;}
+.ico-approve {    background-image: url("../images/smartppc6/icons/tick_shield.png") !important;}
+.ico-lock {       background-image: url("../images/smartppc6/icons/lock.png") !important;}
+.ico-unlock {     background-image: url("../images/smartppc6/icons/lock_unlock.png") !important;}
+.ico-color {      background-image: url("../images/smartppc6/icons/color.png") !important;}
+.ico-image {      background-image: url("../images/smartppc6/icons/image.png") !important;}
+.ico-richmedia {      background-image: url("../images/smartppc6/icons/rich.png") !important;}
+.ico-text {       background-image: url("../images/smartppc6/icons/script_code.png") !important;}
+.ico-key {        background-image: url("../images/smartppc6/icons/key.png") !important;}
+.ico-reply {      background-image: url("../images/smartppc6/icons/balloon.png") !important;}
+.ico-stop {       background-image: url("../images/smartppc6/icons/stop.png") !important;}
+.ico-ok {         background-image: url("../images/smartppc6/icons/ok.png") !important;}
+.ico-keyedit {    background-image: url("../images/smartppc6/icons/key_edit.png") !important;}
+.ico-puzzle {     background-image: url("../images/smartppc6/icons/puzzle.png") !important;}
+.ico-chat {       background-image: url("../images/smartppc6/icons/balloon.png") !important;}
+.ico-binocular {  background-image: url("../images/smartppc6/icons/binocular.png") !important;}
+.ico-folderarrow {background-image: url("../images/smartppc6/icons/folder_arrow.png") !important;}
+.ico-xls {     background-image: url("../images/smartppc6/icons/document_excel.png") !important;}
+.ico-csv {        background-image: url("../images/smartppc6/icons/document_excel_csv.png") !important;}
+.ico-globeplus {  background-image: url("../images/smartppc6/icons/globe__plus.png") !important;}
+.ico-warningsmall {  background-image: url("../images/smartppc6/icons/exclamation_small.png") !important;}
+.ico-unpaid {     background-image: url("../images/smartppc6/icons/exclamation_y2.png") !important;}
+.ico-warningtrouble{background-image: url("../images/smartppc6/icons/exclamation_diamond_frame_red.png") !important;}
+.ico-resolve {    background-image: url("../images/smartppc6/icons/lifebuoy.png") !important;}
+.ico-upgrade {    background-image: url("../images/smartppc6/icons/control_double_090-green.png") !important;}
+.ico-downgrade {  background-image: url("../images/smartppc6/icons/control_double_270-red.png") !important;}
+.ico-renew {      background-image: url("../images/smartppc6/icons/arrow_circle-renew.png") !important;}
+.ico-back {       background-image: url("../images/smartppc6/icons/arrow_return_180_left.png") !important;}
+.ico-next {       background-image: url("../images/smartppc6/icons/arrow.png") !important;}
+.ico-unread {     background-image: url("../images/smartppc6/icons/mail.png") !important;}
+.ico-readed {     background-image: url("../images/smartppc6/icons/mail_open.png") !important;}
+.ico-starsmall {  background-image: url("../images/smartppc6/icons/star_small.png") !important;}
+.ico-history { background-image: url("../images/smartppc6/icons/clock.png") !important;}
+.ico-columns { background-image: url("../images/smartppc6/icons/ui-scroll-pane-table.png") !important;}
+.ico-import {  background-image: url("../images/smartppc6/icons/pictures--arrow.png") !important;}
+.ico-target  { background-image: url("../images/smartppc6/icons/target.png") !important;}
+.ico-doc-convert  {  background-image: url("../images/smartppc6/icons/document-convert.png") !important;}
+.ico-settings  {  background-image: url("../images/smartppc6/icons/wrench-screwdriver.png") !important;}
+.ico-site-layout  {  background-image: url("../images/smartppc6/icons/layout-header-3-mix.png") !important;}
+.ico-money-ok {   background-image: url("../images/smartppc6/icons/money-coin.png") !important;}
+.ico-money-resend {  background-image: url("../images/smartppc6/icons/money-coin-gray.png") !important;}
+.ico-money-back   {  background-image: url("../images/smartppc6/icons/money-coin-back.png") !important;}
+.ico-default   {  background-image: url("../images/smartppc6/icons/document.png") !important;}
+.ico-help   {  background-image: url("../images/smartppc6/icons/question-frame.png") !important;}
+.ico-preview {    background-image: url("../images/smartppc6/icons/magnifier-zoom.png") !important;}
+
+.ico-infored { background-image: url("../images/smartppc6/icons/info-red.png") !important;}
+.ico-infoblue {   background-image: url("../images/smartppc6/icons/info-blue.png") !important;}
+
+.ico-viewads { background-image: url("../images/smartppc6/icons/application_image.png") !important;}
+
+.ico-starl{background: url("../images/smartppc6/icons/ico-star.png") no-repeat left top !important;}
+
+.ico-user{background: url("../images/smartppc6/icons/ico-user-blue.png") no-repeat left top !important;}
+
+.required {
+   background-image:url("../images/smartppc6/icons/ico-star.png");
+   background-position:right top !important;
+   background-repeat:no-repeat;
+   padding-right: 12px !important;
+   white-space: nowrap;
+}
+
+
+/*====================================== _typographics.css ================================================*/
+
+
+h1, h2, h3, h4, h5, h6 {
+   color: #000;
+   font-family: "Arial", "Tahoma";
+   margin: 0px;
+}
+
+
+h1 {
+   font-size: 26px;
+   letter-spacing: -0.03em;
+   padding: 0.8em 0 0.2em 0;
+   margin: 0px;
+   font-weight: normal;
+   display: block;
+   overflow: visible;
+}
+
+*+html h1 {
+   letter-spacing: -0.05em;
+}
+
+h1.smaller {
+   font-size: 20px;
+}
+
+h1.readonly {
+   background:#FFFFFF url(../images/smartppc6/bgfade_disabled.png) repeat-x scroll 0 0 !important;
+   border:1px solid #DAD6D2;
+   color:#777777;
+   font-size:14px;
+   height:20px;
+   margin:0;
+   padding:2px 3px;
+}
+
+h2,h3{
+   font-size: 14px;
+}
+
+h2 {
+   
+   letter-spacing: -0.03em;
+   padding: 0.8em 0 0.5em 0;
+   margin: 0px;
+   font-weight: bold;
+   display: block;
+   color: #1A487B;
+}
+
+
+.xFrame h2 {
+   color: #0066aa;
+   font-size: 18px;
+   padding-top: 0px; 
+}
+
+h2.underline {
+   padding-top: 0px;
+   background: url("../images/smartppc6/underline.gif") repeat-x 0 0px;
+}
+
+.textInfo {
+   font-size: 13px;
+   color: #444;
+   width: 68%;
+   padding: 10px 0;
+}
+
+p {
+   display: block;
+   clear: both;
+   padding-bottom: 10px;
+}
+
+
+a, a:VISITED {
+   color: #0066a8;
+}
+
+
+/*======================================_forms.css ================================================*/ 
+
+
+
+.form, form {
+   margin: 0;
+   padding: 0;
+   border: 0;
+}
+
+/* Assume frame border with current color theme */
+.frame {
+   background: #f6f3f0;
+   border: 1px solid;
+   border-color: #e0dcd8 #b9babf #b9babf #e0dcd8;
+}
+
+#manageAdsDiv1.frame {
+   display: table-cell;
+   width: 99%;
+}
+
+
+.setAll {
+   background: transparent url("../images/smartppc6/button_setall.gif") no-repeat center;
+   position: absolute;
+   margin-top: 7px;
+   margin-bottom: -25px;
+   display: block;
+   border: none;
+   cursor: pointer;
+   height: 17px;
+}
+
+.setAll2 {
+   background: transparent url("../images/smartppc6/button_setall2.gif") no-repeat left top;
+   display: block;
+   padding-left: 23px;
+   padding-top: 3px;
+   font-weight: bold;
+   border: none;
+   cursor: pointer;
+   height: 21px;
+   
+}
+
+.bulkCtl {
+   width: 18px;
+}
+
+.frameBorderless {
+   background-color: #f6f3f0;
+}
+
+label {
+   font-weight: bold;
+   font-size: 12px;
+   color: #000;
+   display: block;
+   position:relative;
+}
+
+label.disabled {
+   color: #888;
+}
+
+label input {
+   position: relative;
+   top: 1px;
+}
+
+.ffFix, x:-moz-any-link {
+   top: 3px;
+}
+
+*+html .ffFix {
+   top: 0px;
+}
+
+span.text,
+input.text,
+input.hasDatepicker {
+   background: #ffffff url("../images/smartppc6/form-input-bg.gif") repeat-x;
+   border: 1px solid #dad6d2;
+   height: 22px;
+   margin: 0px;
+   padding: 0px 3px;
+   padding-top: 3px;
+   font-size: 15px;
+}
+
+* html .text {
+   height: 20px;
+   width: 99%;
+}
+
+input.disabled, 
+input.readonly {
+   background: #f6f3f0 !important;
+   color: #777 !important;
+}
+
+.chkbox1 input.disabled {
+   height:auto;
+}
+
+.button_selected { 
+   color: red;
+   background-image: url("../images/smartppc6/bgfade_disabled.png") !important;  
+}
+
+textarea.disabled,
+textarea.readonly {
+   background: #f6f3f0 url("../images/smartppc6/bgfade_disabled.png") repeat-x !important;
+   border: 1px solid #dad6d2;
+   color: #777 !important;
+}
+
+
+input.textSmall {
+   background: #ffffff url("../images/smartppc6/form-input-bg.gif") repeat-x;
+   border: 1px solid #dad6d2;
+   padding: 2px 3px;
+   height: 14px;
+   margin: 0px;
+   font-size: 11px;
+}
+
+textarea.text {
+   background: #ffffff url("../images/smartppc6/form-input-bg.gif") repeat-x;
+   border: 1px solid #dad6d2;
+   padding: 2px 3px;
+   margin: 0px;
+   font-size: 14px;
+}
+
+* html textarea.text {
+   background: #ffffff url("../images/smartppc6/form-input-bg.gif") repeat-x;
+   border: 1px solid #dad6d2;
+   padding: 2px 3px;
+   margin: 0px;
+   width: 99%;
+   font-size: 14px;
+}
+
+/*---------------------*/
+.limitation {
+   position: absolute;
+   padding:5px 5px 5px 13px;
+   margin-left:24px;
+   margin-top:2px;
+   display: inline;
+   white-space: nowrap;
+   min-width: 100px;
+   display: none;
+   color: #fff992;
+   font-size: 10px;
+   background: url("../images/smartppc6/limitation-bg.gif") top right no-repeat;
+}
+
+* html .limitation {
+   margin-top: 3px;
+}
+
+*+html .limitation {
+   margin-top:3px;
+}
+/*----------------------*/
+
+.limInputBg {
+   background: url("../images/smartppc6/liminputbg.gif") top left no-repeat;
+}
+
+.limTextareaBg {
+   background: url("../images/smartppc6/liminputbg.gif") 0 2px no-repeat;
+   margin-top: 3px !important;
+   padding-top: 3px !important;
+}
+
+
+.limCounter {
+   position: absolute;
+   color: #fff;
+   margin: 2px 0 0 -4px;
+   font-size:8px;
+   line-height: 9px;
+   font-weight: bold;
+   padding: 1px 20px 3px 10px;
+}
+
+* html .limCounter {
+   margin: 3px 0 0 -3px;
+}
+
+*+html .limCounter {
+   margin: 3px 0 0 -3px;
+}
+
+input.button, button.button, span.button {
+   padding: 2px 5px;
+   font-size: 13px;
+   height: 30px;
+   background-image: url("../images/smartppc6/button-bg.gif");
+   background-position: 0 0;
+   background-color: #efefef;
+   font-weight: bold;
+   margin: 0px;
+   cursor: pointer;
+   border-width: 1px;
+   border-style: solid;
+   border-color: #eeedeb #dad6d2 #dad6d2 #eeedeb;
+   cursor: pointer;
+}
+
+input.button:hover, button.button:hover, .buttonHover {
+   border: 1px solid #2e92d4 !important; 
+   background-image: url("../images/smartppc6/button-bg.gif");
+}
+
+.buttonPress {
+   background-image: none !important;
+}
+
+input.createReportButton, button.createReportButton {
+   background:transparent url(../images/smartppc6/createReport-bg.png) no-repeat scroll 0px 0;
+   border:none;
+   cursor: pointer;
+   font-size:11px;
+   font-weight:bold;
+   height:35px;
+   margin:0;
+   width:201px;
+   display: block;
+   float: left;
+}
+
+.selectBg {
+   background: #ffffff url("../images/smartppc6/form-input-bg.gif") repeat-x !important;
+}
+
+input.text:FOCUS, button.button:FOCUS, input.button:FOCUS, textarea.text:FOCUS, input.focusFix , textarea.focusFix, .selectbox:focus {
+   border: 1px solid #2e92d4 !important;
+}
+
+
+.hintBox,.notifyBox {
+   padding: 10px;
+   color: #444;
+   background: #e5f8c9 url("../images/smartppc6/bg-fade-top1.png") repeat-x top left;
+   border: 1px solid #dedede;
+}
+
+
+.hintBox2 {
+   padding: 10px;
+   color: #444;
+   background: #ffffdd url("../images/smartppc6/bg-fade-top1.png") repeat-x top left;
+   border: 1px solid #b9b9b9;
+}
+
+.errBox {
+   background: #ffd9d9 url("../images/smartppc6/bg-fade-top1.png") repeat-x top left;
+   border: 1px solid #ff9898;
+   color: #444;
+   margin-bottom: 10px;
+   padding: 10px;
+}
+
+
+.scrollBox {
+   overflow: auto;
+   padding: 10px;
+   border: 1px solid #dad6d2;
+   background: #ffffff url("../images/smartppc6/form-input-bg.gif") repeat-x;
+}
+
+#ad_sources_xml_feeds, #ad_type_image{
+   border: none !important;
+}
+
+.invalidfield {
+   border: 1px solid #f00 !important;
+}
+
+table.form tr {
+   vertical-align: top;
+}
+
+table.form td label {
+   padding-top: 4px;
+}
+
+.tipLabel {
+   font-size: 11px;
+   color: #fff;
+   font-weight: normal;
+   display: block;
+   padding: 2px 5px;
+   float: left;
+}
+
+.errorTip {
+   position: absolute;
+   padding: 2px 2px 10px 2px;
+   /* margin-top: -18px;*/
+   width: 150px;
+   max-width: 150px;
+   margin-left: -35px;
+   margin-top: -35px;
+   display: block;
+   font-size: 10px;
+   background: url("../images/smartppc6/errortip-bg.gif") bottom left no-repeat;
+}
+
+.errorP {
+   padding: 2px 0px;
+   font-size: 11px;
+   color: #ff0000;
+   z-index: 1000;
+   font-weight: normal;
+}
+
+.errorTipMark {
+   display: inline;
+   position: absolute;
+   padding: 0 0 0 20px;
+   height: 16px;
+   /*max-width: 150px;*/
+   margin-left: -18px;
+   margin-top: 4px;
+   background: url("../images/smartppc6/icons/info-red.png ") 0 0 no-repeat;
+}
+
+* html .errorTip {
+   margin-top: -30px;
+   margin-left: -42px;
+}
+#error_message_div {
+   background: #ffd9d9 url("../images/smartppc6/bg-fade-top1.png") repeat-x top left;
+   border: 1px solid #ff9898;
+   margin-bottom: 10px;
+   padding: 10px;
+}
+
+#error_message_div .closeButton {
+   float: right;
+   width: 16px;
+   height: 16px;
+   padding: 2px;
+}
+
+.error_message_div {
+   margin: 0pt  !important;
+}
+
+.Box {
+   padding: 10px;
+}
+
+.inlet {
+   background: transparent url("../images/smartppc6/form-input-bg.gif") repeat-x top left;
+   border-top:    1px solid #b9b9b9 ;
+   border-right:  1px solid #ffffff;
+   border-bottom: 1px solid #ffffff ;
+   border-left:   1px solid #b9b9b9;
+   background-color: #ffffff;
+}
+
+.inlet2 {
+   border-top:    1px solid #b9b9b9 !important;
+   border-right:  1px solid #ffffff !important;
+   border-bottom: 1px solid #ffffff !important;
+   border-left:   1px solid #b9b9b9 !important;
+   background-color: #ffffff;
+}
+
+.outlet {
+   padding: 1px;
+
+   border-top:    1px solid #ffffff !important;
+   border-right:  1px solid #b9b9b9 !important;
+   border-bottom: 1px solid #b9b9b9 !important;
+   border-left:   1px solid #ffffff !important;
+
+   background-color: #f6f3f0;
+}
+
+.xFrame {
+   background: #f6f3f0 url("../images/smartppc6/bgfade3.png") repeat-x 0 0;
+   border: 1px solid #b9babf;
+}
+
+td.underline {
+   padding-top: 0px;
+   background: url("../images/smartppc6/underline.gif") repeat-x 0 -16px;
+}
+
+
+/**
+ ---------------------------------------------------------------------------------> BUTTON
+*/
+
+
+table.xBtn tr td, table.xBtnGreen tr td  {
+   border: 0 none !important;
+   border-bottom: 0 none !important;
+   padding: 0;
+   font:normal 11px sans-serif, tahoma, verdana, helvetica ;
+   height: 21px;
+   min-height: 21px;
+}
+
+table.xBtn, table.xBtnGreen {
+   cursor:pointer;
+   border-collapse: collapse;
+   white-space: nowrap;
+   display: inline;
+   width: auto;
+}
+
+
+body:nth-of-type(1) .xBtn {
+   display: table;
+   float:left;
+   margin-right:4px;
+}
+
+table.xBtn button, table.xBtnGreen button {
+   border:0 none;
+   background: none;
+   font:normal 11px "sans-serif", Arial, Verdana, Helvetica;
+   height: 21px;
+   cursor:pointer;
+   margin:0;
+   overflow:visible;
+   width:auto;
+   -moz-outline:0 none;
+   outline:0 none;
+}
+
+table.xBtnGreen button {
+   color: #000;
+}
+
+*+html .xBtn button, *+html .xBtnGreen button, * html .xBtn button, * html .xBtnGreen button {
+      width: 1px;
+}
+
+.xBtn button, .xBtnGreen button, x:-moz-any-link {
+   padding-left:0;
+   padding-right:0;
+}
+
+*+html .xBtn button, *+html .xBtnGreen button {
+   padding-top:3px;
+}
+
+.xBtn .xBtn-text-ico, .xBtnGreen .xBtn-text-ico {
+   background-position: 0 0px;
+   background-repeat: no-repeat;
+   height: 16px;
+   padding-left:18px;
+   padding-top:0px;
+   padding-bottom:2px;
+   padding-right:0;
+   margin-top: 1px;
+}
+
+.xBtn .xBtn-text, .xBtnGreen .xBtn-text {
+   background-position: 0 0px;
+   background-repeat: no-repeat;
+   height: 16px;
+   padding-top:0px;
+   padding-bottom:2px;
+   padding-right:0;
+   margin-top: 1px;
+}
+
+*+html .xBtn .xBtn-text-ico, *+html .xBtnGreen .xBtn-text-ico {
+   padding-bottom:2px;
+}
+
+*+html .xBtn .xBtn-text, *+html .xBtnGreen .xBtn-text {
+   background-position: 0 0px;
+   padding-top:1px;
+   margin-top: 2px;
+}
+
+.xBtn-Left, .xBtn-Right {
+   font-size:1px;
+   line-height:1px;
+}
+
+.xBtn .xBtn-Left {
+   width:3px;
+   height:21px;
+   background:url(../images/smartppc6/btn-sprite.png) no-repeat 0 0;
+}
+
+.xBtnGreen .xBtn-Left {
+   width:3px;
+   height:21px;
+   background:url(../images/smartppc6/btn-sprite-green.png) no-repeat 0 0;
+}
+
+.xBtn .xBtn-Right {
+   width:3px;
+   height:21px;
+   background:url(../images/smartppc6/btn-sprite.png) no-repeat 0 -21px;
+}
+
+.xBtnGreen .xBtn-Right {
+   width:3px;
+   height:21px;
+   background:url(../images/smartppc6/btn-sprite-green.png) no-repeat 0 -21px;
+}
+
+.xBtn .xBtn-Left i, .xBtn .xBtn-Right i, .xBtnGreen .xBtn-Left i, .xBtnGreen .xBtn-Right i {
+   display:block;
+   width:3px;
+   overflow:hidden;
+   font-size:1px;
+   line-height:1px;
+}
+
+.xBtn .xBtn-Center{
+   background-image:url(../images/smartppc6/btn-sprite.png);
+   background-color: #f6f3f0;
+   background-repeat: repeat-x !important;
+   background-position: 0 -42px; /* For IE 7 scrolling */
+   z-index: 10;
+   vertical-align: middle;
+   text-align:center;
+   cursor:pointer;
+   white-space:nowrap;
+}
+
+.xBtnGreen .xBtn-Center {
+   background-image:url(../images/smartppc6/btn-sprite-green.png);
+   background-color: #f6f3f0;
+   background-repeat: repeat-x !important;
+   background-position: 0 -42px; /* For IE 7 scrolling */
+   z-index: 10;
+   vertical-align: middle;
+   text-align:center;
+   cursor:pointer;
+   white-space:nowrap;
+}
+
+.xBtn-over .xBtn-Left{
+   background:url(../images/smartppc6/btn-sprite.png) repeat-x 0 -63px !important;
+}
+.xBtn-over .xBtn-Right{
+   background:url(../images/smartppc6/btn-sprite.png) repeat-x 0 -84px !important;
+}
+.xBtn-over .xBtn-Center {
+   background:url(../images/smartppc6/btn-sprite.png) repeat-x 0 -105px !important;
+}
+.xBtn-click .xBtn-Left {
+   background:url(../images/smartppc6/btn-sprite.png) repeat-x 0 -126px !important;
+}
+.xBtn-click .xBtn-Right {
+   background:url(../images/smartppc6/btn-sprite.png) repeat-x 0 -147px !important;
+}
+
+.xBtn-click .xBtn-Center {
+   background:url(../images/smartppc6/btn-sprite.png) repeat-x 0 -168px !important;
+}
+
+/*          --------------- Green ------------- */
+.xBtnGreen-over .xBtn-Left{
+   background:url(../images/smartppc6/btn-sprite-green.png) repeat-x 0 -63px !important;
+}
+.xBtnGreen-over .xBtn-Right{
+   background:url(../images/smartppc6/btn-sprite-green.png) repeat-x 0 -84px !important;
+}
+.xBtnGreen-over .xBtn-Center {
+   background:url(../images/smartppc6/btn-sprite-green.png) repeat-x 0 -105px !important;
+}
+.xBtnGreen-click .xBtn-Left {
+   background:url(../images/smartppc6/btn-sprite-green.png) repeat-x 0 -126px !important;
+}
+.xBtnGreen-click .xBtn-Right {
+   background:url(../images/smartppc6/btn-sprite-green.png) repeat-x 0 -147px !important;
+}
+
+.xBtnGreen-click .xBtn-Center {
+   background:url(../images/smartppc6/btn-sprite-green.png) repeat-x 0 -168px !important;
+}
+
+.xBtn em, .xBtnGreen em {
+   font-style:normal;
+   font-weight:normal;
+   height: 16px;
+}
+
+.xTbar {
+   padding-top: 2px;
+   min-height: 28px;
+
+}
+
+.xTbar .vsplitter {
+   display: inline-block;
+   width: 2px;
+   padding: 0px;
+   margin: 0 5px;
+   height: 16px;
+   background: #f6f3f0 url("../images/smartppc6/vertical-splitter.gif") repeat-y 0 0;
+}
+
+* html .xTbar .vsplitter {
+   display: inline;
+}
+
+*+html .xTbar .vsplitter {
+   display: inline;
+}
+
+
+.xTbar .xBtn .xBtn-Center,.xTbar .xBtn .xBtn-Left,.xTbar .xBtn .xBtn-Right {
+   background-image: none;
+}
+
+.ad-edit-handle .xBtn .xBtn-Center, .ad-edit-handle .xBtn .xBtn-Left, .ad-edit-handle .xBtn .xBtn-Right {
+   background-image: none;
+} 
+
+#color_picker_div {
+   position: absolute;
+   z-index: 1000;
+   margin-top: -297px;
+}
+
+/* radio */
+
+.option {
+   position: relative;
+}
+.option input {
+   position: absolute;
+   left: 0;
+}
+.option label {
+   margin-left: 18px;
+}
+.option input {
+}
+html:first-child .option input {
+   margin: -4px 0 0 -3px;
+}
+
+/*
+*  Farbtastic
+*/
+
+.farbtastic {
+  position: relative;
+}
+.farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.farbtastic, .farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .color, .farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.farbtastic .wheel {
+  background: url('../images/colorp/wheel.png') no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .overlay {
+  background: url('../images/colorp/mask.png') no-repeat;
+}
+.farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+  background: url('../images/colorp/marker.png') no-repeat;
+}
+
+.paginator {
+   height: 22px;
+}
+
+.paginator td {
+   font-size: 11px;
+   height: 22px;
+}
+
+
+.paginator td input {
+   height: 18px;
+   padding: 4px 0 0 0;
+}
+
+/*  selectors */
+
+.selector { 
+   clear: left; 
+}
+
+*+html .selector {
+   height: 1%; 
+}
+
+.selector input {
+   float: left; 
+   margin-right: -20px 
+}
+.selector label { 
+   margin-left: 20px; 
+   display: block; 
+}
+.percent{
+   position: relative;
+   top: 0px;
+   left: 0pt;
+}  
+
+optgroup{
+   background-color: #fff;
+   color:#000;
+}
+
+/*------.createReportButton for opera, mozilla, safari ---------*/
+.opera .createReportButton {
+    padding-top: 11px;
+}
+.mozilla .createReportButton {
+    padding-top: 0px;   
+} 
+.safari .createReportButton {
+    padding-top: 0px;   
+} 
+/*------/.createReportButton for opera, mozilla, safari ---------*/
+
+/*------.xBtn .xBtn-text-ico for opera, mozilla, safari ---------*/
+   .opera input.button, button.button {
+      padding: 6px 5px;
+   }
+   
+   .opera input.createReportButton {
+      padding-top: 15px;
+   }
+
+   .opera .xBtn .xBtn-text-ico {
+      height:15px;
+      margin-top:3px;
+      padding:0 0 2px 18px;
+   }
+/*------.xBtn .xBtn-text-ico for opera, mozilla, safari ---------*/
+
+
+.default_value {
+   color: #aaa;
+   
+}
+
+
+
+/*====================================== _tabs.css ================================================*/
+
+.tabdiv {
+   border-right: 1px solid #8b8b8b;
+   border-bottom: 1px solid #8b8b8b;
+   border-left: 1px solid #8b8b8b;
+   border-top: none;
+   padding-top: 7px;
+   margin-top: -7px; 
+  
+}
+
+* html .tabdiv {
+   border: 1px solid;
+   border-color: transparent #8b8b8b #8b8b8b #8b8b8b;
+   padding-top: 0px;
+   margin-top: 0px;
+   position: relative;
+   top:-6px;
+}
+
+.tabsPanel {
+   padding: 0px 0 0 10px;
+   height: 29px;
+   background: url("../images/smartppc6/tabpanel-bg.gif") repeat-x;
+}
+
+.tabsPanel2 {
+   padding: 0px 0 0 10px;
+   height: 40px;
+   background: url("../images/smartppc6/tabpanel2-bg.gif") repeat-x 0px 0px;
+}
+
+.tabsPanel span {
+   float: left;
+   height: 29px;
+   background: url("../images/smartppc6/tab-inactive.png") repeat-x 0 0;
+   margin-right: 1px;
+   margin-bottom: -1px;
+   
+}
+
+.tabsPanel2 span {
+   float: left;
+   height: 40px;
+   background: url("../images/smartppc6/tab-inactive2.png") repeat-x 0 0;
+   margin-right: 2px;
+   margin-bottom: -1px;
+}
+
+* html .tabsPanel span {
+   float: left;
+   height: 29px;
+   background: url("../images/smartppc6/tab-inactive.png") repeat-x 0 0;
+   margin-right: 1px;
+   margin-bottom: -10px;
+
+}
+
+
+.tabsPanel span.sel, .tabsPanel span:hover  {
+   background: url("../images/smartppc6/tab-active.png") repeat-x 0 0; 
+}
+
+.tabsPanel2 span.sel, .tabsPanel2 span:hover  {
+   background: url("../images/smartppc6/tab-active2.png") repeat-x 0 0; 
+}
+
+.tabsPanel span a {
+   height: 25px;
+   display: block;
+   padding: 5px 7px 0 5px;
+   margin-left:2px;
+   text-decoration: none;
+   letter-spacing: -0.05em;
+   color: #000;
+   background: url("../images/smartppc6/tab-inactive.png") no-repeat 100% 0;
+}
+
+.tabsPanel2 span a {
+   height: 31px;
+   width: 120px;
+   display: block;
+   padding: 5px 7px 0 5px;
+   margin-left:2px;
+   text-align: center;
+   text-decoration: none;
+   color: #000;
+   font-size: 15px;
+   background: url("../images/smartppc6/tab-inactive2.png") no-repeat 100% 0;
+}
+
+
+.choosing .tabsPanel2 span a span {
+   padding-left: 23px;
+   display: block;
+   background: url("../images/smartppc6/icons/check1.png") no-repeat 0px 1px;
+}
+
+.choosing .tabsPanel2 span.sel a span {
+   padding-left: 23px;
+   display: block;
+   background: url("../images/smartppc6/icons/check2.png") no-repeat  0px 1px;
+}
+
+* html .tabsPanel span a {
+   height: 29px;
+   display: inline-block;
+   padding-top: 3px !important;
+   margin-left: 2px;
+   margin-top: 0px !important;
+   text-decoration: none;
+   color: #000;
+   background: url("../images/smartppc6/tab-inactive.png") no-repeat 100% 0;
+}
+
+.tabsPanel span a:hover, .tabsPanel span a.sel {
+   background: url("../images/smartppc6/tab-active.png") repeat-x 100% 0; 
+}
+
+.tabsPanel2 span a:hover, .tabsPanel2 span a.sel {
+   background: url("../images/smartppc6/tab-active2.png") repeat-x 100% 0; 
+}
+
+
+
+
+/*====================================== _tables.css ================================================*/
+
+.simpleTable,.table,.smplTable {
+   border: none;
+   border-collapse: collapse;
+}
+
+.smplTable {
+   border: 0px solid #DDD;
+}
+
+.smplTable td {
+   border-bottom: 1px solid #ddd; /**/
+   padding: 0.7em;
+}
+
+.smplTable tr.odd td {
+   background: url("../images/smartppc6/table-row-bg-fade.png") 0 100%  repeat-x;
+}
+
+.smplTable .simpleTableOver td {
+   background: #f6f8fa;
+}
+
+.xTable {
+   font-family: arial, tahoma, helvetica, sans-serif;
+   font-size: 11px;
+   background-color: #fff;
+   text-align: left;
+   width: 100%;
+   cursor: text !important;
+   border: 1px solid #b9b9b9;
+   border-collapse: separate;
+   
+}
+
+.xTable > tbody > tr > td, .xTable > tbody > tr > th {
+   height: 28px;
+   padding: 4px 0px;
+   font-family: arial, tahoma, helvetica, sans-serif;
+   font-size: 11px;
+   border-top: 1px solid #ffffff;
+   border-bottom: 1px solid #E0E0E0;
+   border-right: 1px solid #ffffff;
+   border-left: 1px solid #ffffff;
+   min-height: 28px;
+   margin: 0;
+}
+
+*+HTML .xTable > tbody > tr > td, 
+*+HTML .xTable > tbody > tr > th,
+* HTML .xTable > tbody > tr > td, 
+* HTML .xTable > tbody > tr > th {
+   height: 22px;
+   min-height: 22px;
+}
+
+
+.xTable > tbody > tr > td.nohl {
+   min-height: 0px;
+   height: 0px;
+}
+
+.xTable > tbody > tr > td.chkbox {
+   width: 15px !important;
+   padding: 4px 2px;
+   text-align: center;
+}
+
+.xTable > tbody > tr > td.curColumn {
+   background-color: #F6f3f0;
+   border-right: 1px solid #E6EFF8;
+   border-left: 1px solid #E6EFF8;
+}
+
+.xTable > tbody > tr.selected > td {
+   background-color: #E6EFF8;
+   border-right: 1px solid #E6EFF8;
+   border-left: 1px solid #E6EFF8;
+}
+
+.noborder {
+   border: none !important;
+}
+
+.xTable > tbody > tr.th {
+   background: #f6f3f0 url("../images/smartppc6/table-row-bg-fade.png") 0 100% repeat-x;
+   width: 16px;
+   padding: 0px;
+}
+
+.xTable > tbody > tr.th > td {
+   font-family: arial, tahoma, helvetica, sans-serif;
+   font-size: 12px;
+   text-align: center !important;
+   border: 1px solid #b9b9b9;
+   border-color: #ffffff #a6a4a1 #9e9d9c #ffffff;
+   color: #1A487B;
+   font-weight: bold;
+   font-size: 12px;
+   text-decoration: none;
+   padding: 3px 1px;
+}
+
+.xTable > tbody > tr:LAST-CHILD > td { 
+   border-bottom: 1px solid #ffffff !important;
+}
+.xTable > tbody > tr:LAST-CHILD > th { 
+   border-bottom: 1px solid #ffffff !important;
+}
+
+.xTable > tbody > tr.f9px > td {
+   font-size: 9px;
+}
+
+.xTable > tbody > tr.th > td.asc, .xTable > tbody > tr.th > td.desc {
+   border-bottom-color: #ffffff !important;
+   border-left-color: #ffffff !important;
+   padding: 3px 1px 3px 1px;
+} 
+
+.xTable > tbody > tr.th > td.asc {
+   background: #fff url('../images/smartppc6/sort_asc.gif') no-repeat center top;
+}
+
+.xTable > tbody > tr.th > td.desc {
+   background: #fff url('../images/smartppc6/sort_desc.gif') no-repeat  center bottom;
+}
+
+.xTable .group {
+   background-color: #ffffff !important;
+   padding: 4px 4px 4px 10px;
+   border-bottom: solid 2px #99BBE8 !important;
+}
+
+.xTable .group td { /* height: 30px;*/
+   line-height: 1.5em;
+   font-family: tahoma, arial, helvetica, sans-serif;
+   color: #3764A0;
+   border-bottom: solid 2px #99BBE8 !important;
+   font-weight: bold;
+   overflow: hidden;
+   font-size: 14px;
+}
+
+.xTable .groupIco {
+   background: url('../images/table/group-expand-sprite.gif') no-repeat scroll 10px -42px;
+}
+
+.xTable > tbody > tr.deleted_row {
+   color: #800;
+   background-color: #fff2f2;
+   cursor: default;
+}
+
+.xTable > tbody > tr.deleted_row > td {
+   border-right: 1px solid #fff2f2;
+   border-left: 1px solid #fff2f2;
+}
+
+.xTable > tbody > tr.blocked_row {
+   color: #888;
+   background-color: #fff9f2;
+   cursor: default;
+}
+
+.xTable > tbody > tr.blocked_row > td {
+   border-right: 1px solid #fff9f2;
+   border-left: 1px solid #fff9f2;
+}
+
+.xTable > tbody > tr.new {
+   background: #F5FFE3;
+}
+
+.xTable > tbody > tr.new > td {
+   border-right: 1px solid #F5FFE3;
+   border-left: 1px solid #F5FFE3;
+}
+
+.xTable > tbody > tr.alltotal > td, .xTable > tbody > tr.pagetotal > td  {
+   background: #f6f3f0;
+   font-weight: bold;
+   border-right: 1px solid #f6f3f0;
+   border-left: 1px solid #f6f3f0;
+}
+
+.xTable > tbody > tr.grayed > td  {
+   background: #f6f3f0;
+   border-right: 1px solid #f6f3f0;
+   border-left: 1px solid #f6f3f0;
+}
+
+.xTable > tbody > tr > td > span.editable {
+   border: 1px solid #b9b9b9;
+   display: block;
+   cursor: pointer;
+   padding: 2px;
+   text-align: center;
+}
+
+.xTable > tbody > tr > td > .setAll {
+   display: none;
+   position: relative;
+}
+
+.xTable > tbody > tr > td.border_left {
+   border-left: 1px solid #9E9D9C !important;
+}
+
+.xTable > tbody > tr > td.border_right {
+   border-right: 1px solid #9E9D9C !important;
+}
+
+.xTable > tbody > tr.grayed > td > .setAll {
+   display: block;
+   position: relative;
+}
+
+.xTable > tbody > tr.grayed > td > span.editable {
+   border: 1px solid #2e92d4;
+   background-color: #fff;
+}
+
+
+.xTable > tbody > tr.grayed > td:first-child {
+   border-left: 1px solid #b9b9b9;
+}
+
+.xTable > tbody > tr.grayed > td:last-child {
+   border-right: 1px solid #b9b9b9;
+}
+
+.xTable > tbody > tr.new > td:first-child {
+   border-left: 1px solid #b9b9b9;
+}
+
+.xTable > tbody > tr.new > td:last-child {
+   border-right: 1px solid #b9b9b9;
+}
+
+.xTable > tbody > tr > td.nodata, .xTable > tbody > tr.nodata > td {
+   height: 60px;
+   text-align: center;
+   color: #888;
+   font-style: italic;
+   font-size: 12px;
+   
+}
+/* Opera 9 */
+   @media all and (width) {
+   
+   .smplTable tr td{
+      border-top: 1px solid #fff; /**/
+      border-bottom: 1px solid #ddd; /**/
+   }
+   .smplTable tr.odd td{
+      /*border-top: 1px solid #fff; /**/
+      border-top: 1px solid #ddd; /**/
+      border-bottom: 1px solid #ddd; /**/
+   }
+   .smplTable tr.odd td {
+      background: url("../images/smartppc6/table-row-bg-fade.png") 0 100%  repeat-x;
+      border-top: 1px solid #ddd; /**/
+      border-bottom: 1px solid #ddd; /**/ 
+   }
+   
+   .smplTable .simpleTableOver td {
+      background: #f6f8fa;
+      border-top: 1px solid #ddd; /**/
+      border-bottom: 1px solid #ddd; /**/ 
+   }
+   
+   
+   .xTable {
+      border: 1px solid #b9b9b9;
+   }
+
+
+
+}/* /Opera 9 */
+.opera .xTable > tbody > tr > td {
+   border-top: 1px solid #E0E0E0;
+   border-right: 1px solid #ffffff;
+   border-left: 1px solid #ffffff;
+}
+.opera .xTable > tbody > tr.th > td {
+   border-top: 1px solid #b9b9b9;
+/* border-bottom: 1px solid red !important;*/
+   
+} 
+.opera .xTable > tbody > tr.th > td {
+   border-left-color: #a6a4a1 !important;
+}
+.opera.xTable {
+      border: 1px solid #b9b9b9;
+   }
+.opera .xTable > tbody > tr:first-child > td{
+   border-top:1px solid #A6A4A1  !important;
+}
+.opera .xTable > tbody > tr:last-child > td{
+   border-bottom:1px solid #A6A4A1  !important;
+}
+.opera .xTable tbody tr td.first{
+   border-left:1px solid #A6A4A1  !important;
+}
+.opera .xTable tbody tr td.last{
+   border-right:1px solid #A6A4A1  !important;
+}
+.groupTable {
+   
+}
+
+.groupTable > tbody > tr > td {
+   height: 28px;
+}
+
+.hTable {
+   position: absolute;
+   z-index: 2345;
+}
+.hintTable {
+   position: absolute;
+   z-index: 2345;
+   background-color: #999;
+   opacity: 0.3;
+}
+.hTable div {
+   height: 50px;
+   background-color: #fff;
+   z-index: 2345;
+   border: 1px solid #b9b9b9;
+   width: 400px;
+   padding-top:30px;
+}
+
+
+
+/*====================================== selectbox.css ================================================*/
+
+div.selectbox-wrapper {
+   position:absolute;
+   width:400px;
+   background-color:white;
+   border:1px solid #ccc;
+   margin:0px;
+   padding:0px;
+   text-align:left;
+   overflow: auto;
+   z-index: 1000;
+}
+
+div.selectbox-wrapper ul {
+   list-style-type:none;
+   margin:0;
+   padding:0px;
+}
+
+div.selectbox-wrapper ul li.selected {
+   background-color: #dad6d2;
+}
+
+div.selectbox-wrapper ul li.current {
+   background-color: #faf0e6;
+}
+
+div.selectbox-wrapper ul li {
+   list-style-type:none;
+   display:block;
+   margin:0;
+   padding:2px;
+   cursor:pointer;
+}
+
+.selectbox {
+   margin: 0px;
+   padding:2px 3px;
+   font-family:Arial, Tahoma, Helvetica, sans-serif; 
+   font-size: 14px;
+   display : block;
+   width: 200px;
+   text-align:left; 
+   background: #ffffff url('../images/smartppc6/select-bg.gif') right top no-repeat;
+   height:20px;
+   cursor: pointer;
+   border:1px solid #dad6d2;
+   color:#000;
+}
+
+select {
+   outline-style:none; 
+}
+
+
+
+/*======================================  drp.css ================================================*/
+
+.drp_container {
+   width: 750px;
+   height: 260px;
+   position: absolute;
+   z-index: 999;
+   padding: 10px;
+   outline: none;
+   display: none;
+   margin-top: -1px;
+}
+
+.drp_picker {
+   height: 210px;
+   text-align: center;
+}
+
+.drp_ranges {
+   float: left;
+}
+
+.drp_pickers_container {
+   float: right;
+   width: 500px;
+   height: 250px;
+}
+
+.drp_submit {
+   text-align: center;
+   padding-top: 12px;
+}
+
+.drp_input {
+   height: 40px;
+   width: 200px;
+   cursor: pointer;
+}
+
+.drp_inputKey {
+   background: url("../images/smartppc6/selectKey2.png") no-repeat right top;
+   width: 16px;
+   margin: -1px -1px 0 0;
+   height: 42px;
+   float: right;
+}
+
+.drp_label {
+   font-size: 14px !important;
+   height: 10px;
+}
+
+.drp_input .drpRangeTitle {
+   font-size: 14px;
+   padding: 4px 0 0 10px;
+   overflow: hidden;
+   white-space: nowrap;
+   color: #0066A8;
+}
+
+.drp_input .drpRangeDates {
+   font-size: 12px;
+   padding: 0px 0 0 10px;
+   color: #a8a8a8;
+}
+
+.drp_preset_link {
+   display: block;
+   line-height: 20px;
+   font-size: 12px;
+   padding: 2px 5px;
+   border: 1px solid;
+   border-color: transparent;
+   width: 226px;
+}
+
+.drp_preset_link.selected {
+   background: #ffffff;
+   border: 1px solid;
+   border-color: #b9b9b9 transparent #b9b9b9 #b9b9b9;
+}
+
+img.ui-datepicker-trigger{
+   position: relative;
+   top: 4px;
+   left: 5px;
+   top: 2px;
+}
+
+*+html img.ui-datepicker-trigger{
+   top: -3px;  
+}
+
+/*====================================== _buttons.css ================================================*/ 
+
+.guibutton {
+   cursor: pointer;
+   outline: none;
+   line-height: 1.2em;
+   text-decoration: none;
+   white-space: nowrap;
+   color: #444;
+   height: 20px;
+   display: block;
+   -moz-user-select: none; /* mozilla browsers */
+   -khtml-user-select: none; /* webkit browsers */
+   
+   margin-right: 3px;
+}
+
+.guibutton i {
+   position: absolute;
+   z-index: 100;
+   background-image: none;
+   background-color: #E9E2DB;
+   background-repeat: repeat-x;
+   background-position:  0px -44px;
+   padding: 0;
+   margin-top: 1.56em;
+   margin-left: 0.2em;
+   border-color: #AAAAAA;
+   border-style: solid;
+   border-width: 0 1px 1px 1px;
+   font-style: normal;
+   display: none;
+}
+
+.guibutton u {
+   float:right;
+   z-index: 101;
+   background-image: url(../images/smartppc6/button-dropdown.png);
+   background-repeat: no-repeat;
+   padding: 0;
+   font-style: normal;
+   text-decoration: none;
+   width: 18px;
+   margin-top: 2px;
+   height: 16px;
+}
+
+.guibutton > u.over {
+   background-position: 0 -16px; 
+}
+
+.guibutton > u.click {
+   background-position: 0 -32px; 
+}
+
+.guibutton > u > i > a { 
+   display: block;
+   padding: 2px 1em;
+   cursor: pointer;
+   color: #000;
+}
+
+.guibutton > u > i > a:hover {
+   text-decoration: underline;
+   color: #1A487B;
+   background-color: #E5EAF0;
+}
+
+.guibutton > u > i > a.selected {
+   font-weight: bold;
+   background-color: #E5EAF0;
+}
+
+.guibutton.disabled b b b {
+   color: #888;
+   text-shadow: #fff 1px 1px 0px;
+}
+.guibutton.disabled {
+   cursor: default;
+}
+
+.guibutton b.hasmenu {
+   padding-right: 18px !important; 
+}
+
+.guibutton b {
+   border-color: #AAAAAA;
+   border-style: solid;
+   border-width: 1px 0;
+   display: block; 
+   height: 18px;
+   font-weight: normal;
+   margin: 0 1px;
+   padding: 0;
+   background-image: url(../images/smartppc6/gui-btn-sprite.png);
+   background-color: #F6F3F0;
+   background-repeat: repeat-x;
+   background-position:  0px 0px;
+}
+
+.guibutton.greenBtn b {
+   background-image: url(../images/smartppc6/gui-btn-sprite-green.png) !important;
+   background-position:  0px 0px;
+} 
+.guibutton.greenBtn:hover b, .guibutton.greenBtn.over b {
+   border-color: #008800;
+}
+
+.guibutton:hover > b, .guibutton.over b, .guibutton.current b {
+   border-color: #888888;
+   background-image: url(../images/smartppc6/gui-btn-sprite.png);
+   background-position:  0px -18px;
+}
+
+.guibutton:hover > b > b, .guibutton.over b b, .guibutton.current b b{
+   border-color: #888888;
+}
+
+.guibutton.disabled:hover > b,
+.guibutton.disabled:hover > b > b, 
+.guibutton.disabled.over > b, 
+.guibutton.disabled.over > b > b {
+   background-position:  0px 0px;
+   background-image: url(../images/smartppc6/gui-btn-sprite.png);
+   border-color: #AAAAAA;
+}
+
+.guibutton.click b {
+   background-position:  0px -36px;
+   background-image: url(../images/smartppc6/gui-btn-sprite.png);
+}
+
+.guibutton.disabled.click > b, 
+.guibutton.disabled.click > b > b {
+   background-position:  0px 0px;
+   background-image: url(../images/smartppc6/gui-btn-sprite.png);
+   border-color: #AAAAAA;
+}
+
+.guibutton b b {
+   background: transparent none no-repeat scroll 0 0;
+   border-width: 0 1px;
+   margin: 0 -1px;
+   padding: 0 2px;
+}
+
+
+.guibutton b b b {
+   border-width: 0;
+   margin: 0;
+   color: #000;
+   padding: 0 1px;
+   line-height: 19px;
+}
+
+.xTbar .guibutton b {
+   border-color: transparent;
+   background-image: none;
+}
+
+.xTbar .guibutton b b {
+   border-color: transparent;
+}
+
+.xTbar .guibutton.greenBtn > b, .xTbar .guibutton.greenBtn > b > b {
+   background-image: url(../images/smartppc6/gui-btn-sprite-green.png) !important;
+   background-position:  0px 0px;
+   border-color: #AAAAAA;
+}
+
+.xTbar .guibutton:hover > b, .xTbar .guibutton:hover > b > b {
+   border-color: #888;
+   background-image: url(../images/smartppc6/gui-btn-sprite.png);
+}
+.xTbar .guibutton.click > b, .xTbar .guibutton:active > b > b {
+   background-position:  0px -36px;
+   background-image: url(../images/smartppc6/gui-btn-sprite.png);
+}
+
+.xTbar .guibutton.disabled:hover > b, .xTbar .guibutton.disabled:hover > b > b {
+   border-color: transparent;
+   background-image: none !important;
+}
+
+.guibutton.menu b b b {
+   background: transparent url(../images/icons/button_arrow_down.gif) no-repeat scroll right center;
+   padding-right: 15px;
+}
+
+.guibutton.ico {
+   padding: 0 !important;
+   background: none !important;
+}
+
+.guibutton.ico b b b {
+   padding-left: 19px !important;
+   background-position: 1px 2px;
+   background-repeat: no-repeat;
+   
+}
+
+ /* icons */
+ 
+.guibutton.ico-user b b b                 {background-image: url("../images/smartppc6/icons/user_business.png")   !important; }
+.guibutton.ico-arrowreload b b b          {background-image: url("../images/smartppc6/icons/arrows-reload.png") !important;}
+.guibutton.ico-arrowfirst b b b           {background-image: url("../images/smartppc6/icons/arrow-first.png")     !important; }
+.guibutton.ico-arrowfirst.disabled b b b  {background:       url("../images/smartppc6/icons/arrow-first.png") 1px -14px no-repeat !important;}
+.guibutton.ico-arrowlast b b b            {background-image: url("../images/smartppc6/icons/arrow-last.png") !important;}
+.guibutton.ico-arrowlast.disabled b b b   {background:       url("../images/smartppc6/icons/arrow-last.png") 1px -14px no-repeat !important;}
+.guibutton.ico-arrowleft b b b            {background-image: url("../images/smartppc6/icons/arrow-left.png") !important;}
+.guibutton.ico-arrowleft.disabled b b b   {background:       url("../images/smartppc6/icons/arrow-left.png") 1px -14px no-repeat !important;}
+.guibutton.ico-arrowright b b b           {background-image: url("../images/smartppc6/icons/arrow-right.png") !important;}
+.guibutton.ico-arrowright.disabled b b b  {background:       url("../images/smartppc6/icons/arrow-right.png")  1px -15px no-repeat !important;}
+.guibutton.ico-delete b b b               {background-image: url("../images/smartppc6/icons/cross.png") !important;}
+.guibutton.ico-right2 b b b               {background-image: url("../images/smartppc6/icons/arrow_right_double.png") !important;}
+.guibutton.ico-left2 b b b                {background-image: url("../images/smartppc6/icons/arrow_left_double.png") !important;}
+.guibutton.ico-play b b b                 {background-image: url("../images/smartppc6/icons/play.png") !important;}
+.guibutton.ico-pause b b b                {background-image: url("../images/smartppc6/icons/pause.png") !important;}
+.guibutton.ico-columns b b b              {background-image: url("../images/smartppc6/icons/ui-scroll-pane-table.png") !important;}
+.guibutton.ico-plusgreen b b b            {background-image: url("../images/smartppc6/icons/plus-green.png") !important;}
+.guibutton.ico-confirm b b b              {background-image: url("../images/smartppc6/icons/confirm.png") !important;}
+.guibutton.ico-cancel b b b               {background-image: url("../images/smartppc6/icons/slash.png") !important;}
+.guibutton.ico-plusgreen2 b b b           {background-image: url("../images/smartppc6/icons/plus-green2.png") !important;}
+.guibutton.ico-puzzle b b b               {background-image: url("../images/smartppc6/icons/puzzle.png") !important;}
+.guibutton.ico-lock b b b                 {background-image: url("../images/smartppc6/icons/lock.png") !important;}
+.guibutton.ico-unlock b b b               {background-image: url("../images/smartppc6/icons/lock_unlock.png") !important;}
+.guibutton.ico-stop b b b                 {background-image: url("../images/smartppc6/icons/stop.png") !important;}
+.guibutton.ico-ok b b b                   {background-image: url("../images/smartppc6/icons/ok.png") !important;}
+.guibutton.ico-report b b b               {background-image: url("../images/smartppc6/icons/report.png") !important;}
+.guibutton.ico-edit b b b                 {background-image: url("../images/smartppc6/icons/edit.png") !important;}
+.guibutton.ico-pageapply b b b            {background-image: url("../images/smartppc6/icons/page_tick.gif") !important;}
+.guibutton.ico-pagedeny b b b             {background-image: url("../images/smartppc6/icons/page_cross.gif") !important;}
+.guibutton.ico-xls b b b                  {background-image: url("../images/smartppc6/icons/document_excel.png") !important;}
+.guibutton.ico-csv b b b                  {background-image: url("../images/smartppc6/icons/document_excel_csv.png") !important;}
+.guibutton.ico-money b b b                {background-image: url("../images/smartppc6/icons/money.png") !important;}
+.guibutton.ico-doc-convert b b b          {background-image: url("../images/smartppc6/icons/document-convert.png") !important;}
+.guibutton.ico-site-layout b b b          {background-image: url("../images/smartppc6/icons/layout-header-3-mix.png") !important;}
+.guibutton.ico-viewads b b b              {background-image: url("../images/smartppc6/icons/application_image.png") !important;}
+.guibutton.ico-copy b b b                 {background-image: url("../images/smartppc6/icons/folders.png") !important;}
+.guibutton.ico-mail b b b                 {background-image: url("../images/smartppc6/icons/ico-mail-blue.png") !important; }
+.guibutton.ico-approve b b b              {background-image: url("../images/smartppc6/icons/tick_shield.png") !important;}
+.guibutton.ico-resolve b b b              {background-image: url("../images/smartppc6/icons/lifebuoy.png") !important;}
+.guibutton.ico-upgrade b b b              {background-image: url("../images/smartppc6/icons/control_double_090-green.png") !important;}
+.guibutton.ico-downgrade b b b            {background-image: url("../images/smartppc6/icons/control_double_270-red.png") !important;}
+.guibutton.ico-renew b b b                {background-image: url("../images/smartppc6/icons/arrow_circle-renew.png") !important;}
+.guibutton.ico-notesplus b b b            {background-image: url("../images/smartppc6/icons/notebooks_plus.png") !important;}
+.guibutton.ico-image b b b                {background-image: url("../images/smartppc6/icons/image.png") !important;}
+.guibutton.ico-text b b b                 {background-image: url("../images/smartppc6/icons/script_code.png") !important;}
+.guibutton.ico-createReportplus b b b     {background-image: url("../images/smartppc6/icons/createReportplus.png") !important;}
+.guibutton.ico-puzzle2 b b b              {background-image: url("../images/smartppc6/icons/puzzle2.png") !important;}
+.guibutton.ico-color b b b                {background-image: url("../images/smartppc6/icons/color.png") !important;}
+.guibutton.ico-zoom b b b                 {background-image: url("../images/smartppc6/icons/magnifier-zoom.png") !important;}
+.guibutton.ico-settings b b b                {background-image: url("../images/smartppc6/icons/wrench-screwdriver.png") !important;}
+.guibutton.ico-money-ok b b b             {background-image: url("../images/smartppc6/icons/money-coin.png") !important;}
+
+
+
+/* ======================================================== theme_default ========================================= */
+
+ul#menu li {
+   background-color: #4f4d4c !important;
+}
+
+#menuRole .wrapper,
+ul#submenu li, 
+ul#submenu2 li {
+   background-color: #7a7876 !important;
+}
+
+#menusplitter,
+#menuUser,
+ul#menu li.sel, 
+ul#submenu li.sel, 
+ul#menu li.sel:hover, 
+ul#submenu li.sel:hover {
+   background-color: #2462a8 !important;
+}
+
+ul#menu li:hover, 
+ul#submenu li:hover, 
+ul#submenu2 li:hover  {
+   background-color: #ff8800 !important;
+}
+
+/*======================================  style.css ================================================*/
+.p6 {
+   padding: 0px 6px 0px 6px;
+}
+
+
+.cal {
+   background-image: url('images/calendar.gif');
+   background-position: 1px 2px;
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 22px;
+   float: left;
+}
+
+
+.inpSub {
+   background-color: #efebef;
+   border: solid 1px #D0D0D0;
+	float: left;
+}
+
+.inpTxt {
+   border: solid 1px #D0D0D0;
+   width: 100px;
+   float: left;
+	margin-left:4px;
+}
+.floatl{
+	float: left;
+}
+.w100p{
+	width: 100%;
+}
+.w200{
+	width: 200px;
+}
+.textbold{
+	font-family:Tahoma;
+   font-size:11px;
+   font-weight: bold;
+}
+
+/*======================================  campaigns.css ================================================*/
+
+ .sem_block{float: left;}
+ .sem_block_right{float: left; margin-left: 60px;}
+ 
+ #site_selector{background:#F6F3F0; padding: 10px; margin: 30px 0 10px 0;}
+ #site_selector .up_arrow{background:url(../images/smartppc6/up_arrow.png) no-repeat; width: 71px; height: 31px; margin-top: -41px;}
+ #site_selector .first_place{left: 21px;}
+ #bids_div{ width: 250px; height: 100px; margin: 10px;border:0;margin: 0 10px;padding: 0;}
+ #bids_div h1{margin: 20px 0 10px 0; padding: 0;}
+ #update_your_bid_btn{margin-left: 50px;}
+
+ #places_div .site_place{width:250px; height: 260px;float: left;}
+ #places_div .site_place label{width: 208px;cursor: pointer; padding-left: 15px;}
+ #places_div .site_place .example{width: 208px;height: 208px;margin: 10px 0;}
+  #places_div .site_place a.action{text-decoration: none; border-bottom: 1px dotted;}
+ #places_div .site_place .allnetwork{background: url(../images/places_examples/example_allnetwork.png) no-repeat 0 4px}
+ #places_div .site_place .intext{background:  url(../images/places_examples/example_intext.png) no-repeat 0 4px}
+ #places_div .site_place .domains{background:  url(../images/places_examples/example_parked.png) no-repeat -2px 4px}
+ #places_div .site_place .search{background:  url(../images/places_examples/example_search.png) no-repeat 0 4px}
+ 
+ 
+ #dimensions_list{font-size: 12px;}
+ #dimensions_list span.bname{font-size:12px; color: #AAA}
+ #dimensions_list td.col1{ }
+ #dimensions_list td.colp{width: 60px; text-align: center;padding: 2px 0 2px; vertical-align: top;}
+ #dimensions_list td.row{border-bottom: 1px #EEE solid; }
+ #dimensions_list div.dim_supported{height: 20px; background: url(../images/smartppc6/format_supported.png) no-repeat 50% 0;}
+ #dimensions_list tr.green td{color: black;background-color: #f0fce2;}
+ #dimensions_list tr.green span{color: black!important;}
+ #dimensions_list tr.notgreen td{color: #999;}
+ 
+ .place_name{font-size: 18px; font-weight: bold;}
+ .campaign_attention_message{font-size: 12px; margin: 5px;}
+ .campaign_attention_message b{color: #9f3333}
+ 
+
+
+/*====================================== gridwizard.css ================================================*/
+
+
+.ui-vertical-draglets,.ui-horizontal-draglets { /* background: #aaa;*/
+   float: left;
+   border: 0px solid transparent;
+}
+
+.ui-horizontal-draglets {
+   background: url("../images/gridwizard/dashbg.gif") repeat-x scroll 3px 4px;
+   cursor: row-resize;
+   margin-top: -3px;
+   height: 3px;
+   padding: 1px;
+}
+
+.ui-vertical-draglets {
+   width: 3px;
+   margin-left: -3px;
+   cursor: col-resize;
+   
+   background: url("../images/gridwizard/dashbg.gif") repeat-y scroll 4px 3px;
+   padding: 1px;
+}
+
+.ui-layout-draglets {
+   
+}
+
+.ui-vertical-draglets.ui-draglet-inuse {
+   background-color: #8f8;
+}
+
+.ui-horizontal-draglets.ui-draglet-inuse {
+   background-color: #8f8;
+}
+
+.ui-container-drag {
+   background-color: #efffef;
+   opacity: 0.7;
+}
+
+.ui-zone {
+   border: 0px solid #888;
+}
+
+*+html .ui-zone {
+   border: 0px solid #888;
+}
+
+.ui-zone-fill {
+   border: 2px solid #83bdff;
+   margin-left: -1px;
+   margin-top: -1px;
+}
+
+.wiz-container table { 
+   border: none;
+   border-collapse: collapse;
+}
+
+*+html .wiz-grid {
+   zoom:1;
+   display: inline;
+}
+
+.ui-tableHsizes,.ui-tableWsizes {
+   border-collapse: collapse;
+}
+
+.ui-tableHsizes>tbody>tr>td {
+   background: url("../images/gridwizard/sizesH.gif") no-repeat top left;
+   color: #888;
+   padding-left: 5px;
+}
+
+.ui-tableHsizes>tbody>tr>td>div {
+   padding-left: 8px;
+   background: url("../images/gridwizard/sizesH.gif") no-repeat bottom left;
+}
+
+.ui-tableWsizes>td {
+   background: url("../images/gridwizard/sizesW.gif") no-repeat top left;
+}
+
+.ui-tableWsizes>td>div {
+   padding-top: 4px;
+   color: #888;
+   background: url("../images/gridwizard/sizesW.gif") no-repeat top right;
+}
+
+.ui-zone-button {
+   background: #b9b9b9;
+   padding: 1px;
+   display: block;
+   color: #fff;
+   width: 16px;
+   height: 16px;
+   text-align: center;
+   cursor: pointer;
+}
+
+.ui-zone>.ui-zone-button {
+   display: none;
+}
+
+.ui-zone.selected {
+   background: #E6EFF8 url(../images/smartppc6/table-row-bg-fade2.png) repeat-x scroll 0 0;
+}
+
+.ui-zone.selected>.ui-zone-button {
+   display: block;
+}
+
+.ui-zone-button.split {
+   width: 30px;
+   text-align: center;
+   color: #fff;
+   margin-top: -16px;
+   margin-left: -8px;
+}
+
+.ui-button-hover {
+   background-color: #880000;
+}
+
+.ui-dropped {
+   border: 1px solid #dedede;
+   padding: 5px;
+   background: #e5f8c9 url("../images/smartppc6/bg-fade-top1.png") repeat-x top left;
+}
+
+.ui-channel-closeBtn {
+   width: 10px;
+   height: 10px;
+   background: #800;
+   color: #fff;
+   cursor: pointer;
+   line-height: 6px;
+}
+
+.ui-channel {
+   
+}
+
+.ui-foreignChannel {
+   padding: 5px;
+   background: #e6eff8 url("../images/smartppc6/table-row-bg-fade2.png") repeat-x 0 0;
+   border: 1px solid #b9b9b9;
+   margin-bottom: 2px;
+   overflow: hidden;
+   cursor: 'move';
+   float:left;
+   width: 200px;
+}
+
+.ui-foreignChannel>div.size {
+   font-size: 10px;
+   font-weight: normal;
+}
+
+.ui-foreignChannel>div.slot2 {
+   font-size: 10px;
+   font-weight: normal;
+}
+
+.ui-foreignChannel>div.slot {
+   float: right;
+}
+
+.ui-dragChannel {
+   background: #e5f8c9 url("../images/smartppc6/bg-fade-top1.png") repeat-x top left;
+   border: 1px solid #dedede;
+   z-index: 20000;
+}
+
+.ui-dropZone {
+   background-color: #f6fbef;
+}
+
+#channels_list {
+   width: 200px;
+}
+
+
+.ui-dragChannel .slot, .ui-dragChannel .size, .ui-dragChannel .slot2, .ui-dragChannel .title,  .ui-dragChannel.search-channel div.n {
+   display: none;
+}
+
+.ui-channel { 
+   border: solid 1px #b9b9b9;
+   overflow: hidden;
+   background: #fdfdfd;
+}
+
+.ui-channel div.n {
+   color: #b9b9b9;
+   font-size: 9px;
+   padding-left: 3px;
+}
+
+.ui-channel div.title {
+   padding-left: 3px;
+}
+
+.ui-channel.search-channel > div.n, .ui-channel.search-channel > div.title {
+   display: none;
+}
+
+.ui-channel.active  {
+   background-color:#E6EFF8;
+}
+
+.ui-channel.active div.n {
+   color: #000;
+}
+
+
+.ui-channel.search-channel {
+   background: url("../images/smartppc6/search_type_bg.png") 5px 5px no-repeat;
+} 
+
+.ui-channel.search-channel.active {
+   background: #E6EFF8 url("../images/smartppc6/search_type_bg.png") 5px 5px no-repeat;
+}
+
+.ui-channel.intext-channel {
+   background: url("../images/smartppc6/intext_type_bg.png") 27px 0 no-repeat;
+}
+
+.ui-channel.intext-channel.active {
+   background: #E6EFF8 url("../images/smartppc6/intext_type_bg.png") 27px 0 no-repeat;
+} 
+
+/*====================================== lightbox.css ================================================*/
+
+#lightbox{
+   background-color:#eee;
+   padding: 10px;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   }
+#lightboxDetails{
+   font-size: 0.8em;
+}  
+#lightboxCaption{ 
+   padding-bottom: 3px;
+   float: left; 
+   font-size: 12px;
+   margin-right:20px;
+}
+#keyboardMsg{ float: right; }
+
+.closeButton { 
+   background-image: url(../images/lightbox/close.gif);
+   width: 18px;
+   height: 18px;
+   float: right;
+  /* position: absolute;*/
+   right: 3px;
+   top: 3px;
+   z-index: 200;
+   cursor: pointer;
+}
+
+
+#lightbox img{ border: none; clear: both;} 
+#overlay img{ border: none; }
+
+#overlay{ background-image: url(../images/lightbox/overlay.png); }
+
+* html #overlay{
+   background-color: #333;
+   back\ground-color: transparent;
+   background-image: url(blank.gif);
+   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="overlay.png", sizingMethod="scale");
+}
+   
+
+
+/*======================================  slimbox2.css ================================================*/
+
+/* SLIMBOX */
+
+#lbOverlay {
+   position: fixed;
+   z-index: 9999;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   cursor: pointer;
+}
+
+#lbCenter, #lbBottomContainer {
+   position: absolute;
+   z-index: 9999;
+   overflow: hidden;
+   background-color: #fff;
+}
+
+.lbLoading {
+   background: #fff url(../images/slimbox2/loading.gif) no-repeat center;
+}
+
+#lbImage {
+   position: absolute;
+   left: 0;
+   top: 0;
+   border: 10px solid #fff;
+   background-repeat: no-repeat;
+}
+
+#lbPrevLink, #lbNextLink {
+   display: block;
+   position: absolute;
+   top: 0;
+   width: 50%;
+   outline: none;
+}
+
+#lbPrevLink {
+   left: 0;
+}
+
+#lbPrevLink:hover {
+   background: transparent url(../images/slimbox2/prevlabel.gif) no-repeat 0 15%;
+}
+
+#lbNextLink {
+   right: 0;
+}
+
+#lbNextLink:hover {
+   background: transparent url(../images/slimbox2/nextlabel.gif) no-repeat 100% 15%;
+}
+
+#lbBottom {
+   font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+   font-size: 10px;
+   color: #666;
+   line-height: 1.4em;
+   text-align: left;
+   border: 10px solid #fff;
+   border-top-style: none;
+}
+
+#lbCloseLink {
+   display: block;
+   float: right;
+   width: 22px;
+   height: 22px;
+   background: transparent url(../images/slimbox2/closelabel.gif) no-repeat center;
+   margin: 5px 0;
+   outline: none;
+}
+
+#lbCaption, #lbNumber {
+   margin-right: 71px;
+}
+
+#lbCaption {
+   font-weight: bold;
+}
+
+
+
+
+/*====================================== table.css ================================================*/
+
+.simpleTable {
+   font-family: arial, tahoma, helvetica, sans-serif;
+   font-size: 11px;
+   background-color: #ffffff;
+   text-align: left;
+   width: 100%;
+}
+
+td.chkboxbottom {
+   padding: 9px 0px 0px 3px;
+}
+
+td.rightBord {
+   border-right: solid 1px #D0D0D0;
+}
+
+table.bordTop {
+   border-top: solid 1px #D0D0D0;
+   border-bottom: solid 1px #D0D0D0;
+}
+
+table.bordBot {
+   border-bottom: solid 1px #D0D0D0;
+}
+
+table.bord {
+   border: solid 1px #D0D0D0;
+}
+
+.buttons {
+   padding-left: 5px;
+   background-color: #E8E8E8;
+   font-size: 11px;
+   font-family: arial, tahoma, helvetica, sans-serif;
+   border: solid 1px #D0D0D0;
+   border-bottom: none;
+   border-top: none;
+   height: 26px;
+}
+
+.buttons3 {
+   font-size: 11px;
+   font-family: arial, tahoma, helvetica, sans-serif;
+   border: solid 1px #D0D0D0;
+   border-bottom: none;
+   border-top: none;
+   height: 26px;
+}
+
+.buttons tr td div {
+   padding-left: 25px;
+   padding-top: 3px;
+   float: left;
+}
+
+.addBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -224px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   cursor: pointer;
+}
+
+.addButAct {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -224px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+.edtBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -98px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   cursor: pointer;
+}
+
+.edtButAct {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -98px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+
+.delBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -199px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   cursor: pointer;
+}
+
+.delButAct {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -199px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+
+.publBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -399px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   cursor: pointer;
+}
+
+.publButAct {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -399px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+
+.dontPublBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -423px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   cursor: pointer;
+}
+
+.dontPublButAct {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -423px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+
+.resumeBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -325px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 14px;
+   padding-right: 10px;
+}
+
+.cloneBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -500px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 14px;
+   padding-right: 10px;
+}
+
+.resumeButAct {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -325px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+
+.pauseBut {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -300px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 14px;
+   padding-right: 10px;
+}
+
+.pauseButAct {
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -300px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+.bulkUploadBut{
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -450px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 14px;
+   width: 100px;
+}
+
+.bulkUploadButAct{
+   background-image: url('../images/table/icons.gif');
+   background-position: 4px -450px;
+   background-repeat: no-repeat;
+   height: 14px;
+   padding-right: 10px;
+   border: solid 1px #EBECEE;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+.buttons2 {
+   padding-left: 5px;
+   background-color: #E8E8E8;
+   font-size: 11px;
+   font-family: arial, tahoma, helvetica, sans-serif;
+   border: solid 1px #D0D0D0;
+   border-bottom: none;
+   border-top: none;
+   height: 30px;
+}
+
+.buttons2 tr td div {
+   float: left;
+}
+
+.startBut {
+   background-image: url('../images/table/start.gif');
+   background-position: 4px 4px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.startButAct {
+   background-image: url('../images/table/start.gif');
+   background-position: 4px 4px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+}
+
+.startButDis {
+   background-image: url('../images/table/page-first-disabled.gif');
+   background-repeat: no-repeat;
+   background-position: 4px 2px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.backBut {
+   background-image: url('../images/table/back.gif');
+   background-repeat: no-repeat;
+   background-position: 6px 4px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.backButAct {
+   background-image: url('../images/table/back.gif');
+   background-repeat: no-repeat;
+   background-position: 6px 4px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+}
+
+.backButDis {
+   background-image: url('../images/table/page-prev-disabled.gif');
+   background-repeat: no-repeat;
+   background-position: 6px 2px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.nextBut {
+   background-image: url('../images/table/next.gif');
+   background-repeat: no-repeat;
+   background-position: 6px 4px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.nextButAct {
+   background-image: url('../images/table/next.gif');
+   background-repeat: no-repeat;
+   background-position: 6px 4px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+}
+
+.nextButDis {
+   background-image: url('../images/table/page-next-disabled.gif');
+   background-repeat: no-repeat;
+   background-position: 6px 2px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.endBut {
+   background-image: url('../images/table/end.gif');
+   background-position: 4px 4px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.endButAct {
+   background-image: url('../images/table/end.gif');
+   background-position: 4px 4px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+}
+
+.endButDis {
+   background-image: url('../images/table/page-last-disabled.gif');
+   background-position: 4px 2px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 20px;
+}
+
+.updBut {
+   font-family: arial, tahoma, helvetica, sans-serif;
+   font-size: 11px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 80px;
+   cursor: pointer;
+   margin-top: 1px;
+   margin-left: 2px;
+}
+
+.updButAct {
+   font-family: arial, tahoma, helvetica, sans-serif;
+   font-size: 11px;
+   border: solid 1px #EBECEE;
+   height: 20px;
+   width: 80px;
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+   margin-top: 1px;
+   margin-left: 2px;
+}
+
+.reportBut {
+   background-image: url('../images/design/icons.gif');
+   background-position: 4px -250px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 14px;
+   padding-right: 10px;
+}
+
+.mailBut {
+   background-image: url('../images/design/icons.gif');
+   background-position: 4px -146px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 14px;
+   padding-right: 10px;
+}
+
+.approveBut {
+   background-image: url('../images/design/icons.gif');
+   background-position: 4px -349px;
+   background-repeat: no-repeat;
+   border: solid 1px #EBECEE;
+   height: 14px;
+   padding-right: 10px;
+   cursor: pointer;
+}
+
+.load {
+   background-image: url('../images/table/wait.gif');
+   background-repeat: no-repeat;
+   margin: 4px 5px 0px 3px;
+   height: 20px;
+   width: 16px;
+}
+
+.loadAct {
+   background-image: url('../images/table/grid-loading.gif');
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;;
+}
+
+.loadDone {
+   background-image: url('../images/table/done.gif');
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 20px;
+}
+
+.split {
+   background-image: url('../images/table/split.gif');
+   background-position: 4px 0px;
+   background-repeat: no-repeat;
+   height: 20px;
+   width: 8px;
+}
+
+.inpPage {
+   font-size: 10px;
+   width: 20px;
+   height: 15px;
+   position: relative;
+   margin-top: 1px;
+}
+
+.inpPageBut {
+   font-size: 11px;
+   width: 210px;
+   height: 15px;
+   position: relative;
+   top: 2px;
+}
+
+.itemsRight {
+   position: relative;
+   top: 4px;
+   left: -5px;
+   float: right !important;
+}
+
+.asc {
+   background: transparent url('../images/table/sort_asc.gif') no-repeat right;
+}
+
+.desc {
+   background: transparent url('../images/table/sort_desc.gif') no-repeat right;
+}
+
+.trAct {
+   background-color: #EFF3F7;
+}
+
+.act {
+   background-color: #F4F5F7;
+   border: solid 1px #D0D0D0;
+   cursor: pointer;
+}
+
+.calInps {
+   width: 104px;
+}
+
+.filters {
+   float: right;
+   position: relative;
+   top: 25px;
+}
+
+
+.minus{
+   background: url('../images/table/group-expand-sprite.gif') no-repeat scroll 4px -45px;
+   width: 20px;
+   height: 20px;
+   cursor: pointer;
+}
+
+.plus{
+   background: url('../images/table/group-expand-sprite.gif') no-repeat scroll 4px 5px;
+   width: 20px;
+   height: 20px;
+   cursor: pointer;
+}
+
+.table-columns {
+   position: relative;
+   width: 116px;
+}
+
+.table-columns-container {
+   width: 200px;
+   background-color: white;
+   border: 1px #000 solid;
+   position: absolute;
+}
+/*====================================== datepicker.css ================================================*/
+
+table.jCalendar {
+   border: 1px solid #000;
+   background: #aaa;
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+table.jCalendar th {
+   background: #333;
+   color: #fff;
+   font-weight: bold;
+   padding: 3px 5px;
+}
+table.jCalendar td {
+   background: #ccc;
+   color: #000;
+   padding: 3px 5px;
+   text-align: center;
+}
+table.jCalendar td.other-month {
+   background: #ddd;
+   color: #aaa;
+}
+table.jCalendar td.today {
+   background: #666;
+   color: #fff;
+}
+table.jCalendar td.selected {
+   background: #f66;
+   color: #fff;
+}
+table.jCalendar td.selected:hover {
+   background: #f33;
+   color: #fff;
+}
+table.jCalendar td:hover, table.jCalendar td.dp-hover {
+   background: #fff;
+   color: #000;
+}
+table.jCalendar td.disabled, table.jCalendar td.disabled:hover {
+   background: #bbb;
+   color: #888;
+}
+
+/* For the popup */
+
+/* NOTE - you will probably want to style a.dp-choose-date - see how I did it in demo.css */
+
+div.dp-popup {
+   position: relative;
+   background: #ccc;
+   font-size: 10px;
+   font-family: arial, sans-serif;
+   padding: 2px;
+   width: 171px;
+   line-height: 1.2em;
+}
+div#dp-popup {
+   position: absolute;
+   z-index: 199;
+}
+div.dp-popup h2 {
+   font-size: 12px;
+   text-align: center;
+   margin: 2px 0;
+   padding: 0;
+}
+a#dp-close {
+   font-size: 11px;
+   padding: 4px 0;
+   text-align: center;
+   display: block;
+}
+a#dp-close:hover {
+   text-decoration: underline;
+}
+div.dp-popup a {
+   color: #000;
+   text-decoration: none;
+   padding: 3px 2px 0;
+}
+div.dp-popup div.dp-nav-prev {
+   position: absolute;
+   top: 2px;
+   left: 4px;
+   width: 100px;
+}
+div.dp-popup div.dp-nav-prev a {
+   float: left;
+}
+/* Opera needs the rules to be this specific otherwise it doesn't change the cursor back to pointer after you have disabled and re-enabled a link */
+div.dp-popup div.dp-nav-prev a, div.dp-popup div.dp-nav-next a {
+   cursor: pointer;
+}
+div.dp-popup div.dp-nav-prev a.disabled, div.dp-popup div.dp-nav-next a.disabled {
+   cursor: default;
+}
+div.dp-popup div.dp-nav-next {
+   position: absolute;
+   top: 2px;
+   right: 4px;
+   width: 100px;
+}
+div.dp-popup div.dp-nav-next a {
+   float: right;
+}
+div.dp-popup a.disabled {
+   cursor: default;
+   color: #aaa;
+}
+div.dp-popup td {
+   cursor: pointer;
+}
+div.dp-popup td.disabled {
+   cursor: default;
+}
+.calendar select {
+   font: normal 11px Tahoma;
+   width: 180px;
+}
+.calendar .date-pick {
+   width: 72px;
+}
+
+/* ================================== dialogs.css ======================================== */
+div.sppc-selector-dialog {
+	text-align: left;	
+}
+
+div.sppc-selector-dialog div.ui-dialog-titlebar {
+	display: none;
+}
+
+div.sppc-selector-dialog div.ui-dialog-content {
+	padding: 10px 10px 50px 10px;
+}
+
+div.sppc-selector-dialog div.ui-dialog-buttonpane {
+	text-align: right;
+}
+
+div.sppc-selector-dialog div.ui-dialog-buttonpane button {
+   margin-right: 15px;
+}

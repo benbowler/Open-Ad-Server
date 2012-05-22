@@ -1,0 +1,509 @@
+<script type="text/javascript">
+//<!--
+	var number_format = '<%NUMBERFORMAT%>';
+	var dec_digits = new Number(number_format.charAt(0));
+	var dot_char = number_format.charAt(1);
+	var thousand_separator = number_format.charAt(2);
+	
+	$(document).ready(function(){
+      hookDocumentClick('edit_your_bid_container','edit_bid_caller','fast');
+
+		$('#groups_tree').treeview({animated: "fast", persist: "id", persist_id:"<%NODE%>"});
+		<%STARTITEM%>
+		$('#groups_tree > * > * > *').children('.file').addClass('folder');
+		$('#groups_tree > * > * > *').children('.file').removeClass('file');
+	});
+	
+	function get_controller(controller, id_campaign_type) {
+		switch (id_campaign_type) {
+    	case 'cpm_flatrate':
+	    	return controller;
+        case 'cpc':
+	  		return controller;
+	  	<%PLUGIN_CONTROLLER%>
+        default:
+            return controller;
+      }
+	} //end get_controller()
+	
+   function showFrame(){
+	     if(!checkAjaxLogin($('#dinamic').html())) {
+		 replaceFormButtons(this.document); 
+         parseTables(this.document);
+         $('#loading').removeClass('loading-big');
+         $('#dinamic').show();         		   
+	   }
+   }   	
+   
+   function show_campaigns(id_entity){
+      $('#dinamic').hide();
+      $('#loading').addClass('loading-big');
+      $('#groups_tree span').removeClass('selected_item');
+      $('#user'+id_entity).addClass('selected_item');
+      $('#dinamic').loadJFrame("<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads_campaigns/index/"+id_entity);
+		$('#manageAdsTitle')[0].innerHTML = '{@All Campaigns@}';
+   }
+   
+   function show_groups(id_campaign, id_campaign_type){
+      $('#dinamic').hide();
+      $('#loading').addClass('loading-big');
+      $('#groups_tree span').removeClass('selected_item');
+      $('#camp'+id_campaign).addClass('selected_item');
+      $('#dinamic').loadJFrame("<%SITEURL%><%INDEXPAGE%>advertiser/"+get_controller('manage_ads_groups', id_campaign_type)+"/index/"+id_campaign,function(){});
+      $('#camp'+id_campaign).parents('li').children('.expandable-hitarea').click();
+		$('#manageAdsTitle')[0].innerHTML = 
+			'{@Campaign@}: <span class="green i">&bdquo;' +
+			$('#camp'+id_campaign).text().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;') + 
+			'&ldquo;</span> &rarr; {@Groups@}';
+      return false;
+   }
+   
+   var default_tab = '<%TAB%>';
+   
+   function show_ads(id_group, tab, id_campaign_type){
+      $('#dinamic').hide();
+      $('#loading').addClass('loading-big');
+      $('#groups_tree span').removeClass('selected_item');
+      $('#group'+id_group).addClass('selected_item');
+      tail = ''; 
+      if (default_tab != '') {
+         tail = '/'+default_tab;
+         default_tab = '';         
+      }
+      if (tail == '') {
+         if (tab != '') {
+            tail = '/'+tab;
+         }
+      }
+      
+      $('#dinamic').loadJFrame("<%SITEURL%><%INDEXPAGE%>advertiser/"+get_controller('manage_ads_ads', id_campaign_type)+"/index/"+id_group+tail,function(){});
+      $('#group'+id_group).parents('li').children('.expandable-hitarea').click();
+
+		$('#manageAdsTitle')[0].innerHTML = 
+			'{@Campaign@}: <span class="green i">&bdquo;' +
+			$('#group'+id_group).parent().parent().parent().find('span')[0].innerHTML + 
+			'&ldquo;</span> &rarr; {@Group@}: <span class="green i">&bdquo;' +
+			$('#group'+id_group).text().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;') + 
+			'&ldquo;</span> &rarr; <span id=managesubtitle>{@Summary@}</span>';
+
+      return false;
+   }
+
+   function createGroup(code) {
+      document.getElementById("campaign_code").value = code;
+      document.getElementById("creategroup_form").submit();
+   }
+
+   function editGroup(campaign_code, code) {
+      document.getElementById("campaign_code_2").value = campaign_code;
+      document.getElementById("group_code").value = code;
+      document.getElementById("editgroup_form").submit();
+   }
+
+   function editCampaign(code) {
+      document.getElementById("campaign_code_3").value = code;
+      document.getElementById("editcampaign_form").submit();
+   }
+
+   function editChannels(group_code) {
+      document.getElementById("group_code_2").value = group_code;
+      document.getElementById("editchannels_form").submit();
+   }
+
+   function editSites(group_code) {
+      document.getElementById("editsites_group_code").value = group_code;
+      document.getElementById("editsites_tab").value = 'channels';
+      document.getElementById("editsites_form").submit();
+   }
+
+   function editSitesSummary(group_code) {
+      document.getElementById("editsites_group_code").value = group_code;
+      document.getElementById("editsites_tab").value = 'summary';
+      document.getElementById("editsites_form").submit();
+   }
+
+   function editSitesAds(group_code) {
+      document.getElementById("editsites_group_code").value = group_code;
+      document.getElementById("editsites_tab").value = 'ads';
+      document.getElementById("editsites_form").submit();
+   }
+
+   function createAd(group_code, ad_type) {
+      document.getElementById("group_code_3").value = group_code;
+      $('#ad_type').val(ad_type);
+      document.getElementById("createad_form").submit();
+   }
+
+   function importAds(group_code, tab) {
+      document.getElementById("group_code_4").value = group_code;
+      document.getElementById("ref_tab").value = tab;
+      document.getElementById("import_form").submit();
+   }
+
+   function editCpcBids(group_code, tab) {
+	      document.getElementById("edit_cpc_bids_group_code").value = group_code;
+	      document.getElementById("edit_cpc_bids_ref_tab").value = tab;
+	      document.getElementById("edit_cpc_bids_form").submit();
+	   }
+
+   function editAd(ad_code) {
+      document.getElementById("ad_code").value = ad_code;
+      document.getElementById("editad_form").submit();
+   }
+   
+   function deleteGroup(group) {
+      Grp = $('#group'+group).parent();
+      Grp.prev().toggleClass('last', Grp.hasClass('last'));
+      Grp.remove();
+   }
+
+   function deleteCampaign(campaign) {
+      Cmp = $('#camp'+campaign).parent();
+      if ($("[class^='last']", Cmp)) { //  Cmp.hasClass(['last','lastExpandable','lastCollapsable'])
+         if (Cmp.prev().children('.hitarea')) {
+            if(Cmp.prev().hasClass('expandable')) {
+	            Cmp.prev().addClass('lastExpandable');
+	            Cmp.prev().children('.hitarea').addClass('lastExpandable-hitarea');
+            } else {
+               Cmp.prev().addClass('lastCollapsable');
+               Cmp.prev().children('.hitarea').addClass('lastCollapsable-hitarea');
+            }
+         } else {
+            Cmp.prev().addClass('last');
+         }
+      }
+      Cmp.remove();
+   }
+   
+   function renewSiteChannel(group_site_channel) {
+      $("#renew_group_site_channel").val(group_site_channel);
+      $("#renew_form").submit();
+   }
+
+   function upgradeSiteChannel(group_site_channel) {
+      $("#upgrade_group_site_channel").val(group_site_channel);
+      $("#upgrade_form").submit();
+   }
+
+   function downgradeSiteChannel(group_site_channel) {
+      $("#downgrade_group_site_channel").val(group_site_channel);
+      $("#downgrade_form").submit();
+   }
+
+   function resolveSiteChannel(group_site_channel, campaign_type) {
+      $("#resolve_group_site_channel").val(group_site_channel);
+      $("#resolve_campaign_type").val(campaign_type);
+      $("#resolve_form").submit();
+   }
+
+   function showKeywordBidEditor(id_site, bid_type, sender, id_group) {
+	   $("#bid_editor_id_group", "#edit_your_bid_container").val(id_group);
+	   showSiteBidEditor(id_site, bid_type, sender);
+   }
+   
+   function showSiteBidEditor(id_site, bid_type, sender) {
+
+	      switch (bid_type) {
+	         case 'text':
+	         case 'image':
+		         $('#bid_editor_hint>span').html('{@Set your bid for this Site. Leave blank to use default bid value.@}');
+	            break;
+	         case 'sites':
+               $('#bid_editor_hint>span').html('{@Set your bid for this keyword on sites. Leave blank to use default bid value.@}');
+               break;
+		case 'parked_domains':
+		    $('#bid_editor_hint>span').html('{@Set your bid for this keyword on parked domains. Leave blank to use default bid value.@}');
+		break;
+            	case 'intext':
+		    $('#bid_editor_hint>span').html('{@Set your bid for this keyword on In-Text. Leave blank to use default bid value.@}');
+		break;
+        
+	    case 'search':
+                $('#bid_editor_hint>span').html('{@Set your bid for this keyword on search results. Leave blank to use default bid value.@}');
+	         break;
+	         default:
+	            return false;
+	      }
+	      
+	      $(sender).addClass('edit_bid_caller');
+	      $("#site_id", "#edit_your_bid_container").val(id_site);
+	      $("#bid_type", "#edit_your_bid_container").val(bid_type);
+	      $('#new_bid').val( $(sender).next().text() );
+	      showContainer('edit_your_bid_container', sender);
+	      $('#new_bid').focus();
+	      return false;
+	   }
+
+   function cancelSiteBid() {
+	   $('#new_bid').removeClass('invalidfield').next('p.errorP:first').remove();
+	   hideContainer('edit_your_bid_container');      
+	   return true;
+	}
+	
+   function str_to_float(float_str){
+	   chars = '0123456789'+dot_char+thousand_separator;
+	   len = float_str.length;
+	   if (len == 0) {
+	      return Number.NaN;
+	   }
+	   digits = 0;
+	   dec_part = true;
+	   for (i = len-1; i >= 0; i--) {         
+	      pos = chars.indexOf(float_str.charAt(i));
+	      if (pos == -1) {
+	         return Number.NaN;        
+	      } else if (pos < 10) {
+	         digits ++;
+	      } else if (pos == 10) {
+	         if (!dec_part) {
+	            return Number.NaN;
+	         }
+	         dec_part = false;
+	         digits = 0;
+	      } else {
+	         if (digits != 3) {
+	            return Number.NaN;
+	         }
+	         dec_part = false;
+	         digits = 0;
+	      }
+	   }
+	   float_str = float_str.replace(dot_char, '.');
+	   float_str = float_str.replace(thousand_separator, '');
+	   float_str = float_str.replace(thousand_separator, '');
+	   float_str = float_str.replace(thousand_separator, '');
+	   return new Number(float_str);
+   }
+
+   function float_to_str(float_number){      
+	    num_string = float_number.toFixed(dec_digits);
+	    num_string =  num_string.replace('.', dot_char);
+	    pos = num_string.indexOf(dot_char);
+	    len = num_string.length;
+	    if (pos == -1) {
+	       pos = len; 
+	    }
+	    pos--;
+	    digits = 0;
+	    num_str = '';      
+	    for (i = pos; i >= 0; i-=3) {
+	       if (num_str != '') {
+	          num_str = thousand_separator+num_str;
+	       }
+	       start = i-2;
+	       if (start < 0) {
+	          start = 0;
+	       }
+	       num_str = num_string.substring(start,i+1)+num_str;
+	    }
+	    if (pos+1 != len) {
+	       num_str = num_str+num_string.substring(pos+1,len);
+	    }         
+	    return num_str;     
+	 }
+
+   function UpdatePriceField(id) {
+	    var price_val;
+	    price_val = str_to_float($('#'+id).val());
+	    $('#'+id).val(float_to_str(price_val));
+	 }
+
+   function updateSiteBid() {
+	      code_site = $("#site_id", "#edit_your_bid_container").val();
+	      var bid_type = $("#bid_type", "#edit_your_bid_container").val();
+	      price = $('#new_bid').val();
+	      
+	      if ((price != '') && (isNaN(str_to_float(price)))) {
+	         if (!$('#new_bid').hasClass('invalidfield')) {
+	            $('#new_bid').addClass('invalidfield'); 
+	            $('<p class="errorP">{@Incorrect price value specified!@}</p>').insertAfter('#new_bid');   
+	         }
+	         $('#new_bid').focus();
+	         return false;
+	      } 
+	      if (price != '') { 
+	         UpdatePriceField('new_bid');
+	      }
+	      $('#new_bid').removeClass('invalidfield').next('p.errorP:first').remove();
+	      if(bid_type == 'text' || bid_type == 'image') {
+	      $.post('<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads_ads/update_sites_bid',
+	         {new_bid: price, bid_type: bid_type, code_group_site: code_site},
+	         function(data) {
+	            if (!checkAjaxLogin(data)) {
+	               try {
+	                  var response = JSON.parse(data);
+	               } catch (e) { 
+	                  alert("Invalid server reply");
+	                  return false; 
+	               } 
+
+	               if ('' != response.message) {
+		               alert(response.message);
+	               }
+	               switch (bid_type) {
+	                  case 'text':
+	                     var class_bid_text = 'cell_bid_text';
+	                     var class_bid_value = 'cell_bid_value'; 
+	                     var class_position = 'bid_position';   
+	                  break;
+	                  case 'image':
+	                     var class_bid_text = 'cell_image_bid_text';
+	                     var class_bid_value = 'cell_image_bid_value';  
+	                     var class_position = 'image_bid_position';  
+	                  break;
+	             }
+	               
+	               $('span.'+class_bid_text,'#tr_'+code_site).text(response.updated_values.cell_text);
+	               $('span.'+class_bid_value,'#tr_'+code_site).text(response.updated_values.cell_value);
+	               $('td.'+class_position,'#tr_'+code_site).text(response.updated_values.cell_position_text);
+	               $('span.'+class_bid_text,'#tr_'+code_site).toggleClass('default_value', response.updated_values.is_default_bid).toggleClass('custom_value', !response.updated_values.is_default_bid);
+	               $('#edit_your_bid_container').hide();
+	               stat = response.updated_values.status_value; 
+	               if (stat != '') {
+	                  $('td.td_status','#tr_'+code_site).text(response.updated_values.status_text);
+	                  $('td.td_site>span.ico-right','#tr_'+code_site).remove();
+	                  $('.ico-resolve','#tr_'+code_site).parents('.xBtn').addClass('hideImp');               
+	                  if (stat == 'trouble') {
+	                     $('td.td_site','#tr_'+code_site).append("<span title='This site/channel has trouble status' class='ico-right ico-warningtrouble'></span>");
+	                     $('.ico-resolve','#tr_'+code_site).parents('.xBtn').removeClass('hideImp');                  
+	                  } else if (stat == 'unpaid') {
+	                     $('td.td_site','#tr_'+code_site).append("<span class='ico-right ico-unpaid' title='This site/channel has unpaid status'></span>");
+	                  }  
+	               }
+	            } 
+	         }
+	      );
+	      }
+         if(bid_type == 'sites' || bid_type == 'parked_domains' || bid_type == 'search' || bid_type == 'intext') {
+             id_group = $("#bid_editor_id_group", "#edit_your_bid_container").val();
+             $.post('<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads_ads/update_keyword_bid',
+                {new_bid: price, bid_type: bid_type, id_keyword: code_site, id_group: id_group},
+                function(data) {
+                   if (!checkAjaxLogin(data)) {
+                      try {
+                         var response = JSON.parse(data);
+                      } catch (e) { 
+                         alert("Invalid server reply");
+                         return false; 
+                      } 
+    
+                      if ('' != response.message) {
+                         alert(response.message);
+                      }
+                      class_bid_text = 'cell_bid_'+bid_type;
+                      class_bid_value = 'cell_value_'+bid_type;
+                      
+                      $('span.'+class_bid_text,'#tr_'+code_site).text(response.updated_values.cell_text);
+                      $('span.'+class_bid_value,'#tr_'+code_site).text(response.updated_values.cell_value);
+                      $('span.'+class_bid_text,'#tr_'+code_site).toggleClass('default_value', response.updated_values.is_default_bid).toggleClass('custom_value', !response.updated_values.is_default_bid);
+                      $('#edit_your_bid_container').hide();
+                   } 
+                }
+             );
+          }
+	      return false;
+	   }
+
+   <%PLUGIN_JS_FUNCTIONS%>
+   
+//-->
+</script>
+<div class='floatr pt10'>
+	<button class='createReportButton cursor-hand' id='createReportButton' onclick="go('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign');">
+		<span class='ico ico-createReportplus'>{@Create Campaign@}</span>
+	</button>
+</div>
+
+<h1>{@Manage Ads@}</h1>
+
+<table class="frame w100p">
+	<tr>
+		<td>
+		<div class="p5">
+
+	<table class="w100p table">
+		<tr class="top">
+			<td colspan="3">
+				<h2 id="manageAdsTitle" class="pt0">{@All Campaigns@}</h2>
+			</td>
+		</tr>
+		<tr class="top">
+			<td class="w200 top" style="overflow:auto;">
+				<div style="overflow:auto;height:300px;width:200px;" class='inlet'>
+					<%TREE%>
+				</div>
+				<div class="hintBox filetree mt10">
+					<label class="mb5">{@Legend@}</label>
+               <div><span class="cpm_flatrate" style="padding-left: 20px;padding-top: 2px;">{@CPM/FlatRate Campaign@}</span></div>
+               <%PLUGIN_COLOR_HINT%>
+				</div>
+			</td>
+			<td class="w10"><img src="<%SITEURL%>images/blank.gif" width=10 height=1></td>
+			<td id='loading' class="top" style="width:90%;">
+				<div onload="showFrame();" id="dinamic" scrolling="no" frameborder="0" src="#"></div>                  
+			</td>
+		</tr>
+	</table>
+	</div>
+		</td>
+	</tr>
+</table>
+
+<form id="creategroup_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_group">
+   <input type="hidden" name="campaign" id="campaign_code">
+</form>
+<form id="editgroup_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_group">
+   <input type="hidden" name="campaign" id="campaign_code_2">
+   <input type="hidden" name="group" id="group_code">
+</form>
+<form id="editcampaign_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/edit_campaign">
+   <input type="hidden" name="id" id="campaign_code_3">
+</form>
+<form id="editchannels_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/edit_channels">
+   <input type="hidden" name="group" id="group_code_2">
+</form>
+<form id="editsites_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/edit_sites">
+   <input type="hidden" name="group" id="editsites_group_code">
+   <input type="hidden" name="tab" id="editsites_tab">
+</form>
+<form id="createad_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_ad">
+   <input type="hidden" name="ad_type" id="ad_type">
+   <input type="hidden" name="id_group" id="group_code_3">
+</form>
+<form id="import_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/import_ads">
+   <input type="hidden" name="tab" id="ref_tab">
+   <input type="hidden" name="id_group" id="group_code_4">
+</form>
+<form id="edit_cpc_bids_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/edit_cpc_bids">
+   <input type="hidden" name="tab" id="edit_cpc_bids_ref_tab" >
+   <input type="hidden" name="id_group" id="edit_cpc_bids_group_code">
+</form>
+<form id="editad_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_ad">
+   <input type="hidden" name="id" id="ad_code">
+</form>
+<form id="renew_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/renew">
+   <input type="hidden" name="group_site_channel" id="renew_group_site_channel">
+</form>
+<form id="upgrade_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/upgrade">
+   <input type="hidden" name="group_site_channel" id="upgrade_group_site_channel">
+</form>
+<form id="downgrade_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/downgrade">
+   <input type="hidden" name="group_site_channel" id="downgrade_group_site_channel">
+</form>
+<form id="resolve_form" method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/resolve">
+   <input type="hidden" name="group_site_channel" id="resolve_group_site_channel">
+   <input type="hidden" name="campaign_type" id="resolve_campaign_type">
+</form>
+
+<div class="w200 hide frame p3" id="edit_your_bid_container" style="">
+   <input type="hidden" id="bid_editor_id_group" name="bid_editor_id_group">
+   <input type="hidden" id="site_id" name="site_id">
+   <input type="hidden" id="bid_type" name="bid_type">
+   <div class="frame p3 right"><label class="inline" for="new_bid">{@Your Bid@}, {@$@}:</label> <input type="text" class="text w50" id="new_bid"  onkeydown="if(event.keyCode==13) $('#saveBid_btn').click();if(event.keyCode==27) $('#cancelBid_btn').click();"></div>
+
+   <div id="bid_editor_hint" class="hintBox"><span>{@Set your bid for this Site. Leave blank to use default bid value.@}</span></div>
+   <div class="xTbar right"><table class="floatr"><tr><td align="center">
+   	<a id="saveBid_btn" value="{@Save@}" title="{@Save@}" class="guibutton floatl" href="#" jframe="no" onclick="return updateSiteBid();">{@Save@}</a>
+   	<a id="cancelBid_btn" value="{@Cancel@}" title="{@Cancel@}" class="guibutton floatl" href="#" jframe="no" onclick="return cancelSiteBid();">{@Cancel@}</a>
+   </td></tr></table></div>
+</div>

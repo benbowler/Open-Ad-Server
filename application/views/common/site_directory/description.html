@@ -1,0 +1,31 @@
+<table class="w100p" border="0">
+	<tr class="top">
+		<td>
+			<table class="w300">
+			   <tr class="top">
+			      <td  class="w140">
+			         <img alt="Image Here" src="<%IMAGE%>" class="bordImg mr10 ml5" style1="border: 1px; border-style: solid; border-color='black';">
+			      </td>
+			      <td>
+			      	
+				      <b class='f14px'><%NAME%></b>
+				      <div><a target='_blank' href='http://<%URL%>'><%URL%></a></div>
+				      <%DESCRIPTION%>
+						<div class="mt5">
+								<a href="#" class='guibutton floatl greenBtn' value="{@more info...@}" onclick="show_site_info('<%CODESITE%>'); return; go('<%SITEURL%><%INDEXPAGE%><%ROLE%>/site_information/index/<%CODESITE%>');">{@more info...@}</a>
+						</div>      
+					</td>
+			   </tr>
+			</table> 
+		</td>
+		<td class="w250 middle">
+			 <iframe  marginwidth="0px" marginheight="0px" scrolling="no" frameborder="0" height="125" width="250"  src="http://www.quantcast.com/profile/embed?img=http%3A//www.quantcast.com/profile/demographicGraph%3Fdemo%3Dage%26wunit%3Dwd%253A<%URLQANCAST%>&w=250&h=125&showDeleteButtons=false&wunit=Charts.Demographics.age."></iframe>
+		</td>
+		<td class="w200 pl10 pr10 middle">
+			<a  href="http://alexa.com/data/details/traffic_details?url=<%URL%>" target="_blank"><img src="http://traffic.alexa.com/graph?c=1&amp;f=555555&amp;u=<%URL%>&amp;r=3m&amp;y=t&amp;z=1&amp;h=125&amp;w=200" width="200" height="125" border="0" /></a>     
+		</td>
+		<td class="w100 pl10 pr10 middle">
+			<script src="http://xslt.alexa.com/site_stats/js/s/a?url=<%URL%>"></script>
+		</td>
+	</tr>	
+</table>

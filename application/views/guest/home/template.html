@@ -1,0 +1,43 @@
+<!--LoginPage-->
+<style>
+.filterBoxMark{
+   margin-left: 190px;
+}
+</style>
+<table class="ma">
+	<tr valign="top">
+		<td class="w400 center">
+			<h1>{@Advertisers@}</h1>
+			<div class="left filterBox p10" style="height: 220px">
+				<%ADVERTISERINFO%>
+			</div>	
+		</td>
+	</tr>
+	<tr>
+		<td class="pt20 center">
+			
+			<table class="table w235 ma" border="0">
+				<tr>
+					<td>
+						<input type="button" class="guibutton floatl greenBtn w100" onclick="location.href='<%SITEURL%>advertiser/sign_up'" value="{@Create an account@}">
+					</td>
+					<td class="w10">&nbsp;</td>
+					<td>
+						<input type="button" class="guibutton floatl greenBtn w100" onclick="location.href='<%SITEURL%>advertiser/login'" value="{@Login@}">
+					</td>
+				</tr>
+			</table>
+			
+			
+			
+		</td>
+	</tr>
+</table>
+
+<div class="hintBox mt20">
+   <a href="<%SITEURL%>guest/terms">{@Terms & Services@}</a>
+   &nbsp;&bull;&nbsp;
+   <a href="<%SITEURL%>guest/policy">{@Privacy Policy@}</a>
+</div>
+
+

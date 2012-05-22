@@ -1,0 +1,81 @@
+<script type="text/javascript">
+<!--
+$(document).ready(function(){             
+    $(".bytecity_top").click(openDialogWindow);
+    $(".bytecity_top").find('b').find('b').find('b').click(openDialogWindow);
+});
+function showAnswer(json_answer) {
+	try {
+		answer = JSON.parse(json_answer);
+	} catch(e) {
+		$("#bytecity_container").html('<div id="error_message_div">Invalid response</div>');
+		$("button:contains('Create an account')").remove();
+	} finally {
+		if (answer.status == 'ok') {
+			$("#bytecity_container").html(answer.data);
+			$(".byte_city_registration").remove();
+			$("button:contains('Create an account')").remove();
+		}
+		if (answer.status == 'form') {
+			$("#bytecity_container").html(answer.data);
+		}
+		if (answer.status == 'error') {
+			$("#bytecity_container").html('<div id="error_message_div">'+answer.data+'</div>');
+			$("button:contains('Create an account')").remove();
+		}
+	}
+}
+function openDialogWindow(){
+    $.ajax({
+    url: site_url+"admin/bytecity",
+    type: "POST",
+    dataType: "HTML",
+    timeout: 3000,
+		beforeSend: function(){
+   	 		$('#bytecity_loader').addClass('loading').text(''); 
+    	},
+    	success: function(answer){
+    		$('#bytecity_loader').removeClass('loading').text(''); 
+    		showAnswer(answer);
+        	$('#bytecity_container').dialog({ 
+            	modal: true, 
+            	width: 520,
+            	height: 'auto',
+            	buttons: {
+				"Create an account": function() {
+        			$('#bytecity_form_form').ajaxSubmit({
+            			url: site_url+"admin/bytecity",
+        				type: "POST",
+        				dataType: "HTML",
+        				timeout: 3000,
+        				beforeSend: function(){
+        			       	 $('#bytecity_loader').addClass('loading').text(''); 
+        			    },
+        			   success: function(answer){
+        	              showAnswer(answer);
+        			   },
+        			   error: function(XMLHttpRequest, textStatus, ErrorThrown){
+       	            	$("#bytecity_container").text(textStatus);
+       	        	   }
+        			});
+            	},
+				Cancel: function() {
+					$('#bytecity_container').dialog( "close" );
+				}
+			}
+            });
+        	$('#bytecity_container').dialog('open');
+    	},
+    	error: function(XMLHttpRequest, textStatus, ErrorThrown){
+        	$("#bytecity_container").text(textStatus);
+    	}
+    });
+}
+//-->
+</script>
+<div class="byte_city_registration" style="height: 27px; border-style: solid; border-color: #e5e5e5; border-width: 1px 1px 0 1px; float: right; width: 252px;">
+	<div id="bytecity_top_div" class="floatr" style="text-align: center; border-style: solid; border-color: white; border-width: 1px 1px 0 1px; height: 26px; width: 250px; background-color: #fafaec;"><span id="bytecity_loader" class="floatr"></span>
+		<a style="" href="#" class="bytecity_top"><span style="position: relative; top: 6px; color: black; text-decoration: none; border-bottom:1px dotted;">Register at the Byte City Network</span></a>
+	</div>
+</div>
+<div id="bytecity_container" title="Registration on ByteCity" style="display:none;"></div>

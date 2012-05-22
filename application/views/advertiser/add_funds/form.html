@@ -1,0 +1,109 @@
+<script type="text/javascript">
+//<!--
+   var money_format = '<%MONEYFORMAT%>';
+   var number_format = '<%NUMBERFORMAT%>';
+   var text = "{@Total: {TOTAL} ({DEPOSIT} - deposit, {COMMISSION} - commission)@}";
+   var dec_digits = new Number(number_format.charAt(0));
+   var dot_char = number_format.charAt(1);
+   var thousand_separator = number_format.charAt(2);
+
+   function float_to_str(float_number){      
+      num_string = float_number.toFixed(dec_digits);
+      num_string =  num_string.replace('.', dot_char);
+      pos = num_string.indexOf(dot_char);
+      len = num_string.length;
+      if (pos == -1) {
+         pos = len; 
+      }
+      pos--;
+      digits = 0;
+      num_str = '';      
+      for (i = pos; i >= 0; i-=3) {
+         if (num_str != '') {
+            num_str = thousand_separator+num_str;
+         }
+         start = i-2;
+         if (start < 0) {
+            start = 0;
+         }
+         num_str = num_string.substring(start,i+1)+num_str;
+      }
+      if (pos+1 != len) {
+         num_str = num_str+num_string.substring(pos+1,len);
+      }         
+      return num_str;     
+   }
+ 
+   function str_to_float(float_str){
+      chars = '0123456789'+dot_char+thousand_separator;
+      len = float_str.length;
+      if (len == 0) {
+         return Number.NaN;
+      }
+      digits = 0;
+      dec_part = true;
+      for (i = len-1; i >= 0; i--) {         
+         pos = chars.indexOf(float_str.charAt(i));
+         if (pos == -1) {
+            return Number.NaN;        
+         } else if (pos < 10) {
+            digits ++;
+         } else if (pos == 10) {
+            if (!dec_part) {
+               return Number.NaN;
+            }
+            dec_part = false;
+            digits = 0;
+         } else {
+            if (digits != 3) {
+               return Number.NaN;
+            }
+            dec_part = false;
+            digits = 0;
+         }
+      }
+      float_str = float_str.replace(dot_char, '.');
+      float_str = float_str.replace(thousand_separator, '');
+      float_str = float_str.replace(thousand_separator, '');
+      float_str = float_str.replace(thousand_separator, '');
+      return new Number(float_str);
+   }
+ 
+   function money(value) {
+      return money_format.replace("%", float_to_str(value)); 
+   }
+   
+   $(function() {
+      $('.ammount_sum').keyup(
+         function(){
+            frm = $(this).parents('form');                     
+            amount_val = str_to_float($('#am', frm).val());
+            if (!isNaN(amount_val) && amount_val>0) {
+               commission = new Number($('#fund_comm', frm).val()); //  <%COMMISSION%>;              
+               if (commission != 0) {           
+                  new_text = text.replace('{DEPOSIT}', money(amount_val));
+                  new_text = new_text.replace('{TOTAL}', money(amount_val*(100+commission)/100));
+                  new_text = new_text.replace('{COMMISSION}', money(amount_val*commission/100));
+                  $('#msg_div', frm).html(new_text);                                      
+                  $('input[name=agree]:checkbox', frm).attr('checked', false);
+                  $('#agree_div', frm).show();      
+               } else {
+                  $('input[name=agree]:checkbox', frm).attr('checked', true);
+               }
+            } else {
+               $('#agree_div', frm).hide();
+            }
+         }
+      );        
+      $('.ammount_sum').keyup();
+   });   
+//-->
+</script>
+<h1>{@Add Funds@}</h1>
+
+<%GATEWAYFORMS%>
+
+<div class="mt10 mb10 hintBox">
+	<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.
+</div>
+

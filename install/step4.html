@@ -1,0 +1,55 @@
+<script type="text/javascript">
+<!--
+function correctEMail() {
+    val = document.getElementById("login").value;
+    if (val == "") return true;
+    if (/^\w+([\.\w\-]+)*\w@\w((\.\w\-)*\w+)*\.\w{2,3}$/.test(val) == false) {
+       alert("You must enter correct E-Mail address as login!");
+       return false;
+    }
+    return true;
+ }
+//-->
+</script>
+<div id="step4">
+	<h1><%STEPTITLE%></h1>
+   <form action="" method="post">
+   	<input type="hidden" name="button" value="" />
+   	
+	<div class="text_block">
+	      <!-- div class="install_description">Description</div -->
+	      <div class="install_error" style="display:<%ERROR%>;">Please, fill all fields.</div>
+	      <input type="hidden" name="step" value="4">
+	      <table>
+	         <tr>
+	            <td class="col1">
+	               <label for="login">Login E-Mail:</label>
+	            </td>
+	            <td class="col2">      
+	               <input id="login" type="text" name="login" value="<%LOGIN%>">
+	            </td>
+	         </tr>
+	         <tr>
+	            <td class="col1">
+	               <label for="password">Password:</label>
+	            </td>
+	            <td class="col2">      
+	               <input id="password" type="password" name="password" value="<%PASSWORD%>">
+	            </td>
+	         </tr>
+            <tr>
+	            <td class="col1">
+	               <label for="password2">Confirm password:</label>
+	            </td>
+	            <td class="col2">      
+	               <input id="password2" type="password" name="password2" value="<%PASSWORD2%>">
+	            </td>
+	         </tr>
+	      </table>
+	  </div>
+	  
+	  <a class="button_prev" href="#">Prev</a>
+	  <a class="button" href="#">Next</a>
+	  
+   </form>
+</div>

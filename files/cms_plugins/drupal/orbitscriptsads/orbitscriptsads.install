@@ -1,0 +1,31 @@
+<?php
+/**
+ * @file
+ * Install file of the orbitscriptsads module
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function orbitscriptsads_install() {
+  drupal_set_message(st("Orbit Ads settings are available under !link",
+    array( '!link' => l(st('Administer > Site configuration > Orbit Ads'),  'admin/settings/orbitscriptsads' ) )
+  ));
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function orbitscriptsads_uninstall() {
+  $max = variable_get('orbitscriptsads_managed_last_block', 0);
+  for ($count=0 ; $count <= $max ; $count++) {
+  	variable_del('orbitscriptsads_managed_ad_block_'. $count);
+  }
+  variable_del('orbitscriptsads_managed_last_block');
+  variable_del('orbitscriptsads_channels');
+  variable_del('orbitscriptsads_errors');
+  variable_del('orbitscriptsads_managed_number_blocks');
+  variable_del('orbitscriptsads_api_key');
+  variable_del('orbitscriptsads_base_url');
+  variable_del('orbitscriptsads_site_id');
+}

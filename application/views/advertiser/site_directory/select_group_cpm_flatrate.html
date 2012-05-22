@@ -1,0 +1,160 @@
+<script type="text/javascript">
+//<!--
+$( function(){
+
+      $('#groups_tree').treeview({animated: "fast", persist: "id", persist_id: "user<%USER_CODE%>"});
+      $('#groups_tree > * > * > *').children('.file').addClass('folder');
+      $('#groups_tree > * > * > *').children('.file').removeClass('file');
+      $('#groups_tree').show();
+      if ($('#empty_tree').val() == 'true') {
+         $('#add_to_new').click();
+      }
+   });
+
+function show_campaigns(id_entity){
+	
+}
+
+function show_groups(id_campaign){
+    //$('#groups_tree span').removeClass('selected_item');
+    //$('#camp'+id_campaign).addClass('selected_item');
+    $('#camp'+id_campaign).parents('li').children('.expandable-hitarea').click();
+    return false;
+}
+
+function show_ads(id_group, tab){
+    $('#groups_tree span').removeClass('selected_item');
+    $('#group'+id_group).addClass('selected_item');
+    $('#group'+id_group).parents('li').children('.expandable-hitarea').click();
+    $('#group_code').val(id_group);
+    return false;
+ }
+
+function checkAddToGroupRequirements() {
+   var selected_group_code = $('#group_code').val();
+	if ("" != selected_group_code) {
+		$.post('<%SITEURL%><%INDEXPAGE%>advertiser/buy_site_channel/add_site_channel_to_existing_campaign/<%SITE_CODE%>/<%CHANNEL_CODE%>/<%CAMPAIGN_TYPE%>/<%PROGRAM_TYPE%>',
+				{group_code: selected_group_code},function(data) {
+					  if(!checkAjaxLogin(data)) {
+						  replyCheckAddToGroupRequirements(data);
+					  }	
+				});
+	} else {
+		$('#error_message_div').html('{@Select Group in Campaign to add site/channel for or press "Add to new campaign" button@}!');
+	   $('#error_message_div').show();
+	}
+}
+
+function replyCheckAddToGroupRequirements(data) {
+	try {
+		var reply_object = JSON.parse(data);
+	} catch (e) {
+		$('#error_message_div').html('{@Invalid server reply!@}');
+		$('#error_message_div').show();
+	}
+
+	if (reply_object.error_flag) {
+		$('#error_message_div').html(reply_object.error_message);
+		$('#error_message_div').show();
+		return;
+	}
+
+	go(reply_object.redirect);
+}
+
+function checkAddToNewGroupRequirements() {
+	$.post('<%SITEURL%><%INDEXPAGE%>advertiser/buy_site_channel/add_site_channel_to_new_campaign/<%SITE_CODE%>/<%CHANNEL_CODE%>/<%CAMPAIGN_TYPE%>/<%PROGRAM_TYPE%>',
+            {},function(data) {
+                 if(!checkAjaxLogin(data)) {
+                    replyCheckAddToNewGroupRequirements(data);
+                 }
+            });  
+}
+
+function replyCheckAddToNewGroupRequirements(data) {
+	   try {
+	      var reply_object = JSON.parse(data);
+	   } catch (e) {
+		      alert('{@Invalid server reply!@}');
+	   }
+
+	   if (reply_object.error_flag) {
+	      alert(reply_object.error_message);
+	      return;
+	   }
+
+	   go(reply_object.redirect);
+	}
+//-->
+</script>
+<input type="hidden" name="group_code" id="group_code">
+<input type="hidden" name="empty_tree" id="empty_tree" value="<%EMPTYTREE%>">
+<input type="hidden" name="program_type" id="program_type" value="<%PROGRAM_TYPE%>">
+<h1><a href="<%SITEURL%><%INDEXPAGE%>advertiser/site_directory">{@Site Directory@}</a>&nbsp;&rarr; {@Site@}: <span class="green i"><%SITE_NAME%> (<%SITE_URL%>)</span></h1>
+<div class="frame p10">
+   <div id="error_message_div" style="display: none;"></div>
+	<div class="inlet p5 w400">
+	<table class="smplTable w100p">
+		<tr>
+			<td class="w200"><label>{@Site@}:</label></td>
+			<td class="pl10"><%SITE_NAME%></td>
+		</tr>
+		<tr>
+			<td><label>{@Channel Name@}:</label></td>
+			<td class="pl10"><%CHANNEL_NAME%></td>
+		</tr>
+		<tr>
+         <td><label>{@Program Type@}:</label></td>
+         <td class="pl10">{@<%PROGRAM_TYPE%>@}</td>
+      </tr>
+      <tr>
+         <td><label>{@Volume@}:</label></td>
+         <td class="pl10">{@<%VOLUME%>@}</td>
+      </tr>
+      <tr>
+         <td><label>{@Cost Text@}:</label></td>
+         <td class="pl10">{@<%COST_TEXT%>@}</td>
+      </tr>
+      <tr>
+         <td><label>{@Cost Image@}:</label></td>
+         <td class="pl10">{@<%COST_IMAGE%>@}</td>
+      </tr>
+	</table>
+	</div>
+	
+	<h2 class='mt10'>{@Select existing Campaign &rarr; Group to add site/channel for@}</h2>
+	<table class="table">
+		<tr class="top">
+			<td>
+			
+	<div class="inlet h200 w200 p5" style="overflow: auto;">
+	<%CAMPAIGNS_TREEVIEW%>
+	</div>
+
+	<div class="hintBox filetree mt10">
+		<label class="mb5">{@Legend@}</label>
+	           <div><span class="cpm_flatrate" style="padding-left: 20px;padding-top: 2px;">{@CPM/FlatRate Campaign@}</span></div>
+	</div>
+			</td>
+			<td class="pl10">
+				<button class="button" id="add_to_new" type="button" value="{@Add to new campaign@}" onclick="checkAddToNewGroupRequirements();">
+			      <span class="ico ico-confirm">{@Add to New Campaign@}</span>
+			   </button>
+			</td>
+		</tr>
+	</table>
+	
+	
+	
+	
+
+</div>
+
+<div class="left pt10">
+   <button class="button"  type="button" title="{@OK@}" onclick="checkAddToGroupRequirements();">
+      <span class="ico ico-next">{@Next@}</span>
+   </button>
+   <button class="button mb10 ml10"  type="button" title="{@Cancel@}" onclick="go('<%SITEURL%><%INDEXPAGE%>advertiser/site_directory')">
+      <span class="ico ico-cancel">{@Cancel@}</span>
+   </button>
+</div>

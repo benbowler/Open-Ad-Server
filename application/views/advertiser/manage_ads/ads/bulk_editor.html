@@ -1,0 +1,170 @@
+<script type="text/javascript">
+//<!--
+
+var reload = false;
+
+function UpdateTextPreview() {
+   var title = $('#bulk_ad_title', '#bulk-editor-container').val();
+   var description1 = $('#bulk_ad_description1', '#bulk-editor-container').val().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;');
+   var description2 = $('#bulk_ad_description2', '#bulk-editor-container').val().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;');
+   var display_url = $('#bulk_ad_display_url', '#bulk-editor-container').val();
+   var destination_url = $('#bulk_ad_destination_url', '#bulk-editor-container').val();
+   if ('' == title) title = '{@Title@}';
+   if ('' == description1) description1 = '{@Description 1@}';
+   if ('' == description2) description2 = '{@Description 2@}';
+   if ('' == display_url) display_url = 'example.com';
+   if ('' == destination_url) destination_url = 'example.com';
+   $('#text_ad_example_title').text(title);
+   $('#text_ad_example_description1').html(description1);
+   $('#text_ad_example_description2').html(description2);
+   $('#text_ad_example_url').text(display_url);
+   $('#text_ad_example_title').attr('href', $('#bulk_ad_destination_protocol', '#bulk-editor-container').val()+'://'+destination_url);
+   $('#text_ad_example_title').attr('target','_blank');
+}
+
+function cancel_edit() {
+   if (reload) {
+      startBulkLoading();
+      reloadDinamicFrame('ads');
+      stopBulkLoading();
+   } else {
+      hideBulkContainer();
+   }
+   return false;
+}
+
+function process_edit(bulk, bulk_field) {
+   startBulkLoading();
+   lastcode = '';
+   var ad_data = jQuery('#bulk_editor_form').serializeArray();
+   var code = jQuery('#bulk_ad_code', '#bulk-editor-container').val();
+   var method = 'save_ad';
+   if (typeof(bulk) != 'undefined' && bulk) {
+      method = 'save_ad_bulk';
+   }
+   var url = '<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads_ads/' + method + '/' + code;
+   if (bulk && typeof(bulk_field) != 'undefined') {
+      url += '/' + bulk_field;
+   }
+   jQuery.post(url, ad_data, function(data) {
+      if(!checkAjaxLogin(data)) {
+         eval('data = ' + data);
+         jQuery('.errorP', '#bulk-editor-container').hide();
+         if ('succ' == data.status) {
+            if (!(bulk && typeof(bulk_field) != 'undefined')) {
+               reloadDinamicFrame('ads');
+               return false;
+            } else {
+               reload = true;
+            }
+         } else {
+            jQuery('#error_message_div', '#bulk-editor-container').html('{@You must fill all required fields!@}').show();
+            for (i in data.errors) {
+               jQuery('input[name='+i+']', '#bulk-editor-container').addClass('invalidfield').parent().find('p').html(data.errors[i]).show();
+            }
+            replaceErrors(jQuery('#bulk-editor-container'));
+         }
+         stopBulkLoading();
+      }
+   })
+   return false;
+}
+
+function process_bulk(bulk_field) {
+   if (confirm('{@Do you really want to edit all ads of this group?@}')) {
+      process_edit(true, bulk_field);
+   }
+   return false;
+}
+
+//-->
+</script>
+<div id="bulk-editor-container" class="p5 frame hide" style="position: absolute;z-index:1000;cursor: auto;">
+	<div class='filterBox p10'>
+   <div id="error_message_div" class="hide"></div>
+   <form id="bulk_editor_form" name="bulk_editor_form" method="post">
+   <input type="hidden" name="code" id="bulk_ad_code" />
+   <input type="hidden" name="type" id="bulk_ad_type" />
+   <table class="table ">
+   <tr class="top">
+      <td class="top">
+         <table class='bulkEditor table'>
+         <tr>
+            <td class="bulkCtl"><a href="#" jframe="no" class="setAll2" title="{@Apply `Title` field value to all ads of this group@}" value="{@Apply to All@}" onclick="return process_bulk('title')"></a></td>
+            <td><label for="bulk_ad_title"><span class="required">{@Title@}:</span></label></td>
+            <td>
+               <input type="text" class="text" name="title" id="bulk_ad_title" onkeyup="UpdateTextPreview();" onchange="UpdateTextPreview();" style="width:210px;">
+               
+               <p class="hide"></p>
+            </td>
+         </tr>
+         <tr class="text_only">
+            <td class="bulkCtl"><a href="#" jframe="no" class="setAll2" title="{@Apply `Description 1` field value to all ads of this group@}" value="{@Apply to All@}" onclick="return process_bulk('description1')"></a></td>
+            <td><label for="bulk_ad_description1"><span class="required">{@Description 1@}:</span></label></td>
+            <td>
+               <input type="text" class="text" name="description1" id="bulk_ad_description1" onkeyup="UpdateTextPreview();" onchange="UpdateTextPreview();"  style="width:210px;"/>
+               
+               <p class="hide"></p>
+            </td>
+         </tr>
+         <tr class="text_only">
+            <td class="bulkCtl"><a href="#" jframe="no" class="setAll2"  title="{@Apply `Description 2` field value to all ads of this group@}" value="{@Apply to All@}" onclick="return process_bulk('description2')"></a></td>
+            <td><label for="bulk_ad_description2"><span class="required">{@Description 2@}:</span></label></td>
+            <td>
+               <input type="text" class="text" name="description2" id="bulk_ad_description2" onkeyup="UpdateTextPreview();" onchange="UpdateTextPreview();"  style="width:210px;"/>
+               <p class="hide"></p>
+            </td>
+         </tr>
+         <tr>
+            <td class="bulkCtl"><a href="#" jframe="no" class="setAll2"  title="{@Apply `Display URL` field value to all ads of this group@}" value="{@Apply to All@}" onclick="return process_bulk('display_url')"></a></td>
+            <td><label for="bulk_ad_display_url"><span class="required">{@Display URL@}:</span></label></td>
+            <td>
+               <div class="floatl right f15px" style="width:75px; padding:4px 0px;">http://</div>
+               <input type="text" class="text" name="display_url" id="bulk_ad_display_url" onkeyup="UpdateTextPreview();" onchange="onDisplayUrlChange('text_ad');UpdateTextPreview();" style="margin-left:3px;width:130px;" />
+               <p class="hide"></p>
+            </td>
+         </tr>
+         <tr class="middle">
+            <td class="bulkCtl">
+               <a href="#" jframe="no" class="setAll2" title="{@Apply `Destination URL` field value to all ads of this group@}" value="{@Apply to All@}" onclick="return process_bulk('destination_url')" ></a>
+            </td>
+            <td><label for="bulk_ad_destination_url"><span class="required">{@Destination URL@}:</span></label></td>
+            <td>
+               <div class="floatl right" style="width:75px;">
+					<select id="bulk_ad_destination_protocol" name="destination_protocol"></select>
+				</div>
+               <input type="text" class="text" name="destination_url" id="bulk_ad_destination_url" style="margin-left:3px;width:130px;" />
+               <p class="hide"></p>
+            </td>
+         </tr>
+         </table>
+      </td>
+      <td width="150" class=""></td>
+      <td class="w300 top text_only">
+         <h2>{@Example@}</h2>
+         <%TEXT_AD_EXAMPLE%>
+      </td>
+   </tr>
+   </table>
+   </form>
+   </div>
+	<div>
+	<table style="width:342px;">
+		<tr>
+			<td>
+	            <div class="floatr">
+	            	<button class="guibutton floatl mr3 ico ico-confirm" type="button" onclick="return process_edit()" jframe="no" value="{@Save@}">{@Save@}</button>
+	            	<button class="guibutton floatl ico ico-cancel" type="button" onclick="return cancel_edit()" jframe="no" value="{@Cancel@}">{@Cancel@}</button>
+	            </div> 
+				<div class="ml10 floatl">
+				<a href="#" jframe="no" class="setAll2" title="{@Apply all listed field values to all ads of this group@}" value="{@Apply to All@}" onclick="return process_bulk();">{@Apply to All@}</a>
+				</div>
+			</td>
+		</tr>
+	</table>
+	</div>
+	   
+</div>
+<script type="text/javascript">
+	limitation();
+</script>

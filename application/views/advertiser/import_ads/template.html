@@ -1,0 +1,219 @@
+<script type="text/javascript">
+//<!--
+   $(document).ready(function(){
+      $('#groups_tree').treeview({animated: "fast", persist: "id", persist_id:"<%NODE%>"});
+      <%STARTITEM%>
+      $('#groups_tree > * > * > *').children('.file').addClass('folder');
+      $('#groups_tree > * > * > *').children('.file').removeClass('file');
+   });
+
+   function showFrame(){
+      if(!checkAjaxLogin($('#dinamic').html())) {
+       replaceFormButtons(this.document); 
+         parseTables(this.document);
+         $('#loading').removeClass('loading-big');
+         $('#dinamic').show();
+         UpdateAdsInfo();                  
+      }
+   }      
+   
+   function show_campaigns(id_entity) {
+      $('#dinamic').hide();
+      $('#loading').addClass('loading-big');
+      $('#groups_tree span').removeClass('selected_item');
+      $('#user'+id_entity).addClass('selected_item');
+      $('#dinamic').loadJFrame("<%SITEURL%><%INDEXPAGE%>advertiser/import_ads_ads/index/all/0/<%GROUP_CODE%>/<%SELECTED_CAMPAIGN%>");
+      $('#manageAdsTitle')[0].innerHTML = '{@All Campaigns@}';
+   }
+   
+   function show_groups(id_campaign){
+      $('#dinamic').hide();
+      $('#loading').addClass('loading-big');
+      $('#groups_tree span').removeClass('selected_item');
+      $('#camp'+id_campaign).addClass('selected_item');
+      $('#dinamic').loadJFrame("<%SITEURL%><%INDEXPAGE%>advertiser/import_ads_ads/index/campaign/" + id_campaign + '/<%GROUP_CODE%>/<%SELECTED_CAMPAIGN%>', function() {});
+      $('#camp'+id_campaign).parents('li').children('.expandable-hitarea').click();
+      $('#manageAdsTitle')[0].innerHTML = '{@Campaign@}: <span class="green i">&bdquo;' + $('#camp'+id_campaign).text().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;') + '&ldquo;</span>';
+      return false;
+   }
+   
+   function show_ads(id_group, tab) {
+      $('#dinamic').hide();
+      $('#loading').addClass('loading-big');
+      $('#groups_tree span').removeClass('selected_item');
+      $('#group'+id_group).addClass('selected_item');
+      $('#dinamic').loadJFrame("<%SITEURL%><%INDEXPAGE%>advertiser/import_ads_ads/index/group/" + id_group + '/<%GROUP_CODE%>/<%SELECTED_CAMPAIGN%>');
+      $('#group'+id_group).parents('li').children('.expandable-hitarea').click();
+
+      $('#manageAdsTitle')[0].innerHTML = 
+         '{@Campaign@}: <span class="green i">&bdquo;' +
+         $('#group'+id_group).parent().parent().parent().find('span')[0].innerHTML + 
+         '&ldquo;</span> &rarr; {@Group@}: <span class="green i">&bdquo;' +
+         $('#group'+id_group).text().replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;') + 
+         '&ldquo;</span>';
+      return false;
+   }
+
+   function cancel_import() {
+      if (confirm("{@Are you sure you want to cancel import ads?@}")) {
+         go("<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/group/<%GROUP_CODE%>/<%SELECTED_TAB%>")
+      }
+      return false;
+   }
+
+   function process_import() {
+      codes = jQuery('#selected_ids').val();
+      if ('' == codes) {
+         alert('{@Please choose one or more ad for importing.@}');
+         return false;
+      }
+      jQuery.post('<%SITEURL%><%INDEXPAGE%>advertiser/import_ads/import', 
+         {id_group: '<%GROUP_CODE%>', ids: codes},
+         function(data) {
+            if ('succ' == data) {
+               go("<%SITEURL%><%INDEXPAGE%>advertiser/import_ads/success/<%GROUP_CODE%>/<%SELECTED_TAB%>")
+            } else {
+               go("<%SITEURL%><%INDEXPAGE%>advertiser/import_ads/fail/<%GROUP_CODE%>/<%SELECTED_TAB%>")
+            }
+         }
+      )
+      return false;
+   }
+
+   function UpdateAdsInfo() {
+      ads_ids = new Array();
+      if (jQuery('#selected_ids').val()) {
+         ads_ids = jQuery('#selected_ids').val().split(',');
+      }
+      $("#dinamic").find('tr[rel]').each(function () {
+         var id_ad = $(this).attr('rel');
+         $(this).find('table').each(function () {
+            if ($(this).hasClass('xBtn')) {
+               if (ads_ids.indexOf(id_ad) >= 0) {
+                  if($(this).parent().find('span.added_label').length == 0) {
+                     $(this).parent().append('<span class="added_label">{@Ad_Added@}</span>');
+                  }
+                  $(this).hide();
+               } else {
+                  $(this).parent().find('span.added_label').remove();
+                  $(this).show();
+               }
+            }
+         });
+      });
+   }
+
+   function addAd(code) {
+      title = $('tr[rel='+code+']', "#dinamic").find('td[rev=title]').html();
+      codes = new Array();
+      if (jQuery('#selected_ids').val()) {
+         codes = jQuery('#selected_ids').val().split(',');
+      }
+      if (codes.indexOf(code) < 0) {
+
+         codes.push(code);
+         jQuery('#selected_ids').val(codes.join(','));
+
+         row = '<tr rel="' + code + '"><td>' + code + '</td><td>' + title.replace(/(<)+/g,'&lt;').replace(/(>)+/g,'&gt;') 
+            + '</td><td><a class="guibutton floatl ico ico-delete" value="{@Delete@}" title="{@Delete@}" jframe="no" onclick="return deleteAd(\'' + code + '\')" href="#">{@Delete@}</a></td></tr>';
+         jQuery('#ad_rows').append(row);
+         replaceFormButtons(jQuery('tr[rel='+code+']', '#ad_rows'));
+         
+         UpdateAdsInfo();
+      }
+      return false;
+   }
+
+   function deleteAd(code) {
+      codes = new Array();
+      if (jQuery('#selected_ids').val()) {
+         codes = jQuery('#selected_ids').val().split(',');
+      }
+      if (codes.indexOf(code) >= 0) {
+         codes.remove(codes.indexOf(code));
+         jQuery('#selected_ids').val(codes.join(','));
+         jQuery('tr[rel='+code+']', '#ad_rows').remove();
+         UpdateAdsInfo();
+      }
+      return false;
+   }
+
+   function addSelectedAds() {
+      count = jQuery('input[type=checkbox][name=id_ads\[\]]:checked', '#dinamic').size();
+      if (0 == count) {
+         alert('{@Please choose one or more ad for importing.@}');
+         return false;
+      }
+      jQuery('input[type=checkbox][name=id_ads\[\]]:checked', '#dinamic').each(function() {
+         addAd(jQuery(this).val());
+         jQuery(this).click();
+      });
+      return false;
+   }
+//-->
+</script>
+
+<h1><a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads">{@Manage Ads@}</a> &rarr;
+<a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/campaign/<%CAMPAIGN_CODE%>">{@Campaign@}:</a> <span class="green i">&bdquo;<%CAMPAIGN%>&ldquo;</span> &rarr;
+<a href="<%SITEURL%><%INDEXPAGE%>advertiser/manage_ads/group/<%GROUP_CODE%>/<%SELECTED_TAB%>">{@Group@}:</a> <span class="green i">&bdquo;<%GROUP%>&ldquo;</span>  &rarr; {@Import Ads@}</h1>
+
+
+<table class="w100p table">
+<tr class="top">
+   <td width="200">
+   <h2>{@Info@}</h2>
+   <div class="frame p10">{@Select one or more ads for import directly from you campaigns tree@}</div>
+   </td>
+   <td class="pl10">
+     
+     <h2>{@Select Ads for import@}</h2>
+     <div class="p5 frame">
+         <table class="w100p table">
+         <tr class="top">
+            <td colspan="3">
+               <h2 id="manageAdsTitle" class="pt0">{@All Campaigns@}</h2>
+            </td>
+         </tr>
+         <tr class="top">
+            <td class="w200 top" style="overflow:auto;">
+               <div style="overflow:auto;height:300px;width:200px;" class='inlet'>
+                  <%TREE%>
+               </div>
+            </td>
+            <td class="w10"><img src="<%SITEURL%>images/blank.gif" width="10" height="1" /></td>
+            <td id='loading' class="top" style="width:90%;">
+               <div onload="showFrame();" id="dinamic" scrolling="no" frameborder="0" src="#"></div>                  
+            </td>
+         </tr>
+         </table>
+      </div>
+      <div class="pt10 pb10 right">
+         <button class="button" type="button" onclick="return process_import()"><span class="ico ico-import">{@Import@}</span></button>
+         &nbsp;&nbsp;&nbsp;
+         <button class="button" type="button" onclick="return cancel_import()"><span class="ico ico-cancel">{@Cancel@}</span></button> 
+      </div>
+   </td>
+   <td class="w270 pl10">
+      <h2 >{@Selected Ads@}</h2>
+      <table class="frame mb5 w100p" cellpadding="0" cellspacing="0">
+      <tr>
+         <td class="p5">
+            <div class="inlet">
+               <input type="hidden" name="selected_ids" id="selected_ids" value="" />
+               <table class="xTable" id="ads_container">
+               <tr class="th">
+                  <td class="simpleTitle w20">{@ID@}</td>
+                  <td class="simpleTitle">{@Title@}</td>
+                  <td class="simpleTitle w50 center">{@Action@}</td>
+               </tr>
+               <tbody id="ad_rows">
+               </tbody>
+               </table>
+            </div>
+         </td>
+      </tr>
+      </table>
+      <div id="hidenext"><div class="pt10 pb10 right"><button class="button" type="button" onclick="return process_import()"><span class="ico ico-import">{@Import@}</span></button></div></div>
+   </td>
+</tr>
+</table>

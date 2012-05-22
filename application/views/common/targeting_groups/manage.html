@@ -1,0 +1,58 @@
+<script type="text/javascript">
+function edit(code) {
+   document.getElementById("edit_code").value = code;
+   document.forms["edit_form"].submit();
+}
+
+function getCodeList() {
+   codeList = '';            
+   $('tr.selected', '#manage_targeting_groups_form').find('input').each(
+      function(){
+         if (codeList != '') {
+            codeList = codeList+',';               
+         }
+         codeList = codeList + $(this).val();
+   })
+   return codeList;            
+}
+</script>
+<div class='floatr pt10 pr10'>
+	<button class='createReportButton cursor-hand' id='createReportButton' onclick="return do_action('manage_targeting_groups', 'create', '');">
+		<span class='ico ico-createReportplus'>{@Create Targeting Group@}</span>
+	</button>
+</div>
+<h1>{@Manage Targeting Groups@}</h1>
+<%NOTIFICATION%>
+<form method="post" id="manage_targeting_groups_form" name="manage_targeting_groups_form">
+<div class="filterBox">
+   <table class="table" border="0">
+   <tr>
+      <td class="pl5 bottom">
+         <label for="filt">
+            {@Filter by status@}:
+         </label>
+      </td>
+      <td class="pl5 bottom">
+         <select name="filt"></select> 
+      </td>
+      <td class="pl10 bottom">
+        <input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#manage_targeting_groups_form').submit();"/>
+      </td>
+   </tr>     
+   </table>
+</div>
+
+<input type="hidden" id="manage_targeting_groups_action" name="manage_targeting_groups_action"/>
+
+<div class="frame mb10 p5">
+	<%COLUMNS%>
+	<%BUTTONST%>
+	<div class='inlet'>
+		<%TABLE%>
+    </div>
+	<%PAGINATION%>
+</div>                  
+</form>
+<form method="post" id="edit_form" action="<%SITEURL%><%INDEXPAGE%><%ROLE%>/targeting_group">
+   <input type="hidden" id="edit_code" name="edit_code"/>
+</form>

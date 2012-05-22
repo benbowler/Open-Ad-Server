@@ -1,0 +1,171 @@
+<script type='text/javascript'>
+   jQuery('document').ready(function(){
+	   jQuery('#quicksearch').keyup(function(e){
+  		  if (e.keyCode == 13) {
+    			jQuery('#manage_<%TYPE%>_form').submit();
+  		  }
+	   });
+   });
+
+
+   function showChannelsFrame(id){
+	   if(!checkAjaxLogin($('#iframe_table_site'+id).html())) {
+		   $('#iframe_table_site'+id).show();
+		   $('#loading_table_site'+id).remove();
+		   replaceFormButtons($('#iframe_table_site'+id).document);
+		   parseTables($('#iframe_table_site'+id));
+	   }
+   }
+
+   function showSitesFrame(id){
+	   if(!checkAjaxLogin($('#iframe_table_channel'+id).html())) {
+	      $('#iframe_table_channel'+id).show();
+	      $('#loading_table_channel'+id).remove();
+	      replaceFormButtons($('#iframe_table_channel'+id).document);
+	      parseTables($('#iframe_table_channel'+id));
+	   }
+   }
+
+   <%ADDITIONAL_JS_SITE_BUTTONS%>
+
+   function ShowChannelsBySite(id_site, eNode) {
+   	var exp = $(eNode).hasClass('minus');
+      var tr = $(eNode).parent().parent();
+      if (exp) {
+         $(eNode).addClass('plus');
+         $(eNode).removeClass('minus');
+         $(tr).next().remove();
+      } else {
+         $(eNode).removeClass('plus');
+         $(eNode).addClass('minus');
+         $(tr).after('<tr><td align="center" id="ajax_table_site'+id_site+'" colspan=14 class="frameBorderless"><img id="loading_table_site'+id_site+'" src="<%SITEURL%>images/loading_animation.gif" /><div src="<%SITEURL%><%INDEXPAGE%>admin/manage_sites_channels/get_channels/' + id_site + '/<%PERIOD_BEGIN%>/<%PERIOD_END%>" onload="showChannelsFrame('+id_site+');" id="iframe_table_site' + id_site + '" width="100%" style="display:none"></div></td></tr>');
+         $('#iframe_table_site'+id_site).loadJFrame("<%SITEURL%><%INDEXPAGE%>admin/manage_sites_channels/get_channels/" + id_site + "/<%PERIOD_BEGIN%>/<%PERIOD_END%>");
+      }
+      eNode.expanded = !eNode.expanded;
+   }
+
+   function create_channel_for_site(id_site) {
+	   $('#hidden_form').attr('action',"<%SITEURL%><%INDEXPAGE%>admin/edit_channel");
+	   $('#hidden_form').children('#id_channel').val(undefined);
+	   $('#hidden_form').children('#id_site').val(id_site);
+	   $('#hidden_form').submit();
+	}
+
+   function get_code_for_site(id_site) {
+	   $('#hidden_form').attr('action',"<%SITEURL%><%INDEXPAGE%>admin/get_code_for_site");
+	   $('#hidden_form').children('#id_channel').val(undefined);
+	   $('#hidden_form').children('#id_site').val(id_site);
+	   $('#hidden_form').submit();
+	}
+
+   function create_site_for_channel(id_channel) {
+	      $('#hidden_form').attr('action',"<%SITEURL%><%INDEXPAGE%>admin/edit_site");
+	      $('#hidden_form').children('#id_channel').val(id_channel);
+	      $('#hidden_form').children('#id_site').val(undefined);
+	      $('#hidden_form').submit();
+	   }
+
+   function edit_channel_for_site(id_site,id_channel) {
+	   $('#hidden_form').attr('action',"<%SITEURL%><%INDEXPAGE%>admin/edit_channel");
+	   $('#hidden_form').children('#id_channel').val(id_channel);
+	   $('#hidden_form').children('#id_site').val(id_site);
+	   $('#hidden_form').submit();
+	}
+
+	function get_channel_code(id_site,id_channel) {
+		$('#hidden_form').attr('action',"<%SITEURL%><%INDEXPAGE%>admin/adplacing_get_code");
+		$('#hidden_form').children('#id_channel').val(id_channel);
+      $('#hidden_form').children('#id_site').val(id_site);
+      $('#hidden_form').submit();
+	}
+
+   function view_ads(id_site,id_channel) {
+      $('#hidden_form').attr('action',"<%SITEURL%><%INDEXPAGE%>admin/view_ads");
+      $('#hidden_form').children('#id_channel').val(id_channel);
+      $('#hidden_form').children('#id_site').val(id_site);
+      $('#hidden_form').submit();
+   }
+
+</script>
+<div class='floatr pt10'>
+	<%ADDITIONAL_BUTTONS%>
+    <button class='createReportButton cursor-hand ml3' id='createReportButton' onclick="go('<%SITEURL%><%INDEXPAGE%>admin/edit_site');">
+		<span class='ico ico-createReportplus'>{@Create Site@}</span>
+	</button>
+</div>
+<h1>{@Manage Sites/Channels@}</h1>
+<%NOTIFICATION%>
+<!-- CMS -->
+<div style="height: 32px; background-image: url('<%SITEURL%>/images/cms_plugins/manage-sites-panel-bg.png'); color: white;">
+<div class="floatl" style="height: 13px; width: 12px; margin: 8px 0 0 8px; background-image: url('<%SITEURL%>/images/cms_plugins/down.png');"></div>
+<div class="floatl" style="margin: 8px 0 0 8px;">Get <%SITENAME%></div>
+<!-- CMS add -->
+<!-- Joomla  -->
+<div class="floatl" style="margin: 6px 0 0 10px;">
+<a href="<%SITEURL%><%INDEXPAGE%>admin/get_plugin/joomla"><img alt="Component for Joomla" src="<%SITEURL%>/images/cms_plugins/joomla.png"></img>
+</a>
+</div>
+<!-- Joomla end -->
+<!-- Wordpress  -->
+<div class="floatl" style="margin: 6px 0 0 10px;">
+<a href="<%SITEURL%><%INDEXPAGE%>admin/get_plugin/wordpress"><img alt="Module for wordpress" src="<%SITEURL%>/images/cms_plugins/wordpress.png"></img></a>
+</div>
+<!-- Wordpress end -->
+<!-- Drupal -->
+<div class="floatl" style="margin: 6px 0 0 10px;">
+<a href="<%SITEURL%><%INDEXPAGE%>admin/get_plugin/drupal"><img alt="Module for Drupal" src="<%SITEURL%>/images/cms_plugins/drupal.png"></img>
+</a>
+</div>
+<!-- Drupal end -->
+</div>
+<!-- CMS end -->
+                   
+<form id="hidden_form" method="post">
+<input type="hidden" id="id_site" name="id_site">
+<input type="hidden" id="id_channel" name="id_channel">
+</form>
+<form id="manage_<%TYPE%>_form" name="manage_<%TYPE%>_form" method="post">
+<input type="hidden" id="manage_<%TYPE%>_action" name="manage_action">
+<div class='filterBox'>
+	<table class="table">
+		<tr>
+  	   	<td class="w100 right"><label>{@Select date range@}:</label></td>
+         <td class="pl5">
+				<%DATEFILTER%>
+			</td>
+			<td class="pl10">
+				<label for="status_filter" class="mb5">{@Filter by status@}:</label>
+				<select id="status_filter" name="status_filter" class="w200">
+				</select>
+			</td>
+         <td class="pl10">
+         	<label for="quicksearch" class="mb5">
+         		{@Quick Search@}
+         		<span style="font-size: 0.8em">(<%QUICK_SEARCH_FIELDS%>)</span>
+         	</label>
+         	<input type="text" name="quicksearch" id="quicksearch" class="w200" value="" />
+         </td>
+         <td class="bottom pl10">
+         	 <input type="submit" value="{@Update@}" class="guibutton floatl ico ico-arrowreload"  onclick="$('#manage_<%TYPE%>_form').submit();"/>
+         </td>
+		</tr>
+	</table>
+</div>
+<div id="graphTabs" class="tabsPanel">
+	<span <%SITES_TAB_SELECTED%> id='firstTabSpan'>
+		<a <%SITES_TAB_SELECTED%> href="<%SITEURL%><%INDEXPAGE%>admin/manage_sites_channels/">{@Sites &rarr; Channels@}</a>
+	</span>
+</div>
+<%TABS%>
+</form>
+<script type="text/javascript">
+//<!--
+	$(function(){
+		if ($('#firstTabSpan').hasClass('sel')) {
+			$('.filterBoxMark').css('margin-left', parseInt($('#firstTabSpan').width()/2)+3 + 'px');
+		} else {
+			$('.filterBoxMark').css('margin-left', parseInt($('#secondTabSpan').width()/2)+3+$('#firstTabSpan').width()+'px');
+		}
+	});
+//-->	
+</script>

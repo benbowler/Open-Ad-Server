@@ -1,0 +1,28 @@
+<script type="text/javascript">
+function deleteAlert(id) {
+   $.post('<%SITE_URL%><%CONTROLLER%>/doajax', {block: '<%TABLE_NAME%>', id: id}, function() {
+      $('#alert-' + id).remove();
+      $('.alertdivider', '#alerts-list li:last-child').remove();
+      if ($('li', '#alerts-list').size() == 0) {
+         $('#alerts').remove();
+      }
+   });
+   return false;
+}
+</script>
+<form method="post" id="<%TABLE_NAME%>_form" name="<%TABLE_NAME%>_form">
+<div id="alerts">
+   <h1 class="title">{@System Alerts@}</h1>
+   <ol id="alerts-list" class="alertList pl20">
+   <%ALERTS%>
+   <li id="alert-<%ID%>" class="alertitem">
+      <div class="alertTitle">
+         <%CAPTION%><a href="#dismiss_alert" class="alertDismiss" onclick="return deleteAlert('<%ID%>')">{@dismiss@}</a>
+      </div>
+      <div class="alertDescrition"><%DESCRIPTION%></div> 
+      <div class="alertdivider"><%NOT_LAST%><br /><hr size="1" color="#bFbFb2"><br /><%/NOT_LAST%></div>
+   </li>
+   <%/ALERTS%>
+   </ol>
+</div>
+</form>

@@ -1,0 +1,33 @@
+<form method="post" id="<%TABLE_NAME%>_form" name="<%TABLE_NAME%>_form">
+<input type="hidden" id="<%TABLE_NAME%>_action" name="<%TABLE_NAME%>_action" />
+<div class="mb10">
+   <a name="mails"></a>
+   <table class="table w100p"> 
+   <tr>
+      <td>
+         <h2><%TITLE%></h2>
+      </td>
+      <td align="right">
+         <%SHOW_MORE_LINK%><a class="more" href="<%MORE_LINK%>">{@more features...@}</a><%/SHOW_MORE_LINK%>
+      </td>
+   </tr>
+   </table>
+   <%NOTIFICATION%>
+   <div class="frame p5">
+      <div class="xTbar">
+         <table class="table w100p">
+         <tr>
+            <td>
+               <input type="button" class="guibutton floatl ico ico-delete" value="{@Delete@}"  title="{@Delete@}" onclick="return do_action('<%TABLE_NAME%>', 'delete', '{@Delete selected mails?@}', '{@Please select at least one record in the table@}')" />
+            </td>
+            <td class="right pr5 pl5">
+               {@Inbox@}: <b><%TOTAL%></b>, {@Unread@}: <b><%UNREAD%></b>
+            </td>
+         </tr>
+         </table>
+      </div>
+      <div class="inlet"><%TABLE%></div>
+         <%PAGINATION%>
+      </div>
+   </div>
+</form>

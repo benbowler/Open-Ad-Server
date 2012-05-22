@@ -1,0 +1,44 @@
+<form method="post" name="contact_us">
+<!--LoginPage-->	<%NOTIFICATION%>
+	<div class="frame mb10">
+		<div class="pl10">
+			<h2>
+				{@Send Message@}</h2>
+		</div>
+		<table border="0" cellpadding="0" cellspacing="10">
+			<tbody>
+				<tr>
+					<td>
+						<label for="nm"><span class="required">{@Name@}:</span></label></td>
+					<td class="w400">
+						<input class="text w400" id="nm" name="name" tabindex="1" type="text" /></td>
+					<td>
+						&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="em"><span class="required">{@E-mail@}:</span></label></td>
+					<td>
+						<input class="text w400" id="em" name="e_mail" tabindex="1" type="text" /></td>
+					<td>
+						&nbsp;</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="ms"><span class="required">{@Message@}:</span></label></td>
+					<td>
+						<textarea class="text w400 h100" id="ms" name="message" tabindex="1"></textarea></td>
+				</tr>
+				<tr>
+					<td>
+						&nbsp;</td>
+					<td>
+						<input class="button" tabindex="3" type="submit" value="{@Send@}" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="mt10 mb10 hintBox">
+		<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.</div>
+</form>
+<script id="cke_actscrpt" type="text/javascript">window.onload = function(){window.parent.CKEDITOR._["contentDomReadyteditor"]( window );}</script>

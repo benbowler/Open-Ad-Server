@@ -1,0 +1,32 @@
+<div id="step5">
+	<h1><%STEPTITLE%></h1>
+
+	<div class="text_block">	
+	   <span class="install_description">
+	      Please, check these settings.<br>
+	      If you are sure, and want to install AdServer Lite with these settings, click 'Next' button.
+	   </span>
+	   <textarea rows="10" cols="50" readonly="readonly">
+Database settings:
+Host: <%DB_HOST%>
+Login: <%DB_LOGIN%>
+Password: <%DB_PASSWORD%>
+Dastabase: <%DB_DATABASE%>
+Admin account settings:
+E-Mail Login: <%AC_LOGIN%>
+Password: <%AC_PASSWORD%>
+AdMarket account settings:
+E-Mail Login: <%AM_LOGIN%>
+Password: <%AM_PASSWORD%></textarea> 
+	</div>
+	
+	<form action="" method="post">
+		<input type="hidden" name="button" value="" />
+		
+	  <input type="hidden" name="step" value="6">
+
+	  <a class="button_prev" href="#">Prev</a>	  
+	  <a class="button" href="#">Next</a>
+	  
+	</form>
+</div>

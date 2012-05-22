@@ -1,0 +1,82 @@
+<script type="text/javascript">
+ function load_step(step) {
+		$("#delim1").removeClass().addClass('step-delimiter');
+		$("#delim2").removeClass().addClass('step-delimiter');
+	if (step == 1) {
+		$("#delim1").addClass('tabs-a-i');
+		$("#delim2").addClass('tabs-i-i');
+		$("#step1-tab").removeClass().addClass('active-tab');
+		$("#step2-tab").removeClass().addClass('inactive-tab');
+		$("#step3-tab").removeClass().addClass('inactive-tab');
+		$("#tabs").addClass('tabs');
+	} else if (step == 2) {
+		$("#delim1").addClass('tabs-i-a');
+		$("#delim2").addClass('tabs-a-i');
+		$("#step1-tab").removeClass().addClass('inactive-tab');
+		$("#step2-tab").removeClass().addClass('active-tab');
+		$("#step3-tab").removeClass().addClass('inactive-tab');
+		$("#tabs").addClass('tabs');
+	} else {
+		$("#delim1").addClass('tabs-i-i');
+		$("#delim2").addClass('tabs-i-a');
+		$("#step1-tab").removeClass().addClass('inactive-tab');
+		$("#step2-tab").removeClass().addClass('inactive-tab');
+		$("#step3-tab").removeClass().addClass('active-tab');
+		$("#tabs").removeClass('tabs');
+		
+	}
+	cms = $("#cms").val();
+	id = $("#id").val();
+    $.ajax({
+       type: "GET",
+       url: "<%SITEURL%><%INDEXPAGE%><%ROLE%>/get_plugin/step" + step + "/" + cms + "/" + id, 
+       dataType: "html",
+       success: function(html) {
+          $("#step").html(html);
+           }
+       });
+         return false;
+  }
+</script> 
+<h1><a href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'>{@Manage Sites/Channels@}</a> &rarr; <a href="<%SITEURL%><%INDEXPAGE%><%ROLE%>/get_plugin/<%CMS%>"><span style="text-transform: capitalize;">{@Get <%SITENAME%> <%EXTENSION%> for <%CMS%>@}</span></a> &rarr; {@How To Install@}</h1>
+	
+	<div class="frame">
+	<form name="download" action="<%SITEURL%><%INDEXPAGE%><%ROLE%>/get_plugin/download" method="POST">
+		<table cols="2" class="w100p" cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<td colspan="2" id="tabs" class="w100p tabs">
+						<div id="step1-tab" class="active-tab"><a href="#" onclick="load_step(1)"><%STEP1_NAME%></a></div>
+						<div id="delim1" class="step-delimiter tabs-a-i"></div>
+						<div id="step2-tab" class="inactive-tab"><a href="#" onclick="load_step(2)"><%STEP2_NAME%></a></div>
+						<div id="delim2" class="step-delimiter tabs-i-i"></div>
+						<div id="step3-tab" class="inactive-tab"><a href="#" onclick="load_step(3)"><%STEP3_NAME%></a></div>
+				</td>
+			</tr>
+			<tr>
+				<td class="p10">
+					<div id ="step"><%STEP%></div>
+				</td>
+				<td id = "user_guide">
+					<div class="tiser">
+   						<h3><a href="../../../system/files/cms_plugins/user_guides/<%CMS%>_guide.pdf" target="_blank">Full Guide For <%CMS%></a></h3>
+  						 <a class="guide" href="../../../system/files/cms_plugins/user_guides/<%CMS%>_guide.pdf" target="_blank"></a>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="p10">
+					<div id ="buttons">
+						<button class="button ml5 floatl" title="{@Download@}" value="{@Download@}" type="submit" onclick="$('#channels_table').submit();">
+				 			<span class="ico ico-ok">{@Download@}</span>
+						</button>
+						<button class="button ml5 floatl" title="{@Cancel@}" value="{@Cancel@}" onclick="location.href='<%SITEURL%><%INDEXPAGE%><%ROLE%>/manage_sites_channels'" type="button">
+				 			<span class="ico ico-cancel">{@Cancel@}</span>
+						</button>
+						<input type="hidden" id="cms" name="cms" value="<%CMS%>"/>
+						<input type="hidden" id="id" name="id" value="<%ID%>"/>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+	</div>

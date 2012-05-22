@@ -1,0 +1,397 @@
+<script type="text/javascript">
+//<!--
+var money_format = '<%MONEYFORMAT%>';
+var number_format = '<%NUMBERFORMAT%>';
+var dec_digits = new Number(number_format.charAt(0));
+var dot_char = number_format.charAt(1);
+var thousand_separator = number_format.charAt(2);
+
+function str_to_float(float_str){
+    chars = '0123456789'+dot_char+thousand_separator;
+    len = float_str.length;
+    if (len == 0) {
+       return Number.NaN;
+    }
+    digits = 0;
+    dec_part = true;
+    for (i = len-1; i >= 0; i--) {         
+       pos = chars.indexOf(float_str.charAt(i));
+       if (pos == -1) {
+          return Number.NaN;        
+       } else if (pos < 10) {
+          digits ++;
+       } else if (pos == 10) {
+          if (!dec_part) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       } else {
+          if (digits != 3) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       }
+    }
+    float_str = float_str.replace(dot_char, '.');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    return new Number(float_str);
+ }
+
+function float_to_str(float_number){      
+    num_string = float_number.toFixed(dec_digits);
+    num_string =  num_string.replace('.', dot_char);
+    pos = num_string.indexOf(dot_char);
+    len = num_string.length;
+    if (pos == -1) {
+       pos = len; 
+    }
+    pos--;
+    digits = 0;
+    num_str = '';      
+    for (i = pos; i >= 0; i-=3) {
+       if (num_str != '') {
+          num_str = thousand_separator+num_str;
+       }
+       start = i-2;
+       if (start < 0) {
+          start = 0;
+       }
+       num_str = num_string.substring(start,i+1)+num_str;
+    }
+    if (pos+1 != len) {
+       num_str = num_str+num_string.substring(pos+1,len);
+    }         
+    return num_str;     
+ }
+
+function money(value) {
+    return money_format.replace("%", float_to_str(value)); 
+ }
+
+$(function(){
+	getAddedChannels();
+	getRecentlyAddedChannels();
+});
+
+function getAddedChannels() {
+	$("#iframe_added_channels").attr('src','#');
+	$("#iframe_added_channels").html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_set_pricing/get_added_channels"><input id="submit" type="submit"><input id="campaign_type" name="campaign_type"><input type="hidden" id="modified_channels_info" name="modified_channels_info"></form>');
+	$("#iframe_added_channels").find("#campaign_type").val('<%CAMPAIGN_TYPE%>');
+	$("#iframe_added_channels").activateJFrame();
+	$("#iframe_added_channels").find("#submit").click();
+}
+
+function getRecentlyAddedChannels() {
+	$("#iframe_recently_added_channels").attr('src','#');
+	$("#iframe_recently_added_channels").html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_set_pricing/get_recently_added_channels"><input id="submit" type="submit"><input id="campaign_type" name="campaign_type"><input type="hidden" id="modified_channels_info" name="modified_channels_info"></form>');
+	$("#iframe_recently_added_channels").find("#campaign_type").val('<%CAMPAIGN_TYPE%>');
+	$("#iframe_recently_added_channels").activateJFrame();
+	$("#iframe_recently_added_channels").find("#submit").click();
+}
+
+function replaceSingleSelects() {
+	$('#set_pricing_form select').each(function(){
+		$(this).show();
+		if ($("option",$(this)).length == 1 || !$(this).parent().parent().hasClass('new_row')) {
+			$(this).hide();
+			$('div.selectReplacer', $(this).parent()).text($(this.options[this.options.selectedIndex]).text());
+			//$(this).after($(this.options[0]).text());
+			$('div.selectReplacer', $(this).parent()).show();
+		} else {
+			$('div.selectReplacer', $(this).parent()).hide();
+		}
+	});
+}
+
+function onAddedChannelsTableLoad() {
+	if(!checkAjaxLogin($('#iframe_added_channels').html())){
+		replaceFormButtons($('#iframe_added_channels').document);
+		$('#added_channels_table_process').hide();
+		$('#set_pricing_form #iframe_added_channels select').after('<div class="inlet selectReplacer p3"></div>');
+		replaceSingleSelects();
+		if ('save' == $('#form_type').val()) {
+			$('#submit_set_pricing_form').click();
+		}
+	}
+}
+
+function onRecentlyAddedChannelsTableLoad() {
+	if(!checkAjaxLogin($('#iframe_recently_added_channels').html())){
+		replaceFormButtons($('#iframe_recently_added_channels').document);
+		$('#recently_added_channels_table_process').hide();
+		$('#set_pricing_form #iframe_recently_added_channels select').after('<div class="inlet selectReplacer p3"></div>');
+		replaceSingleSelects();
+		$('#iframe_recently_added_channels select').each(function(){
+			var idChannel = jQuery(this).attr('id_channel');
+			var idSiteChannel = jQuery(this).attr('id_site_channel');
+			if ( idChannel && idSiteChannel) {
+				//updateCostOptions(idSiteChannel, idChannel);
+			}
+		});
+		calculateTotalCost();
+	}
+}
+	
+function onSubmit() {
+	if ((0 < modified_sites_channels_info.length) || (0 < recently_modified_sites_channels_info.length)) {
+		$('#form_type').val('save');
+
+		//add recently sites-channels changes
+		for (ind = 0; ind< recently_modified_sites_channels_info.length; ind++) {
+			id_site_channel = recently_modified_sites_channels_info[ind];
+
+			ad_type = $("#iframe_recently_added_channels").find("#site_channel_"+id_site_channel+"_ad_type").val();
+			program_type = $("#iframe_recently_added_channels").find("#site_channel_"+id_site_channel+"_program_type").val();
+			cost_option = $("#iframe_recently_added_channels").find("#site_channel_"+id_site_channel+"_option").val();
+
+			$("#iframe_added_channels_form").append('<input type="hidden" id="site_channel_'+id_site_channel+'_ad_type" name="site_channel_'+id_site_channel+'_ad_type">');
+			$("#iframe_added_channels_form #site_channel_"+id_site_channel+"_ad_type").val(ad_type);
+
+			$("#iframe_added_channels_form").append('<input type="hidden" id="site_channel_'+id_site_channel+'_program_type" name="site_channel_'+id_site_channel+'_program_type">');
+			$("#iframe_added_channels_form #site_channel_"+id_site_channel+"_program_type").val(program_type);
+
+			$("#iframe_added_channels_form").append('<input type="hidden" id="site_channel_'+id_site_channel+'_program_option" name="site_channel_'+id_site_channel+'_program_option">');
+			$("#iframe_added_channels_form #site_channel_"+id_site_channel+"_program_option").val(cost_option);
+
+			modified_sites_channels_info[modified_sites_channels_info.length] = id_site_channel;
+		}
+
+		var json_val = JSON.stringify(modified_sites_channels_info);
+		$('#modified_sites_channels_info').val(json_val);
+		$("#iframe_added_channels").find("#submit").click();
+	} else {
+		$('#form_type').val('save');
+		$('#submit_set_pricing_form').click();
+	}
+}
+
+function deleteSiteChannelFromGroup(id_site_channel) {
+	if (confirm("{@You have already been charged for this channel and the charged money won't be returned to your balance. Are you sure you want to delete this channel?@}")) {
+		$("#iframe_added_channels").find('#id_site_channel').val(id_site_channel);
+		$("#iframe_added_channels").find('#form_action').val('delete_site_channel');
+		$("#iframe_added_channels").find("#submit").click();
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function deleteRecentSiteChannelFromGroup(id_site_channel) {
+	if (confirm('{@Delete channel on this site from group?@}')) {
+		$("#iframe_recently_added_channels").find('#id_site_channel').val(id_site_channel);
+		$("#iframe_recently_added_channels").find('#form_action').val('delete_site_channel');
+		$("#iframe_recently_added_channels").find("#submit").click();
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function calculateTotalCost() {
+	var total_cost = 0;
+
+	$('#iframe_recently_added_channels .site_channel_program').each( function () {
+		var id_channel = $(this).attr('id_channel');
+		var id_site_channel = $(this).attr('id_site_channel');
+		var ad_type = $('#site_channel_'+id_site_channel+'_ad_type').val();
+		if (ad_type) {
+			var allowedAdTypes = ad_type.split(',');
+		}
+
+		var program_options = sites_channels_programs[id_site_channel].programs;
+		var id_program = $(this).val();
+
+		for (programs_iterator in program_options) {
+			if (id_program == program_options[programs_iterator].id_program) {
+				var programCost;
+				if (-1 != allowedAdTypes.indexOf('text')) {
+					programCost = Number(program_options[programs_iterator].cost_text);
+				}
+				if (-1 != allowedAdTypes.indexOf('image')) {
+					programCost = Number(program_options[programs_iterator].cost_image);
+				}
+				if (-1 != allowedAdTypes.indexOf('richmedia')) {
+					programCost = Number(program_options[programs_iterator].cost_richmedia);
+				}
+
+				total_cost += programCost;
+				break;
+			}
+		}
+	});
+
+	var total_cost_money = money(total_cost);
+	$('#total_cost').text(total_cost_money);
+	var cost_hint_template = '{@Total Campaign Cost Hint@}';
+	$("#total_campaign_cost_hint").text(cost_hint_template.replace("$X",total_cost_money));
+}
+
+function updateCostOptions(id_site_channel,id_channel) {
+	var program_type = $('#site_channel_'+id_site_channel+'_program_type').val();
+	var linked_cost_options = $('#site_channel_'+id_site_channel+'_option');
+	var linked_ad_type = $('#site_channel_'+id_site_channel+'_ad_type');
+	var selected_cost_option = $('#site_channel_'+id_site_channel+'_option').val();
+
+	var ad_type = $(linked_ad_type).val();
+	var allowedAdTypes = ad_type.split(',');
+
+	if (-1 != allowedAdTypes.indexOf('text')) {
+		var display_cost_type = 'cost_per_volume_text';
+	}
+
+	if (-1 != allowedAdTypes.indexOf('image')) {
+		var display_cost_type = 'cost_per_volume_image';
+	}
+
+	if (-1 != allowedAdTypes.indexOf('richmedia')) {
+		var display_cost_type = 'cost_per_volume_richmedia';
+	}
+
+	$(linked_cost_options).removeOption(/./);
+	var program_options = sites_channels_programs[id_site_channel].programs;
+
+	for (programs_iterator in program_options) {
+		if (program_type == program_options[programs_iterator].program_type) {
+			$(linked_cost_options).addOption(
+				program_options[programs_iterator].id_program,
+				program_options[programs_iterator].title+' ('+eval('program_options[programs_iterator].'+display_cost_type)+')'
+			);
+		}
+	}
+	replaceSingleSelects();
+}
+
+function onChangeProgramType(id_site_channel,id_channel) {
+	var linked_ad_type = $('#site_channel_'+id_site_channel+'_ad_type');
+	var program_type = $('#site_channel_'+id_site_channel+'_program_type').val();
+   var allowed = sites_channels_programs[id_site_channel].allowed;
+   var labels = sites_channels_programs[id_site_channel].labels
+   if (allowed.length > 1) {
+      if (('Flat_Rate' == program_type) && (!sites_channels_programs[id_site_channel].restrictions['flat_rate_image_is_allowed'])){
+
+         $('option[value='+allowed[0]+','+allowed[1]+']',linked_ad_type).remove();
+         $(linked_ad_type).val(allowed[0]);
+      } else {
+
+         if (!$('option[value='+allowed[0]+','+allowed[1]+']',linked_ad_type).size()) {
+            $(linked_ad_type).append($('<option></option>').
+            attr("value",allowed[0]+','+allowed[1]).
+            text(labels[allowed[0]]+' & '+ labels[allowed[1]]))
+         }
+      }
+   }
+
+
+	updateCostOptions(id_site_channel,id_channel);
+	var site_channel_added = false;
+	for( i in recently_modified_sites_channels_info) {
+		if (recently_modified_sites_channels_info[i] == id_site_channel) {
+			site_channel_added = true;
+		}
+	}
+
+	if(!site_channel_added) {
+		recently_modified_sites_channels_info[recently_modified_sites_channels_info.length] = id_site_channel;
+	}
+
+	var json_val = JSON.stringify(recently_modified_sites_channels_info);
+	$('#recently_modified_sites_channels_info').val(json_val);
+	replaceSingleSelects();
+	calculateTotalCost();
+}
+
+function onChangeProgramOption(id_site_channel,id_channel) {
+	var site_channel_added = false;
+	for( i in recently_modified_sites_channels_info) {
+		if (recently_modified_sites_channels_info[i] == id_site_channel) {
+			site_channel_added = true;
+		}
+	}
+
+	if(!site_channel_added) {
+		recently_modified_sites_channels_info[recently_modified_sites_channels_info.length] = id_site_channel;
+	}
+
+	var json_val = JSON.stringify(recently_modified_sites_channels_info);
+	$('#recently_modified_sites_channels_info').val(json_val);
+	replaceSingleSelects();
+	calculateTotalCost();
+}
+
+function onChangeAdType(id_site_channel,id_channel) {
+	var linked_ad_type = $('#site_channel_'+id_site_channel+'_ad_type');
+	var linked_cost_options = $('#site_channel_'+id_site_channel+'_option');
+	var current_cost_option = $(linked_cost_options).val();
+	var program_type_options = $('#site_channel_'+id_site_channel+'_program_type');
+
+	updateCostOptions(id_site_channel,id_channel);
+	
+	$(linked_cost_options).val(current_cost_option);
+
+	var site_channel_added = false;
+	for( i in recently_modified_sites_channels_info) {
+		if (recently_modified_sites_channels_info[i] == id_site_channel) {
+			site_channel_added = true;
+		}
+	}
+
+	if(!site_channel_added) {
+		recently_modified_sites_channels_info[recently_modified_sites_channels_info.length] = id_site_channel;
+	}
+
+	var json_val = JSON.stringify(recently_modified_sites_channels_info);
+
+	$('#recently_modified_sites_channels_info').val(json_val);
+
+	replaceSingleSelects();
+	calculateTotalCost();
+}
+
+//-->
+</script>
+<style>
+	.table-columns-handle{
+		margin-top: -25px;
+	}
+	#columns-container-iframe_recently_added_channels{
+		margin-top: -3px !important;
+	}
+</style>
+<%FORM_TITLE%>
+
+<h1><%PROGRESS_BAR%></h1>
+<%ERROR_MESSAGE%>
+<form id="set_pricing_form" name="set_pricing_form" method="post">
+	<input type="hidden" name="review_mode" value="<%REVIEW_MODE%>">
+	<input type="hidden" name="form_type" id="form_type">
+	<input type="submit" id="submit_set_pricing_form" style="display:none;">
+<table class="w100p table" border="0">
+	<tr class="top">
+		<td>
+		   <div id="error_message_div"></div>
+		</td>
+	</tr>
+	<tr class="top">
+		<td>
+		  <div class="frame p10 mb10" <%HIDE_OLD_SITES_CHANNELS%>>
+            <h2 class="pt0">{@Sites / Channels Added Before@}</h2>
+            <img src="<%SITEURL%>images/loading_animation.gif" id="added_channels_table_process"/>
+               <div onload="onAddedChannelsTableLoad();" name="iframe_added_channels" id="iframe_added_channels" width="100%"></div>
+         </div>
+			<div class="frame p10 mb10">
+			   <h2 class="pt0">{@Recently Added Sites / Channels@}</h2>
+				<img src="<%SITEURL%>images/loading_animation.gif" id="recently_added_channels_table_process"/>
+	   			<div onload="onRecentlyAddedChannelsTableLoad();" name="iframe_recently_added_channels" id="iframe_recently_added_channels" width="100%"></div>
+			</div>
+		</td>
+		<!-- td class="w270 pl20">
+			<%CAMPAIGN_SCHEME%>
+		</td -->
+	</tr>
+</table>
+</form>
+<%NAVIGATION_BAR%>

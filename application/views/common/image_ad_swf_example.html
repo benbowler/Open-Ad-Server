@@ -1,0 +1,15 @@
+<script type="text/javascript">
+//<!--
+$(function() {
+	$('#<%ID_SWF_CONTAINER%>').flash({
+		src: '<%SITEURL%>images/jquery_flash/loader_u_<%IMG_W%>x<%IMG_H%>.swf',
+		width: <%IMG_W%>,
+		height: <%IMG_H%>,
+		bgcolor: '<%BGCOLOR%>',
+		flashvars: { banner: '<%SITEURL%>system/files/campaign_creation/<%ID_IMAGE%>', link: '<%DESTINATION_URL%>' }
+	});
+});
+//-->
+</script>		
+   <div style="color:#0000FF; font-family: Arial; font-size:12px; font-style: normal; font-weight: bold;"><%TITLE%></div>
+   <div id="<%ID_SWF_CONTAINER%>"></div>

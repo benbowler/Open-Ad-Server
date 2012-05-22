@@ -1,0 +1,1588 @@
+<link type="text/css" rel="stylesheet" href="<%SITEURL%>/css/campaigns.css"/>
+
+<script type="text/javascript">
+//<!--
+
+var selectedId = '';
+
+var money_format = '<%MONEYFORMAT%>';
+var number_format = '<%NUMBERFORMAT%>';
+var sites_network = <%HAVESITES_NETWORK%>;
+var sites_network_qty = <%HAVESITES_NETWORK_QTY%>;
+
+var dec_digits = new Number(number_format.charAt(0));
+var dot_char = number_format.charAt(1);
+var thousand_separator = number_format.charAt(2);
+
+function str_to_float(float_str){
+    chars = '0123456789'+dot_char+thousand_separator;
+    len = float_str.length;
+    if (len == 0) {
+       return Number.NaN;
+    }
+    digits = 0;
+    dec_part = true;
+    for (i = len-1; i >= 0; i--) {         
+       pos = chars.indexOf(float_str.charAt(i));
+       if (pos == -1) {
+          return Number.NaN;        
+       } else if (pos < 10) {
+          digits ++;
+       } else if (pos == 10) {
+          if (!dec_part) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       } else {
+          if (digits != 3) {
+             return Number.NaN;
+          }
+          dec_part = false;
+          digits = 0;
+       }
+    }
+    float_str = float_str.replace(dot_char, '.');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    float_str = float_str.replace(thousand_separator, '');
+    return new Number(float_str);
+ }
+
+function float_to_str(float_number){      
+    num_string = float_number.toFixed(dec_digits);
+    num_string =  num_string.replace('.', dot_char);
+    pos = num_string.indexOf(dot_char);
+    len = num_string.length;
+    if (pos == -1) {
+       pos = len; 
+    }
+    pos--;
+    digits = 0;
+    num_str = '';      
+    for (i = pos; i >= 0; i-=3) {
+       if (num_str != '') {
+          num_str = thousand_separator+num_str;
+       }
+       start = i-2;
+       if (start < 0) {
+          start = 0;
+       }
+       num_str = num_string.substring(start,i+1)+num_str;
+    }
+    if (pos+1 != len) {
+       num_str = num_str+num_string.substring(pos+1,len);
+    }         
+    return num_str;     
+ }
+
+
+function onSubmit() {
+	   post_checkSitesRequirements();
+}
+
+function post_checkSitesRequirements() {
+   	sitesss = $('#sites_checkbox').attr('checked');
+	   choosed_sites = $('#site_selector_radio').attr('checked');
+	   need_sites = (sitesss && choosed_sites) ? 1 : 0;	   
+	   $.post("<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/check_sites_requirements/"+need_sites,function (data) {
+		   if (!checkAjaxLogin(data)) { 
+			   try {
+                   var response = JSON.parse(data);
+            }
+            catch (e) { 
+            	  alert("Invalid server reply");
+                 return; 
+            } 
+               if (false == response.error_flag) {
+                 $('#form_type').val('save');
+                 $('#select_sites_form').submit();
+               } else
+               {alert(response.error_message)}
+           }
+	   });
+}
+
+function initTree() {
+ $('#categories_tree').treeview({animated: "fast"});
+ $('#categories_tree').removeClass('hide');	
+}
+
+$(function(){
+	   hookDocumentClick('edit_your_bid_container','edit_bid_caller','fast');
+	   hookDocumentClick('edit_your_position_container','edit_position_caller','fast');
+	   
+	   tabs_click('all_sites', 'tab');
+	   
+	   $('#site_selector_action').simpleDialog({
+	      showCloseLabel: true,
+	      width: 1200,
+	      height: 'auto',
+	      callback: updateAddedSitesTable,
+	      open: initTree,
+	      close: updateSitesCount
+	    });	
+	    
+	    if(!sites_network){
+		$('#all_network_radio').attr('CHECKED','CHECKED');
+	    }else{
+		$('#site_selector_radio').attr('CHECKED','CHECKED');
+		$('#site_selector_info').html(sites_network_qty + ' ' + (sites_network_qty>1?'{@sites were selected@}':'{@site was selected@}'));
+		$('#site_selector_about').show();
+	    }
+
+	    if(!$('#sites_checkbox').attr('checked')){
+		//$('#all_network_radio').attr('checked','checked');
+		//$('#site_range_div').hide();
+		 toggle_site_range(true);
+	    }
+	   
+	    $('#categories_tree').treeview({animated: "fast"});
+		$('#categories_tree').removeClass('hide');
+
+		$('#sites_search_query').focus(function(){
+			if (this.value == '{@Start typing here...@}') {
+				this.value = '';
+			}
+		});
+
+		$('#sites_search_query').blur(function(){
+			if (this.value == '') {
+				this.value = '{@Start typing here...@}';
+			}
+		});
+	   
+/*
+	   if(<%ALLPLACES%>) {
+	      $('#all_places_check').attr('checked', 'checked');
+	   } else {
+	      $('#all_places_uncheck').attr('checked', 'checked');
+	   }
+	   
+	   	   
+	   toggle_all_places();
+	   toggle_site_range(true);
+	   
+	   toggle_site_selector(true);
+	   
+	   $('#categories_tree').treeview({animated: "fast"});
+	   $('#categories_tree').removeClass('hide');
+	   updateAddedSitesTable();
+
+
+
+	$('span.editable').css('display', 'block');
+	*/
+});
+
+var old_tab=new Array();
+old_tab['tab'] = '';
+var last_req_category_id;
+var default_bid = str_to_float('<%YOUR_BID_VALUE%>');
+var default_bid_image = str_to_float('<%YOUR_BID_IMAGE_VALUE%>');
+
+function tabs_click(tab, set) {
+	if (old_tab[set] != '') {
+		$('#'+set+'_div_'+old_tab[set]).hide();     
+		$('#'+set+'_'+old_tab[set]).removeClass('sel');               
+		$('#'+set+'_'+old_tab[set]).parent().removeClass('sel');
+	}
+    xcontainer = $('#x-container');
+	//$('#'+set+'_div_'+tab+' .x-container').append(xcontainer);
+	$('#'+set+'_div_'+tab).show();
+	$('#'+set+'_'+tab).addClass('sel');
+	$('#'+set+'_'+tab).parent().addClass('sel');             
+	old_tab[set] = tab;
+	return false;
+}
+
+function set_active_category(id,eItem) {
+	   $('#categories_tree span').removeClass('selected_item');
+	   $(eItem).addClass('selected_item');
+	   reqCategoryDetails(id);
+	}
+
+function reqCategoryDetails(id) {
+    $('#loading_category_details').show();
+    clearCategoryDetails();
+    last_req_category_id = id;
+    
+    $.post("<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/ajax_get_category_details",
+    	    {id_category: id},
+    	    function (data) {
+    	    	if (!checkAjaxLogin(data)) {
+    	    		try {
+    	                 var reply = JSON.parse(data);
+    	            }
+    	         catch (e) { 
+    	             alert("Invalid server reply");
+    	             return; 
+    	         } 
+    	    		if(reply.message == 'OK') {
+    	    			displayCategoryDetails(reply.category_details);
+    	    		} else {
+                  alert(reply.message);
+    	    		}
+    	    		$('#loading_category_details').hide();
+    	    	}
+    	    });
+}
+
+function displayCategoryDetails(details) {
+	if (last_req_category_id == details.id_category) {
+		$("#details_td").show();
+	$("#info_category_description").text(details.description);
+	   $("#info_number_of_sites_in_cat").text(details.sites_in_cat);
+	   $("#info_number_of_sites_in_cat_and_subcat").text(details.sites_in_cat_and_subcat);
+	}
+   
+}
+
+function clearCategoryDetails() {
+	$("#info_category_description").text('');
+   $("#info_number_of_sites_in_cat").text('');
+   $("#info_number_of_sites_in_cat_and_subcat").text(''); 
+}
+
+function onSitesTableLoad() {
+
+    var container = $('#sites_container');
+    if(!checkAjaxLogin(container.html())) {
+       replaceFormButtons(container.document); 
+       parseTables(container);
+       UpdateAddedSitesInfo();
+       $('#sites_table_process').hide();
+       highlightUnavailableBids();
+       container.show();
+       $('#sitesToolbar, #hintSites').removeClass('hide');
+    }
+    
+}
+
+function onAddedSitesTableLoad() {
+	var container = $('#added_sites_container');
+	
+	if(!checkAjaxLogin(container.html())) {
+		replaceFormButtons(container.document); 
+		parseTables(container);
+		UpdateAddedSitesInfo(container);
+		highlightUnavailableBidsAddedSites();
+		$('#added_sites_table_process').hide();
+		container.show();
+
+		$('tr[id_site]', $('#added_sites_cpc_form')).css('height', '55px');
+		
+		$('tr[id_site]', $('#added_sites_cpc_form')).hover(
+			function(el){
+				if ($('#edit_your_bid_container:visible').length == 0 && $('#edit_your_position_container:visible').length == 0) {
+					$('tr.grayed').removeClass('grayed');
+					$(this).addClass('grayed');
+					selectedId = $(this).attr('id_site');
+				}
+			}, 
+			function(el){
+				if ($('#edit_your_bid_container:visible').length == 0 && $('#edit_your_position_container:visible').length == 0) {
+					if (el.relatedTarget)
+						if($(el.relatedTarget.offsetParent).hasClass('.xTable') && !$(el.relatedTarget.parentNode).hasClass('.th'))
+							$(this).removeClass('grayed');
+				}
+			}
+		).click(function(){
+			if ($('#edit_your_bid_container:visible').length == 0 && $('#edit_your_position_container:visible').length == 0) {
+				$('tr.grayed').removeClass('grayed');
+				$(this).addClass('grayed');
+				selectedId = $(this).attr('id_site');
+			}
+		});
+	}
+}
+
+function getSitesByCategory() {
+	
+	if (last_req_category_id==undefined) {
+		if (false == $("#categories_container").hasClass('invalidfield')) {
+		     $("#categories_container").addClass('invalidfield').after('<p class="errorP">{@Choose Category to show sites from!@}</p>');
+		    }
+		return;
+	} else {
+		if ($("#categories_container").hasClass('invalidfield')) {
+	       $("#categories_container").removeClass('invalidfield').next('p.errorP:first').remove();
+	     }
+	}
+
+	$('#sites_table_process').show();
+	var sites_container = $("#sites_container");
+	sites_container.hide();
+	sites_container.attr('src','#');
+	sites_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/search_sites"><input id="submit" type="submit"><input id="filter_mode" name="filter_mode"><input id="id_category" name="id_category"><input id="subcats_input" name="include_subcats"></form>');
+	sites_container.find("#filter_mode").val('by_category');
+	sites_container.find("#id_category").val(last_req_category_id);
+	sites_container.find("#subcats_input").val($('#get_sites_with_subcats:checked').size() > 0);
+	sites_container.activateJFrame();
+	sites_container.find("#submit").click(); 
+ }
+
+function getAllSites() {
+	$('#sites_table_process').show();
+	var sites_container = $("#sites_container");
+	sites_container.hide();
+	sites_container.attr('src','#');
+	sites_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/search_sites"><input id="submit" type="submit"><input id="filter_mode" name="filter_mode"></form>');
+	sites_container.find("#filter_mode").val('all');
+	sites_container.activateJFrame();
+	sites_container.find("#submit").click(); 
+ }
+
+
+function addSiteToGroup(id_site) {
+	$.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/add_site_to_group',
+			{id_site: id_site},
+			function(data) {
+			    if (!checkAjaxLogin(data)) {
+			    try {
+	                	var reply = JSON.parse(data);
+    	                    }catch (e) { 
+    	                	alert("Invalid server reply");
+	                	return; 
+	            	    } 
+		               if(reply.message == 'OK') {
+			               updateAddedSitesTable();
+		               } else {
+		                  alert(reply.message);
+		               }
+		            }
+				
+			});
+}
+
+function addAllSitesToGroup() {
+	   var sites_id = [];
+
+	   $('#sites_container').find('tr[id_site]:has(td:not(span.added_label))').each(function () {
+		   sites_id[sites_id.length] = $(this).attr('id_site');
+	   });
+
+
+		if (sites_id.length > 0) {
+		   $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/add_sites_to_group',
+		         {sites_id: JSON.stringify(sites_id)},
+		         function(data) {
+		            if (!checkAjaxLogin(data)) {
+		            	try {
+		                       var reply = JSON.parse(data);
+		                  }
+		               catch (e) { 
+		                   alert("Invalid server reply");
+		                   return; 
+		               } 
+		                     if(reply.message == 'OK') {
+		                        updateAddedSitesTable();
+		                     } else {
+		                        alert(reply.message);
+		                        updateAddedSitesTable();
+		                     }
+		                  }
+		            
+		         });
+		}
+	}
+
+function delSiteFromGroup(id_site) {
+	  if (!confirm('{@Are you sure to delete this site from Selected Sites?@}')) {
+	      return;
+	   }
+	   $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/del_site_from_group',
+	         {id_site: id_site},
+	         function(data) {
+	            if (!checkAjaxLogin(data)) {
+	            	      try {
+	            	    	  var reply = JSON.parse(data);
+	            	      }
+	            	      catch (e) { 
+	            	    	   alert("Invalid server reply");
+	            	    	   return; 
+	            	    	} 
+	                     if(reply.message == 'OK') {
+	                    	 $('#added_sites_container').find('tr[id_site='+id_site+']').remove();
+	                    	 if($('#added_sites_container').find('tr[id_site]').size() == 0) {
+	                    		 $('#added_sites_container').find('td.nodata').show();
+	                    	 }
+	                    	 UpdateAddedSitesInfo();
+	                     } else {
+	                        alert(reply.message);
+	                     }
+	                  }
+	            
+	         });
+	}
+
+function updateAddedSitesTable() {
+	$('#added_sites_table_process').show();
+	$("#added_sites_container").hide().loadJFrame('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/get_added_sites');
+}
+
+function UpdateAddedSitesInfo() {
+	   added_sites_ids = [];
+	   not_added_sites_exist = false;
+	   
+	   $('#added_sites_container').find('tr[id_site]').each(function () {
+	      added_sites_ids[$(this).attr('id_site')] = true;
+	   });
+
+	   $("#sites_container").find('tr[id_site]').each(function () {
+	      var id_site = $(this).attr('id_site');
+	      $(this).find('a').each(function () {
+	         if ($(this).hasClass('guibutton')) {
+	            if (added_sites_ids[id_site]) {
+	               if($(this).parent().find('span.added_label').length == 0) {
+	                     $(this).parent().append('<span class="added_label">{@Site_Added@}</span>');
+	               }
+	               $(this).hide();
+	            } else {
+	               $(this).parent().find('span.added_label').remove();
+	               $(this).show();
+	               not_added_sites_exist = true;
+	            }
+	         }
+	      });
+	   });
+
+	   if (not_added_sites_exist) {
+		   $('#add_all_sites_btn').guiEnable();
+	   } else {
+		   $('#add_all_sites_btn').guiDisable();
+	   }
+	}
+
+function getSitesByName() {
+	   var id_site = [];
+	    var options = $("#sites_choose option");
+	       if (options.length > 0) {
+	             for (var i = 0; i < options.length; i++) {
+	                id_site[i] = options[i].value;
+	             }
+	          if ($("#sites_choose_error_div").hasClass('invalidfield')) {
+	              $("#sites_choose_error_div").removeClass('invalidfield').next('p.errorP:first').remove();
+	          }
+	       } else {
+	         if (false == $("#sites_choose_error_div").hasClass('invalidfield')) {
+	          $("#sites_choose_error_div").addClass('invalidfield').after('<p class="errorP">{@Choose at least one site!@}</p>');
+	         }
+	         return false;
+	       }
+
+	    $('#sites_table_process').show();
+	    
+	    var sites_container = $("#sites_container");
+	    sites_container.hide();   
+	    sites_container.attr('src','#');
+	    sites_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/search_sites"><input id="submit" type="submit"><input id="filter_mode" name="filter_mode"><input id="id_site" name="id_site"></form>');
+	    sites_container.find("#filter_mode").val('by_name');
+	    sites_container.find("#id_site").val(id_site);
+	    sites_container.activateJFrame();
+	    sites_container.find("#submit").click(); 
+	}
+
+var oldSearchMask = '*';
+
+function fillSitesSearchList() {
+   if ($('#sites_fill_process').is(':visible')) {
+      return;
+   }
+   mask = $("#sites_search_query").val();
+   oldSearchMask = mask;
+   $('#sites_fill_process').show();
+
+   $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/search_sites_by_name',{mask: mask},
+		   function (data) {
+	       if (!checkAjaxLogin(data)) {
+	    	   fillSitesSearchResponse(data);
+	       }
+		   });
+}
+
+function fillSitesSearchResponse(data) {
+         $('#sites_list').removeOption(/./);
+         try {
+             var response = JSON.parse(data);
+        }
+     catch (e) { 
+         alert("Invalid server reply");
+         return; 
+     } 
+
+         if (response != null) {
+            if (response.list != null) {
+               for (var i = 0; i < response.list.length; i++) {
+                  $("#sites_list").addOption(response.list[i].id_site, response.list[i].name + ' ('+ response.list[i].url + ')');
+               }
+            }
+            $('#sites_fill_process').hide();
+         }
+         mask = $("#sites_search_query").val();
+         if (mask != oldSearchMask) {
+            fillSitesSearchList();
+         }
+}
+
+function addToChoosedSites() {     
+    var selected_entities = $("#sites_list").selectedOptions();
+    if (selected_entities.length > 0) {
+       for (i = 0; i < selected_entities.length; i++) {
+          if ($("#sites_choose").containsOption(selected_entities[i].value) == false)
+          {
+             $("#sites_choose").addOption(selected_entities[i].value,selected_entities[i].text);
+          }
+       }
+       $("#sites_choose").sortOptions();
+       $("#sites_choose").find('option[selected]').removeAttr('selected');
+       $("#sites_list").removeOption(/./, true); // remove all options that have been selected
+    }
+     return false;
+ }
+ 
+function addToChoosedSitesAll() {     
+     var selected_entities = $("#sites_list").copyOptions($("#sites_choose"), 'all');
+     $("#sites_choose").sortOptions().selectOptions(/./,true);
+     $("#sites_list").removeOption(/./);
+     return false;
+     
+ }
+ 
+function removeFromChoosedSites() {
+    var selected_entities = $("#sites_choose").selectedOptions();
+    if (selected_entities.length > 0) {
+       for (i = 0; i < selected_entities.length; i++) {
+          if ($("#sites_list").containsOption(selected_entities[i].value) == false)
+          {
+             $("#sites_list").addOption(selected_entities[i].value,selected_entities[i].text);
+          }
+       }
+       $("#sites_list").sortOptions();
+       $("#sites_list").find('option[selected]').removeAttr('selected');
+       $("#sites_choose").removeOption(/./, true); // remove all options that have been selected
+    }
+     return false;
+}
+function removeFromChoosedSitesAll() {
+     var selected_entities = $("#sites_choose").copyOptions($("#sites_list"), 'all');
+     $("#sites_list").sortOptions().selectOptions(/./,true);
+     $("#sites_choose").removeOption(/./);
+     return false;
+}
+
+function UpdatePriceField(id) {
+    var price_val;
+    price_val = str_to_float($('#'+id).val());
+    $('#'+id).val(float_to_str(price_val));
+ }
+
+function getSitesByPrice() {
+    var price;
+    price = $('#price_filter').val();
+
+    var cpc_bid_type = $('#cpc_bid_type').val(); 
+     if (isNaN(str_to_float(price))) {
+        if (false == $('#price_filter').hasClass('invalidfield')) {
+          $('#price_filter').addClass('invalidfield').after('<p class="errorP">{@Incorrect price value specified!@}</p>');   
+        }
+        $('#price_filter').focus();
+        return false;
+     } else {
+       UpdatePriceField('price_filter');
+       if ($('#price_filter').hasClass('invalidfield')) {
+           $('#price_filter').removeClass('invalidfield').next('p.errorP:first').remove();
+         }
+     }
+
+     $('#sites_table_process').show();
+     
+     var sites_container = $("#sites_container"); 
+     sites_container.hide(); 
+     sites_container.attr('src','#');
+     sites_container.html('<form method="post" style="display:none;" action="<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/search_sites"><input id="submit" type="submit"><input id="filter_mode" name="filter_mode"><input id="price" name="price"><input id="cpc_bid_type" name="cpc_bid_type"></form>');
+     sites_container.find("#filter_mode").val('by_price');
+     sites_container.find("#price").val(price);
+     sites_container.find("#cpc_bid_type").val(cpc_bid_type);
+     sites_container.activateJFrame();
+     sites_container.find("#submit").click();
+ }
+
+function updateYourBid() {
+
+	var textBidContainer = $('#your_bid');
+	var textUpdateFieldName = 'your_bid';
+	var imgBidContainer = $('#your_bid_image');
+	var imgUpdateFieldName = 'your_bid_image';
+
+	var textPrice = textBidContainer.val();
+	var textPriceFloat = str_to_float(textPrice);
+	var imgPrice = imgBidContainer.val();
+	var imgPriceFloat = str_to_float(imgPrice);
+
+    if (isNaN(textPriceFloat)) {
+       if (false == textBidContainer.hasClass('invalidfield')) {
+          textBidContainer.addClass('invalidfield').after('<p class="errorP">{@Incorrect price value specified!@}</p>');
+       }
+       textBidContainer.focus();
+
+       return false;
+    }
+
+    if (isNaN(imgPriceFloat)) {
+       if (false == imgBidContainer.hasClass('invalidfield')) {
+          imgBidContainer.addClass('invalidfield').after('<p class="errorP">{@Incorrect price value specified!@}</p>');
+       }
+       imgBidContainer.focus();
+
+       return false;
+    }
+
+    if (textBidContainer.hasClass('invalidfield')) {
+       textBidContainer.removeClass('invalidfield').next('p.errorP:first').remove();
+    }
+
+    if (imgBidContainer.hasClass('invalidfield')) {
+       imgBidContainer.removeClass('invalidfield').next('p.errorP:first').remove();
+    }
+
+    $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_default_bid',
+       {text_bid: textPrice, img_bid: imgPrice},
+       function(data) {
+       if (!checkAjaxLogin(data)) {
+          try {
+             var response = JSON.parse(data);
+          } catch (e) { 
+             alert("Invalid server reply");
+             return; 
+          } 
+
+          if (response.messages != '') {
+             alert(response.messages);
+          }  
+
+          if (response.textBid.status != 'ok') {
+  		     textBidContainer.focus();
+  		     textBidContainer.addClass('invalidfield');
+          } else {
+        	  UpdatePriceField(textUpdateFieldName);
+
+        	  $("#added_sites_container").find("span.default_value").filter('.cell_bid_text').text(response.textBid.value);
+
+        	  $.each(response.sites.textBid,function(id_site,n) {
+                 var site_row = $("#added_sites_container").find("tr[id_site="+id_site+"]");
+              	 if (site_row.find("span.default_value").filter('.cell_bid_text').size() > 0) {
+              	    site_row.find("span.cell_position_value").text(n.cell_position_value);
+              	    site_row.find("span.cell_position_text").text(n.cell_position_text);
+                 }
+          	  });
+          }
+
+          
+	  default_bid = str_to_float($('#your_bid').val());
+	  default_bid_image = str_to_float($('#your_bid_image').val());
+
+
+
+
+          if (response.imgBid.status != 'ok') {
+    		     imgBidContainer.focus();
+    		     imgBidContainer.addClass('invalidfield');
+          } else {
+        	  UpdatePriceField(imgUpdateFieldName);
+
+        	  $("#added_sites_container").find("span.default_value").filter('.cell_image_bid_text').text(response.imgBid.value);
+
+        	  $.each(response.sites.imgBid,function(id_site,n) {
+                  var site_row = $("#added_sites_container").find("tr[id_site="+id_site+"]");
+               	  if (site_row.find("span.default_value").filter('.cell_image_bid_text').size() > 0) {
+               	    site_row.find("span.cell_image_position_value").text(n.cell_position_value);
+               	    site_row.find("span.cell_image_position_text").text(n.cell_position_text);
+                  }
+           	  });
+          }
+
+          highlightUnavailableBids();
+          highlightUnavailableBidsAddedSites();
+       }
+       }
+   );
+}
+
+function highlightUnavailableBids() {
+	var sites_rows = $('#sites_container').find('tr[id_site]'); 
+	if (sites_rows.size() > 0) {
+		sites_rows.each(function() {
+
+			var site_bid = str_to_float($(this).find('span.min_bid_value').text());
+	     
+	     
+	      var site_bid_image = str_to_float($(this).find('span.min_image_bid_value').text());
+	      if ((default_bid < site_bid) && (default_bid_image < site_bid_image)) {
+              $(this).addClass('deleted_row');
+			} else {
+              $(this).removeClass('deleted_row');
+			}
+		});
+}
+}
+
+function highlightUnavailableBidsAddedSites() {
+	   $('#added_sites_container tr[id_site]').each(
+	      function () {
+	            var site_bid_value = $(this).find('span.min_bid_value');
+	            var site_image_bid_value = $(this).find('span.min_image_bid_value');
+
+		            var site_bid = str_to_float(site_bid_value.text());
+	            var site_image_bid = str_to_float(site_image_bid_value.text());
+
+	            var span_your_bid = $(this).find('span.cell_bid_text');
+	            var span_your_bid_image = $(this).find('span.cell_image_bid_text');
+		            
+	            if (span_your_bid.hasClass('default_value')) {
+	               var your_bid = default_bid;   
+	            } else {
+	               var your_bid_value = $(this).find('span.cell_bid_value');
+                       var your_bid = str_to_float(your_bid_value.text());
+	            }
+
+	            if (span_your_bid_image.hasClass('default_value')) {
+	                var your_image_bid = default_bid_image;   
+	            } else {
+	                var your_image_bid_value = $(this).find('span.cell_image_bid_value');
+	                var your_image_bid = str_to_float(your_image_bid_value.text());
+	            }
+	            
+	            if ((your_bid < site_bid) && (your_image_bid < site_image_bid)) {
+		                  $(this).addClass('deleted_row');
+		            } else {
+		                  $(this).removeClass('deleted_row');
+		            }
+	         }
+	   );
+	 }
+
+function showSiteBidEditor(id_site,bid_type,sender) {
+   switch (bid_type) {
+      case 'text':
+          var class_bid_value = 'cell_bid_value';
+	   break;
+      case 'image':
+    	    var class_bid_value = 'cell_image_bid_value';
+      break;
+      default:
+          return false;
+	}
+
+
+	$('tr.grayed').removeClass('grayed');
+	$('tr[id_site='+id_site+ ']').addClass('grayed');
+	selectedId = id_site;
+
+	$(sender).addClass('edit_bid_caller');
+	$("#edit_your_bid_container").find("#site_id").val(id_site);
+	$("#edit_your_bid_container").find("#bid_type").val(bid_type);
+	$('#new_bid').val($("#added_sites_container").find("tr[id_site="+id_site+"]").find("span."+class_bid_value).text());
+	showContainer('edit_your_bid_container', sender);
+	$('#new_bid').focus();
+	return false;
+}
+
+function showSitePostionEditor(id_site,position_type,sender) {
+
+	switch (position_type) {
+    case 'text':
+    	var class_position_value = 'cell_position_value';
+    break;
+    case 'image':
+    	var class_position_value = 'cell_image_position_value';
+    break;
+    default:
+        return false;
+   }
+
+	$('tr.grayed').removeClass('grayed');
+	$('tr[id_site='+id_site+ ']').addClass('grayed');
+	selectedId = id_site;
+
+		$(sender).addClass('edit_position_caller');
+	   $("#edit_your_position_container").find("#site_id").val(id_site);
+	   $("#edit_your_position_container").find("#position_type").val(position_type);
+	   $('#new_position').val($("#added_sites_container").find("tr[id_site="+id_site+"]").find("span."+class_position_value).text());
+	   $('#edit_your_position_container').show();
+	   showContainer('edit_your_position_container', sender);
+	   $('#new_position').focus();
+	   return false;
+	}
+
+function updateSiteBid() {
+	
+	var price;
+	var id_sites = [];
+   var bid_type = $("#edit_your_bid_container").find("#bid_type").val();
+
+	id_sites[0] = $("#edit_your_bid_container").find("#site_id").val();
+	
+   price = $('#new_bid').val();
+
+   
+     if ((price != '') && (isNaN(str_to_float(price)))) {
+        if (false == $('#new_bid').hasClass('invalidfield')) {
+          $('#new_bid').addClass('invalidfield').after('<p class="errorP">{@Incorrect price value specified!@}</p>');    
+        }
+        $('#new_bid').focus();
+        return false;
+     } 
+
+     if (price != '') { 
+       UpdatePriceField('new_bid');
+     }
+       if ($('#new_bid').hasClass('invalidfield')) {
+           $('#new_bid').removeClass('invalidfield').next('p.errorP:first').remove();
+         }
+
+       $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_bid',
+    	       {new_bid: price, bid_type: bid_type, id_sites: JSON.stringify(id_sites)},
+    	       function(data) {
+        	      if (!checkAjaxLogin(data)) {
+        	    	  try {
+                          var response = JSON.parse(data);
+                     }
+                  catch (e) { 
+                      alert("Invalid server reply");
+                      return false; 
+                  } 
+
+                  if (response.message != '') {
+                      alert(response.message);
+                   }
+                  
+                  if (response.result != 'OK') {
+                      return false;
+                  }
+
+                  
+                 switch (bid_type) {
+                  case 'text':
+                      var class_cell_bid_value = 'cell_bid_value';
+                      var class_cell_bid_text = 'cell_bid_text';
+                      var class_cell_position_value = 'cell_position_value';
+                      var class_cell_position_text = 'cell_position_text';
+                  break;
+                  case 'image':
+                      var class_cell_bid_value = 'cell_image_bid_value';
+                      var class_cell_bid_text = 'cell_image_bid_text';
+                      var class_cell_position_value = 'cell_image_position_value';
+                      var class_cell_position_text = 'cell_image_position_text';
+                  break;
+               }
+                  
+                  
+            	  $.each(response.updated_values, function(id_site,new_bid_info) {
+                	  var site_row = $("tr[id_site="+id_sites[0]+"]","#added_sites_container");
+                	  var span_cell_bid_text = site_row.find("span."+class_cell_bid_text);
+                	  site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+                	  span_cell_bid_text.text(new_bid_info.cell_text);
+                	  site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+                	  site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+            		  if (new_bid_info.is_default_bid) {
+            			  span_cell_bid_text.addClass('default_value');
+            			  span_cell_bid_text.removeClass('custom_value');
+            			  
+            		  }
+            		  else {
+            			  span_cell_bid_text.addClass('custom_value');
+            			  span_cell_bid_text.removeClass('default_value');
+            		  }
+            	  });
+            	  hideContainer('edit_your_bid_container');
+        	    	  highlightUnavailableBidsAddedSites();      
+        	      } 
+        	    });
+	    return false;
+}
+
+function cancelSiteBid() {
+
+    if ($('#new_bid').hasClass('invalidfield')) {
+        $('#new_bid').removeClass('invalidfield').next('p.errorP:first').remove();
+    }
+	hideContainer('edit_your_bid_container');
+	
+	return true;
+}
+
+function isInteger (s)
+{
+   var i;
+
+   if (isEmpty(s))
+   if (isInteger.arguments.length == 1) return 0;
+   else return (isInteger.arguments[1] == true);
+
+   for (i = 0; i < s.length; i++)
+   {
+      var c = s.charAt(i);
+
+      if (!isDigit(c)) return false;
+   }
+
+   return true;
+}
+
+function isEmpty(s)
+{
+   return ((s == null) || (s.length == 0))
+}
+
+function isDigit (c)
+{
+   return ((c >= "0") && (c <= "9"))
+}
+
+function updateSitePosition() {
+	   var price;
+	   var id_sites = [];
+
+	   var position_type = $("#edit_your_position_container").find("#position_type").val();
+	   
+	   id_sites[0] = $("#edit_your_position_container").find("#site_id").val();
+
+	   var position_integer = $('#new_position').val();
+	   if (!isInteger(position_integer)) {
+		   position_integer = 0;
+	   }
+	   
+	     if (position_integer < 1) {
+	        if (false == $('#new_position').hasClass('invalidfield')) {
+	          $('#new_position').addClass('invalidfield').after('<p class="errorP">{@Incorrect position value specified!@}</p>');   
+	        }
+	        $('#new_position').focus();
+	        return false;
+	     } 
+
+	       if ($('#new_position').hasClass('invalidfield')) {
+	           $('#new_position').removeClass('invalidfield').next('p.errorP:first').remove();
+	         }
+	       
+	       $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_position',
+	             {new_position: position_integer, position_type: position_type, id_sites: JSON.stringify(id_sites)},
+	             function(data) {
+	               if (!checkAjaxLogin(data)) {
+	            	   try {
+	                       var response = JSON.parse(data);
+	                  }
+		               catch (e) { 
+		                   alert("Invalid server reply");
+		                   return; 
+		               } 
+
+		               if (response.message != '') {
+		                   alert(response.message);
+		              }
+		                 
+		              if (response.result != 'OK') {
+		                   return false;
+		              }
+
+		              switch (position_type) {
+	                  case 'text':
+	                      var class_cell_bid_value = 'cell_bid_value';
+	                      var class_cell_bid_text = 'cell_bid_text';
+	                      var class_cell_position_value = 'cell_position_value';
+	                      var class_cell_position_text = 'cell_position_text';
+	                  break;
+	                  case 'image':
+	                      var class_cell_bid_value = 'cell_image_bid_value';
+	                      var class_cell_bid_text = 'cell_image_bid_text';
+	                      var class_cell_position_value = 'cell_image_position_value';
+	                      var class_cell_position_text = 'cell_image_position_text';
+	                  break;
+	                 }
+		              
+	                 $.each(response.updated_values, function(id_site,new_bid_info) {
+		                var site_row = $("tr[id_site="+id_sites[0]+"]","#added_sites_container");
+		                site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+		                site_row.find("span."+class_cell_bid_text).text(new_bid_info.cell_text);
+		                site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+		                site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+		                site_row.find("span."+class_cell_bid_text).removeClass('default_value');
+		                site_row.find("span."+class_cell_bid_text).addClass('custom_value');
+	                 });
+	                 hideContainer('edit_your_position_container');
+	                 highlightUnavailableBidsAddedSites();      
+	               } 
+	             });
+	       return false;
+	}
+
+function cancelSitePosition() {
+    if ($('#new_position').hasClass('invalidfield')) {
+        $('#new_position').removeClass('invalidfield').next('p.errorP:first').remove();
+    }
+	hideContainer('edit_your_position_container');
+	return true;
+}
+
+function updateAllSitesBid(id_site, bid_type) {
+ switch (bid_type) {
+    case 'text':
+       var class_bid_value = 'cell_bid_value'; 
+    break;
+    case 'image':
+       var class_bid_value = 'cell_image_bid_value'; 
+    break;
+    default:
+        return true;
+ }
+	
+ if (!confirm('{@Are you sure to change bid for all Selected Sites?@}')) {
+	 return true;
+ }
+	
+ 
+	
+ var price = $("tr[id_site="+id_site+"]","#added_sites_container").find("span."+class_bid_value).text();
+ var id_sites = [];
+
+ $("tr[id_site]:not([id_site="+id_site+"])","#added_sites_container").each(function() {
+	 id_sites[id_sites.length] = $(this).attr('id_site');
+ });
+
+ $.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_bid',
+         {new_bid: price, bid_type: bid_type, id_sites: JSON.stringify(id_sites)},
+         function(data) {
+           if (!checkAjaxLogin(data)) {
+        	   try {
+                   var response = JSON.parse(data);
+              }
+	           catch (e) { 
+	               alert("Invalid server reply");
+	               return; 
+	           } 
+
+	           if (response.message != '') {
+                   alert(response.message);
+              }
+                 
+              if (response.result != 'OK') {
+                   return false;
+              }
+
+              switch (bid_type) {
+	              case 'text':
+	                  var class_cell_bid_value = 'cell_bid_value';
+	                  var class_cell_bid_text = 'cell_bid_text';
+	                  var class_cell_position_value = 'cell_position_value';
+	                  var class_cell_position_text = 'cell_position_text';
+	              break;
+	              case 'image':
+	                  var class_cell_bid_value = 'cell_image_bid_value';
+	                  var class_cell_bid_text = 'cell_image_bid_text';
+	                  var class_cell_position_value = 'cell_image_position_value';
+	                  var class_cell_position_text = 'cell_image_position_text';
+	              break;
+              }
+	           
+             $.each(response.updated_values, function(id_site,new_bid_info) {
+                 var site_row = $("tr[id_site="+id_site+"]","#added_sites_container");
+                 var span_cell_bid_text = site_row.find("span."+class_cell_bid_text);
+                 site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+                 span_cell_bid_text.text(new_bid_info.cell_text);
+                if (new_bid_info.is_default_bid) {
+                	span_cell_bid_text.addClass('default_value');
+                	span_cell_bid_text.removeClass('custom_value');
+                }
+                else {
+                	span_cell_bid_text.addClass('custom_value');
+                	span_cell_bid_text.removeClass('default_value');
+                }
+
+                site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+                site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+                
+             });
+             highlightUnavailableBidsAddedSites();   
+           } 
+         });
+}
+
+function updateAllSitesPosition(id_site, position_type) {
+		switch (position_type) {
+	    case 'text':
+	       var class_position_value = 'cell_position_value'; 
+	    break;
+	    case 'image':
+	       var class_position_value = 'cell_image_position_value'; 
+	    break;
+	    default:
+	        return true;
+	 }
+	 
+	 if (!confirm('{@Are you sure to change bid for all Selected Sites?@}')) {
+	    return true;
+	 }
+	   
+	 var position = $("#added_sites_container").find("tr[id_site="+id_site+"]").find("span."+class_position_value).text();
+	 var id_sites = [];
+
+	 $("#added_sites_container").find("tr[id_site]:not([id_site="+id_site+"])").each(function() {
+	    id_sites[id_sites.length] = $(this).attr('id_site');
+	 });
+
+	$.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/update_sites_position',
+	         {new_position: position, position_type: position_type,id_sites: JSON.stringify(id_sites)},
+	         function(data) {
+	           if (!checkAjaxLogin(data)) {
+	        	   try {
+                       var response = JSON.parse(data);
+                  }
+               catch (e) { 
+                   alert("Invalid server reply");
+                   return; 
+               } 
+
+               if (response.message != '') {
+                   alert(response.message);
+               }
+                 
+               if (response.result != 'OK') {
+                   return false;
+               }
+              
+               switch (position_type) {
+	               case 'text':
+	                   var class_cell_bid_value = 'cell_bid_value';
+	                   var class_cell_bid_text = 'cell_bid_text';
+	                   var class_cell_position_value = 'cell_position_value';
+	                   var class_cell_position_text = 'cell_position_text';
+	               break;
+	               case 'image':
+	                   var class_cell_bid_value = 'cell_image_bid_value';
+	                   var class_cell_bid_text = 'cell_image_bid_text';
+	                   var class_cell_position_value = 'cell_image_position_value';
+	                   var class_cell_position_text = 'cell_image_position_text';
+	               break;
+               }
+              
+	             $.each(response.updated_values, function(id_site,new_bid_info) {
+		             var site_row = $("tr[id_site="+id_site+"]","#added_sites_container");
+		             var span_bid_text = site_row.find("span."+class_cell_bid_text);
+		             site_row.find("span."+class_cell_bid_value).text(new_bid_info.cell_value);
+		             span_bid_text.text(new_bid_info.cell_text);
+		             site_row.find("span."+class_cell_position_value).text(new_bid_info.cell_position_value);
+		             site_row.find("span."+class_cell_position_text).text(new_bid_info.cell_position_text);
+
+		             span_bid_text.removeClass('default_value');
+		             span_bid_text.addClass('custom_value');
+	             });
+	             highlightUnavailableBidsAddedSites();   
+	           } 
+	         });
+	}
+
+	function toggle_site_range(init){
+		checked = $('#sites_checkbox').attr('checked');
+		$('#site_range_div').toggleClass('hide', !checked);
+		$('input,label,a', '#bids_div').toggleClass('disabled', !checked);
+		
+		if (init) return;
+		
+		if(!checked){
+		    $('#all_network_radio').attr('checked', true);
+		    toggle_site_selector(false);
+		}
+		
+		siteselector = $('#site_selector_radio').attr('checked');
+		if (siteselector) {
+		   tag = 'sites';
+		   updateSitesCount()
+		   toggle_site_selector(true);
+		} else {
+		   tag = 'allsites';
+		   toggle_site_selector(false);
+		}
+		$.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/toggle_place/'+(checked?1:0) + '/'+tag);	    					
+	}
+
+	function toggle_place(place) {
+		checked = $('#'+place+'_checkbox').attr('checked');
+		$.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/toggle_place/'+(checked?1:0)+'/'+place);
+	}
+
+	function toggle_site_selector(show){
+		if (show){
+			$('#site_selector_about').show();
+		} else {
+			$('#site_selector_about').hide();
+		}		
+	}
+
+	function all_places(){
+		$('#all_network_radio').attr('checked', 'checked');
+		$('#sites_checkbox').attr('checked', 'checked');
+		$('#domains_checkbox').attr('checked', 'checked');
+		$('#intext_checkbox').attr('checked', 'checked');
+		$('#searches_checkbox').attr('checked', 'checked');
+		toggle_site_range(true);
+		toggle_site_selector(true);
+		$.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/all_places');
+	}
+
+	function toggle_all_places(){
+		if($('#all_places_check').attr('checked')){			
+			$('#places_div').addClass('hide');
+			$('#site_selector').addClass('hide');			      
+	      $('#all_network_radio').attr('checked', 'checked');
+	      $('#sites_checkbox').attr('checked', 'checked');
+	      $('#domains_checkbox').attr('checked', 'checked');
+	      $('#intext_checkbox').attr('checked', 'checked');
+	      $('#searches_checkbox').attr('checked', 'checked');
+	      toggle_site_range(true);
+	      toggle_site_selector(true);
+			$.post('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/all_places');
+		} else {
+         $('#places_div').removeClass('hide');
+         toggle_site_selector(false);
+         updateAddedSitesTable();
+		}
+	}
+	
+
+    function site_selector_action(){
+	updateAddedSitesTable();	
+    }	
+    
+    function updateSitesCount(){
+	$('#site_selector_info').load('<%SITEURL%><%INDEXPAGE%>advertiser/create_campaign_step_select_sites/getSitesCount');
+    }
+	
+	
+//-->
+</script>
+
+<%FORM_TITLE%> <%PROGRESS_BAR%> <%NOTIFICATION%>
+<form name="select_sites_form" id="select_sites_form" method="post">
+   <div id="error_message_div"></div>
+<input type="hidden" id="review_mode" name="review_mode" value="<%REVIEW_MODE%>">
+<input type="hidden" name="form_type" id="form_type"> 
+<input type="hidden" name="dummy">
+
+	
+   <div id="tab2_div_custom">
+       <div class="frame p10">
+
+           <h1 style="margin-left: 32px">{@Placements@}</h1>
+
+
+           <div id="places_div" class="pl20 pt20"> 
+           <!-- new -->
+
+               <div class="site_place" >
+<label><input id="sites_checkbox" type="checkbox" name="sites" onclick="toggle_site_range(false);"<%SITESCHECKED%>/> 
+{@Content Network@}</label>
+                   <div class="example allnetwork">
+
+                       <div id="site_range_div" style="padding-top: 165px;">
+                           <div>
+											<label><input type="radio" id="all_network_radio" name="sites_range" value="allsites" checked="checked"<%ALLSITESCHECKED%> onclick="toggle_site_range(false);"> {@Entire network@}</label> 
+<label><input type="radio" id="site_selector_radio" name="sites_range" value="selected"<%CHOOSEDSITESCHECKED%> onclick="toggle_site_range(false);"> {@Managed placements@}</label></div>
+
+									<div id="site_selector_about" class="hide pt10" style="padding-left: 15px">
+									    <a href="#" class="action" onClick="site_selector_action(); return false;"  id="site_selector_action" rel="site_selector">Add placements</a>
+									    <div id="site_selector_info">
+									       {@no placements were selected@}
+									    </div>
+                           </div>
+
+
+                       </div>
+
+
+</div>
+                    </div>
+						  
+
+               <%PLUGINPLACES%>
+
+</form>
+               <div style="clear:both"></div>
+           <!-- end new -->
+
+
+           </div>
+
+
+<div id="site_selector" class="hide frame" style="width:1000px;height:600px">
+<div class="up_arrow first_place"></div>
+<table class="w100p mt20">
+	<tr class="top">
+		<td class="w500">
+		<div class="tabsPanel"><span> <a id="tab_all_sites"
+			href="#" onclick="return tabs_click('all_sites', 'tab');">{@All
+		Sites@}</a> </span> <span> <a id="tab_by_category" href="#"
+			onclick="return tabs_click('by_category', 'tab');">{@By
+		Category@}</a> </span> <span> <a id="tab_by_site_name" href="#"
+			onclick="return tabs_click('by_site_name', 'tab');">{@By Site
+		Name@}</a> </span> <span> <a id="tab_by_price" href="#"
+			onclick="return tabs_click('by_price', 'tab');">{@By Price@}</a> </span></div>
+		<div class="tabdiv hide" id='tab_div_all_sites'>
+		<div class="filterBox p10">
+		<table class="w100p">
+			<tr>
+				<td>
+				<button class="button" onclick="getAllSites();">{@Display
+				sites@}</button>
+				</td>
+				<td>
+				<div class="mt10 mb10 hintBox">{@CPC_Select_All_Sites_Hint@}</div>
+				</td>
+			</tr>
+		</table>
+		</div>
+		<div id="x-container-all" class="x-container"></div>
+		</div>
+		<div class="tabdiv hide" id='tab_div_by_category'>
+		<div class="filterBox p10">
+		<table class="">
+			<tr class="top">
+				<td style="text-align: left;">
+				<h2>{@Categories@}</h2>
+				<div id="categories_container" class="inlet h200 w200"
+					style="overflow: auto;"><%CATEGORIES_TREE%></div>
+				</td>
+				<td class="pl10 hide" id="details_td" style="text-align: left;">
+				<h2>{@Details@} <img id="loading_category_details" src="<%SITEURL%>images/loading.gif"
+				style="display:none"></h2>
+				<div class="frame p10">
+				<table class="">
+					<tr>
+						<td colspan="2" class="pr5 pt10"><label>{@Description@}:</label>
+						<div class="inlet w100p p3"><span
+							id="info_category_description"></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td><label class="">{@Number of CPC sites in
+						category@}:</label></td>
+						<td class="pl10 pr5">
+						<div class="inlet w90p p3"><span
+							id="info_number_of_sites_in_cat"></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td><label class="">{@Number of CPC sites in category
+						and subcategories@}:</label></td>
+						<td class="pl10 pr5">
+						<div class="inlet w50p p3"><span
+							id="info_number_of_sites_in_cat_and_subcat"></span></div>
+						</td>
+					</tr>
+				</table>
+				</div>
+				<div class="pt10"><input type="checkbox"
+					id="get_sites_with_subcats" /><label class="p10 inline"
+					for=get_sites_with_subcats>{@with subcategories@}</label></div>
+				</td>
+			</tr>
+		</table>
+		<div class="mt10">
+		<button class="button" onclick="getSitesByCategory();"><span
+			class="">{@Display sites@}</span></button>
+		</div>
+		</div>
+		<div id="x-container-category" class="x-container"></div>
+		</div>
+		<div class="tabdiv hide" id='tab_div_by_site_name'>
+		<div class="p10 filterBox">
+		<table id="">
+			<tr>
+				<td colspan="3">
+				<table class="table w100p">
+					<tr>
+						<td class="w100"><nobr><label for="sites_search_query">{@Sites
+						Name Filter@}:</label></nobr></td>
+						<td class="pl10"><input type="text" class="text w100p"
+							id="sites_search_query" value="{@Start typing here...@}"
+							onkeyup="fillSitesSearchList();" /></td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<tr class="top">
+				<td class="pt10 w50p"><label>{@Sites@}</label> <select
+					id="sites_list" name="sites_list" multiple="multiple"
+					class="w100p h150" /></td>
+				<td class="center w20 pl5 pt10 middle"><img
+					style="display: none;" src="<%SITEURL%>images/loading.gif"
+				id="sites_fill_process"/>
+				<div><input type="button"
+					class="guibutton floatl ico ico-right2" value=""
+					onclick="return addToChoosedSitesAll();" /></div>
+				<div><input type="button"
+					class="guibutton floatl mt3 ico ico-arrowright" value=""
+					onclick="return addToChoosedSites();" /></div>
+				<div><input type="button"
+					class="guibutton floatl mt3 ico ico-arrowleft" value=""
+					onclick="return removeFromChoosedSites();" /></div>
+				<div><input type="button"
+					class="guibutton floatl mt3 ico ico-left2" value=""
+					onclick="return removeFromChoosedSitesAll();" /></div>
+				</td>
+				<td class="pl5 pt10 w50p"><label> {@Choosen Sites@}</label>
+				<div id="sites_choose_error_div"><select id="sites_choose"
+					name="sites_choose" multiple="multiple" class="w100p h150"></select>
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" class="center pt10"><input
+					id="get_sites_by_name_btn" class="button" type="button"
+					title="{@Display sites@}" value="{@Display sites@}"
+					onclick="getSitesByName();"></td>
+			</tr>
+		</table>
+		</div>
+		<div id="x-container-sites" class="x-container"></div>
+		</div>
+		<div class="tabdiv hide" id='tab_div_by_price'>
+		<div class="p10 filterBox" align="center">
+		<table border="0">
+			<tr>
+				<td valign="top" style="padding-top: 6px"><label
+					class="inline mr5" for="price_filter">{@Maximum CPC Bid@},
+				{@$@}</label></td>
+				<td valign="top"><input type="text" class=" text"
+					id="price_filter" /></td>
+				<td valign="top" style="padding-top: 2px"><select
+					id="cpc_bid_type" class='mw150'>
+					<option value="text">{@Text Ad@}</option>
+					<option value="image">{@Image Ad@}</option>
+				</select></td>
+			</tr>
+		</table>
+		<div class="pt10"><input class="button"
+			id="get_sites_by_price_btn" type="button" title="{@Display sites@}"
+			value="{@Display sites@}" onclick="getSitesByPrice();"></div>
+		</div>
+		<div id="x-container-price" class="x-container"></div>
+		</div>
+		<div id="x-container">
+
+		<div class="mt10 frame p5 hide" id='sitesToolbar'>
+		<div class="center"><img style="display: none;" src="<%SITEURL%>images/loading_animation.gif"
+		id="sites_table_process"/></div>
+		<div class="xTbar"></div>
+		<div id="sites_container" class="w100p" src="#"
+			onload="onSitesTableLoad();"></div>
+		</div>
+
+		</div>
+
+		<div class="hintBox mt10 hide" id='hintSites'>{@Unavailable
+		sites highlight hint@}</div>
+
+		</td>
+
+		<td class="pl10">
+		<h2 class="pt0" style="margin-top: -5px;">{@Selected Sites@}</h2>
+		<div class="center"><img style="display: none;" src="<%SITEURL%>images/loading_animation.gif"
+		id="added_sites_table_process"/></div>
+		<div id="added_sites_container" class="w100p" src="#"
+			onload="onAddedSitesTableLoad();"></div>
+
+		<div class="w200 hide frame p3" id="edit_your_bid_container" style="">
+		<input type="hidden" id="site_id" name="site_id"> <input
+			type="hidden" id="bid_type" name="bid_type">
+		<div class="frame p3 right"><label class="inline" for="new_bid">{@Your
+		Bid@}, {@$@}</label> <input type="text" class="text w50" id="new_bid"
+			onkeydown="if(event.keyCode==13) $('#saveBid_btn').click();if(event.keyCode==27) $('#cancelBid_btn').click();"></div>
+		<div class="hintBox"><span>{@Set your bid for this Site.
+		Leave blank to use default bid value.@}</span></div>
+		<div class="xTbar right">
+		<table class="floatr">
+			<tr>
+				<td align="center"><a id="saveBid_btn" value="{@Save@}"
+					title="{@Save@}" class="guibutton floatl" href="#" jframe="no"
+					onclick="return updateSiteBid();">{@Save@}</a> <a
+					id="cancelBid_btn" value="{@Cancel@}" title="{@Cancel@}"
+					class="guibutton floatl" href="#" jframe="no"
+					onclick="return cancelSiteBid();">{@Cancel@}</a></td>
+			</tr>
+		</table>
+		</div>
+		</div>
+
+		<div class="w200 hide frame p3" id="edit_your_position_container">
+		<input type="hidden" id="site_id" name="site_id"> <input
+			type="hidden" id="position_type" name="position_type">
+		<div class="frame p3 right"><label class="inline"
+			for="new_position">{@Your Position@}</label> <input type="text"
+			class="text w50" id="new_position"
+			onkeydown="if(event.keyCode==13) $('#savePosition_btn').click();if(event.keyCode==27) $('#cancelPosition_btn').click();"></div>
+		<div class="hintBox"><span>{@Set your position for this
+		Site.@}</span></div>
+		<div class="xTbar right">
+		<table class="floatr">
+			<tr>
+				<td align="center"><a id="savePosition_btn" value="{@Save@}"
+					title="{@Save@}" class="guibutton floatl" href="#" jframe="no"
+					onclick="return updateSitePosition();">{@Save@}</a> <a
+					id="cancelPosition_btn" value="{@Cancel@}" title="{@Cancel@}"
+					class="guibutton floatl" href="#" jframe="no"
+					onclick="return cancelSitePosition();">{@Cancel@}</a></td>
+			</tr>
+		</table>
+		</div>
+		</td>
+	</tr>
+</table>
+</div>
+<!-- end site selector -->
+
+</div>
+</div>
+
+<br/>
+<div id="tab2_div_custom">
+<div class="frame p10">
+
+<h1>{@Default BIDS@}</h1>
+
+<!-- BIDS -->
+<div id="bids_div" class="frame">
+<div>
+<table>
+	<tr>
+		<td><label class="inline" for="your_bid">{@Your default
+		bid@}, {@$@}</label></td>
+		<td><input type="text" class="text w50" id="your_bid"
+			name="your_bid" value="<%YOUR_BID_VALUE%>"></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><label class="inline" for="your_bid_image">{@Your
+		default bid for images@}, {@$@}</label></td>
+		<td><input type="text" class="text w50" id="your_bid_image"
+			name="your_bid_image" value="<%YOUR_BID_IMAGE_VALUE%>"></td>
+		<td></td>
+	</tr>
+</table>
+
+{@Click update if you want to apply changes@}
+<div style="margin: 10px 0 0 115px">
+<a id="update_your_bid_btn" href="#" value="{@Update@}"
+			title="{@Update@}"
+			class="guibutton floatl ico ico-arrowreload noremap" jframe="no"
+			onclick="return updateYourBid();">{@Update@}</a>
+</div>
+</div>
+</div>
+<!--  END BIDS -->
+
+</div>
+</div>
+
+
+
+<%NAVIGATION_BAR%>

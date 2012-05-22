@@ -1,0 +1,40 @@
+<form id="create_category_form" name="create_category_form"	method="post">
+	<input type="hidden" name="manage_categories_action" value="create">
+	<input type="hidden" name="id_category_parent" id="id_category_parent">
+	<h2>{@Create category in@}: <span class='green i'>&bdquo;<span id="create_parent_title"><%CURRENT_TITLE%></span>&ldquo;</span></h2>
+	<div id="error_message_div"></div>
+
+	<div class="frame inlet">
+		<div class="p10">
+			<table class="table w100p">
+				<tr>
+					<td class="w200">
+						<label for="create_category_title"><span class="required">{@Category Name@}:</span></label>
+					</td>
+					<td class="pr10">
+						<input class="text w100p" type="text" id="create_category_title" name="category_title">
+					</td>
+				</tr>
+				<tr class="top">
+					<td class="w200 pt10">
+						<label for="create_category_description"><span class="required">{@Description@}:</span></label>
+					</td>
+					<td class="pt10 pr10">
+						<textarea class="text w100p" id="create_category_description" name="category_description"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td  class="pt10"><span class="required">&nbsp;</span>&nbsp; - {@required fields@}.</td>
+					<td  class="pt10">
+						<button class="button"  title="{@OK@}" type="submit">
+							<span class="ico ico-confirm">{@OK@}</span>
+						</button>
+						<button class="button ml5"  title="{@Cancel@}" type="button" onclick="show_category();">
+							<span class="ico ico-cancel">{@Cancel@}</span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</form>

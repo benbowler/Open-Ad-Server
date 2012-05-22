@@ -1,0 +1,90 @@
+<script type="text/javascript">
+jQuery('document').ready(function(){
+	if (!jQuery('#show_your_ad_here_link').attr('checked')) {
+		jQuery('#your_ad_here_link_text').attr('disabled', true);
+	}
+
+	jQuery('#show_your_ad_here_link').click(function(){
+		if (!jQuery(this).attr('checked')) {
+			jQuery('#your_ad_here_link_text').attr('disabled', true);
+		} else {
+			jQuery('#your_ad_here_link_text').attr('disabled', false);
+		}
+	});
+});
+</script>
+
+<h1>{@System Settings@}</h1>
+
+<form name="system_settings" method="post">
+   <div id="error_message_div"></div>
+
+<div class="frame p10 mb10">
+   <h2 class="underline">{@Global options@}</h2>
+   <table class="table f11px">
+      <tr>
+         <td class="w300">
+            <label for="st">
+               <span class="required">{@System Title@}:</span>
+            </label>
+         </td>
+         <td>
+            <input type="text" id="st" name="title" class="text w200">
+         </td>
+      </tr>
+   </table>
+   
+ 	<h2 class="underline mt15">{@Administrator Information@}</h2>
+	<table class="table f11px">
+		<tr>
+			<td class="w300">
+				<label for="am">
+					<span class="required">{@Administrator E-mail@}:</span>
+				</label>
+			</td>
+			<td>
+				<input type="text" id="am" name="mail" class="text w200">
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td class="pt10">
+				<input class="button w210 thickbox" type="button" title="{@Change Login@}" value="{@Change Login@}" alt="<%SITEURL%><%INDEXPAGE%>admin/change_login/index/<%USERIDCODE%>?KeepThis=true&modal=true&TB_iframe=false&height=350&width=550"/>
+			</td>
+		</tr>
+      <tr>
+         <td></td>
+         <td class="pt10">
+            <input class="button w210 thickbox" type="button" title="{@Change Password@}" value="{@Change Password@}" alt="<%SITEURL%><%INDEXPAGE%>admin/change_pass/index/<%USERIDCODE%>?KeepThis=true&modal=true&TB_iframe=false&height=350&width=550"/>
+         </td>
+      </tr>
+	</table>
+	<h2 class="underline mt15">{@Ads Options@}</h2>
+	<%YOUR_AD_HERE%>
+	
+	<h2 class="underline mt15">{@Users@}</h2>
+
+        <%ADVSIGNUP%>
+        <%PUBSIGNUP%>
+        <%MEMSIGNUP%>
+        <%ADDITIONAL_SETTINGS%>
+
+	<div class="p5">
+		<table>
+			<tr>
+				<td class="w300">&nbsp;</td>
+				<td>
+					<button class="button w200" title="{@Save@}" onclick="document.system_settings.submit();">
+						<span class="ico ico-confirm">{@Save@}</span>
+					</button>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+</div>
+	
+<div class="mt10 mb10 hintBox">
+<span class="required">&nbsp;</span>&nbsp; - {@required fields@}.</div>	
+	 
+</form>

@@ -1,0 +1,47 @@
+.farbtastic {
+  position: relative;
+}
+.farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.farbtastic, .farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .color, .farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.farbtastic .wheel {
+  background: url('../images/farbtastic/wheel.png') no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .overlay {
+  background: url('../images/farbtastic/mask.png') no-repeat;
+}
+.farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+  overflow: hidden; 
+  background: url('../images/farbtastic/marker.png') no-repeat;
+}
+
+.colorwell {
+     border: 1px solid #aaa;
+     width: 6em;
+     text-align: center;
+     cursor: pointer;
+     text-transform: uppercase; 
+   }
+
+body .colorwell-selected {
+     border: 1px solid #aaa;
+     font-weight: bold;
+     text-transform: uppercase; 
+   }
+

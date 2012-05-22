@@ -1,0 +1,19 @@
+<input type="hidden" id="active_tab" name="active_tab" value="sites_to_channels">
+
+<div class="w100p tabdiv mb10">
+	<div class="outlet p5">
+      <%COLUMNS%>
+		<div class="xTbar">
+			<input type="button" id='crSiteB' class='guibutton floatl ico ico-plusgreen' value='{@Create Site@}' title='{@Create Site@}' onclick="go('<%SITEURL%><%INDEXPAGE%>admin/manage_sites_channels/create_site');">
+			<div class="floatl vsplitter"></div>
+			<input type="button" id='unlockSiteB' class='guibutton floatl ico ico-unlock' value='{@Resume Site@}' title='{@Resume Site@}' onclick="return do_action('manage_sites', 'resume_site', '', '{@Please select at least one record in the table@}')">
+			<input type="button" id='lockSiteB' class='guibutton floatl ico ico-lock' value='{@Pause Site@}' title='{@Pause Site@}' onclick="return do_action('manage_sites', 'pause_site', '', '{@Please select at least one record in the table@}')">
+			<div class="floatl vsplitter"></div>
+			<input type="button" id='delSiteB' class='guibutton floatl ico ico-delete' value='{@Delete Site@}' title='{@Delete Site@}' onclick="return do_action('manage_sites', 'delete_site', '{@Delete selected sites? Warning notification@}', '{@Please select at least one record in the table@}')">
+		</div>
+		<div class="inlet">
+			<%SITES_TABLE%>
+		</div>
+		<%PAGINATION%>
+	</div>
+</div>

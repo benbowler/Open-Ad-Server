@@ -1,0 +1,52 @@
+<form method="post" id="import_ads_ads_form" name="import_ads_ads_form">
+<div class='p5'>
+   <div class="xTbar">
+      <div>
+         <input jframe="no" type="button" class="guibutton floatl ico ico-plusgreen" value="{@Add Selected@}" title="{@Add Selected@}" onclick="return addSelectedAds()">
+      </div>
+      <div class="clr"></div>
+   </div>
+   <div class="inlet">
+      <%ADS%>
+   </div>
+   <div class="xTbar clearBoth">
+      <%PAGINATION%>
+   </div>
+</div>                  
+</form>
+<script type="text/javascript">
+//<!--
+$(function() {
+   $('#dinamic').find('.tooltip').each(function() {
+      var title = $(this).attr('title');
+      $(this).tooltip({ 
+         delay: 0, 
+         showURL: false,
+         track: false, 
+         bodyHandler: function() {
+            var tooltip_content = $("<div/>");
+            var caption = $("<div/>").text(title);
+            $(caption).addClass('tooltipCaption');
+            if ($(this).attr('ajx')=="true") {
+               $(tooltip_content).hide();
+               var body = $('<div/>');
+               $(tooltip_content).load($(this).attr('href'),{},function() { 
+                  if (!checkAjaxLogin($(tooltip_content).html())) {
+                     $(tooltip_content).show();
+                  };
+               });
+               $(body).append(caption);
+               $(body).append(tooltip_content);
+               return body;
+            } else {
+               var image = $("<img/>").attr("src", $(this).attr('href'));
+               $(tooltip_content).append(caption);
+               $(tooltip_content).append(image);
+               return tooltip_content;  
+            }
+         }
+      });
+   });
+}); 
+//-->
+</script>

@@ -1,0 +1,13 @@
+<div class="mt5">
+	<%COLUMNS%>
+	<div class="xTbar">
+		<input type="button" id='addTagBtn' class='guibutton floatl ico ico-plusgreen' value='{@Add@}' title='{@Add@}' onclick="show_tags_dialog();">
+		<input type="button" id='removeTagBtn' class='guibutton floatl ico ico-delete' value='{@Remove@}' title='{@Remove@}' onclick="remove_selected_tags();">
+		<div class="floatl vsplitter"></div>
+		<input type="button" id='enableTagBtn' class='guibutton floatl ico ico-unlock' value='{@Enable@}' title='{@Enable@}' onclick="enable_selected_tags();">
+		<input type="button" id='disableTagBtn' class='guibutton floatl ico ico-lock' value='{@Disable@}' title='{@Disable@}' onclick="disable_selected_tags();">
+	</div>
+	<div class="inlet">
+		<%TAGS%>
+	</div>
+</div>

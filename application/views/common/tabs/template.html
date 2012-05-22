@@ -1,0 +1,42 @@
+<script type="text/javascript">
+//<!--
+var <%PREFIX%>old_tab = '';
+var <%PREFIX%>tab_first_call = true;
+function <%PREFIX%>tabs_click(tab) {
+   if (<%PREFIX%>tab_first_call) {
+      <%PREFIX%>tab_first_call = false;
+   } else {
+	   if (typeof window['<%PREFIX%>can_switch'] == 'function') {
+		   if (!<%PREFIX%>can_switch(<%PREFIX%>old_tab, tab)) {
+		      return false;
+		   }
+	   }
+   }
+   if ('<%URL%>') {
+      $.post('<%URL%>', {'tab': tab});
+   }   
+	if (<%PREFIX%>old_tab != '') {
+		$('#tab_div_'+<%PREFIX%>old_tab).hide();     
+		$('#tab_'+<%PREFIX%>old_tab).removeClass('sel');               
+		$('#tab_'+<%PREFIX%>old_tab).parent().removeClass('sel');               
+	}
+	$('#tab_div_'+tab).show();        
+	$('#tab_'+tab).addClass('sel');             
+	$('#tab_'+tab).parent().addClass('sel');             
+	//$(parent.document).find('#dinamic').trigger('load');
+	<%PREFIX%>old_tab = tab;
+	return false;
+}
+//-->
+</script>
+<div class="<%CLASS%> mb10">
+	<div class="tabsPanel<%SUFFIX%>" id="<%ID%>" >
+	   <%TABS%>
+	</div>
+	<%DIVS%>
+</div>
+<script type="text/javascript">
+//<!--
+<%PREFIX%>tabs_click('<%DEFAULT%>');
+//-->
+</script>

@@ -1,0 +1,74 @@
+<div id="step3">
+	<h1><%STEPTITLE%></h1>
+   <form action="" method="post">
+   		<input type="hidden" name="button" value="" />
+   	
+	<div class="text_block">
+      <input type="hidden" name="step" value="3" />
+      <!-- div class="install_description">Description</div -->
+      <div class="install_error" style="display:<%ERROR%>;">Please, fill all fields and agree to the terms.</div>
+	</div>	      
+		  <table>
+	         <tr>
+	            <td class="col1">
+	               <label for="host">Database host:</label>
+	            </td>
+	            <td class="col2">
+	               <input id="host" type="text" name="host" value="<%HOST%>">
+	            </td>            
+	         </tr>
+	         <tr>
+	            <td class="col1">
+	               <label for="login">Database login:</label>
+	            </td>
+	            <td class="col2">      
+	               <input id="login" type="text" name="login" value="<%LOGIN%>">
+	            </td>
+	         </tr>
+	         <tr>
+	            <td class="col1">
+	               <label for="password">Database password:</label>
+	            </td>
+	            <td class="col2">      
+	               <input id="password" type="password" name="password" value="<%PASSWORD%>">
+	            </td>
+	         </tr>
+            <tr>
+	            <td class="col1">
+	               <label for="password2">Confirm password:</label>
+	            </td>
+	            <td class="col2">      
+	               <input id="password2" type="password" name="password2" value="<%PASSWORD2%>">
+	            </td>
+	         </tr>
+	         <tr>
+	            <td class="col1">
+	               <label for="database">Database name:</label>
+	            </td>
+	            <td class="col2">      
+	               <input id="database" type="text" name="database" value="<%DATABASE%>">
+	            </td>
+	         </tr>
+            <tr>
+	            <td colspan="2" style="text-align: center;">
+	               <label for="terms">Terms and Conditions:</label>
+	            </td>
+            </tr>
+            <tr>
+               <td colspan="2" >
+                  <textarea id="terms" rows="4" cols="48" name="text" readonly><%LICENSE%></textarea>
+	            </td>
+	         </tr>
+            <tr>
+               <td colspan="2">
+	               <label for="agree">I have read and agree to the Terms and Conditions</label>
+                   <input id="agree" name="agree" value="true" type="checkbox" <%CHECKED%> >
+	            </td>
+	         </tr>
+	      </table>
+	
+	 <a class="button_prev" href="#">Prev</a>	
+	 <a class="button" href="#">Next</a>
+	  
+   </form>
+</div>

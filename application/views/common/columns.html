@@ -1,0 +1,65 @@
+<div id="columns-<%TABLE%>" rel="<%TABLE%>" class="table-columns floatr">
+	<input type="hidden" name="hidden_columns_<%TABLE%>" value="1" />
+
+	<div id="columns-container-<%TABLE%>" class="hide p10 frame" style="position:absolute;min-width:150px;max-width:300px;right: 0;">
+		
+		<table class="table" style="border-bottom: 1px solid #b9b9b9;margin-bottom:5px;min-width:150px;">
+			<tr><td class="w20"><input class="select-all" id="select-all-columns-<%TABLE%>" type="checkbox" onclick="selectAllColumns('columns-container-<%TABLE%>', this.checked)" /></td><td class="pl3"><label for="select-all-columns-<%TABLE%>">{@Select all@}</label></td></tr>
+		</table>
+		
+		<table class="table" style="border-bottom: 1px solid #b9b9b9;margin-bottom:5px;min-width:150px;">
+			<%COLUMNS%>
+			<tr><td class="w20 chkbox1"><%hidden%><%checkbox%></td><td class="pl3 nowrap"><label for="<%id%>"><%title%></label></td></tr>
+			<%/COLUMNS%>
+		</table>
+		
+		<div id="columns-choose-<%TABLE%>" class="table-columns-choose">
+			<table>
+				<tr>
+					<td>
+						<a value="{@Choose columns@}" title="{@Choose columns@}" jframe="no" class="guibutton floatl w100 center" href="#" onclick="$('#<%TABLE%>_loading2').show(); update_columns('<%TABLE%>'); return false;">{@Choose columns@}</a>
+					</td>
+					<td width="10"></td>
+			      <td>
+			      	<img src="<%SITEURL%>images/loading.gif" width=16 height=16 class="hide" id="<%TABLE%>_loading2" hspace="3" vspace="2"/>
+					</td>
+             </tr>
+		   </table>
+		</div>
+	</div>
+	<div id="columns-handle-<%TABLE%>" class="table-columns-handle floatr ml5">
+		<a id="colButton<%TABLE%>" rel="<%TABLE%>" value="{@Columns@}" title="{@Columns@}" class="guibutton floatl ico ico-columns" href="#" jframe="no" onclick="return toggleContainer('columns-container-<%TABLE%>');">{@Columns@}</a>
+	</div>
+</div>
+
+<script type="text/javascript"><!--
+   $(function(){
+	   tableColumns('<%TABLE%>', this.document);
+   });
+
+   $(document).ready(function(){
+	   var dis=1;
+	   $("#columns-container-<%TABLE%> .chkbox1 input[type=checkbox]").each(function(){
+			if(!$(this).attr('disabled')){
+				dis=0;
+			}
+	   });
+
+	   if (dis==1){
+			$('#select-all-columns-<%TABLE%>').attr('disabled','disabled');
+			$('label[for=select-all-columns-<%TABLE%>]').addClass('disabled');
+	   }
+   });
+
+   $(document).click(function(e){
+		if (($(e.target).parents().filter('#columns-container-<%TABLE%>:visible').length != 1) && ($(e.target).parents().filter('#columns-handle-<%TABLE%>').length != 1)) {
+         if ($('#columns-container-<%TABLE%>:visible').length > 0) {
+            $('#columns-container-<%TABLE%>').hide();
+            $('input[rel]:checkbox', '#columns-container-<%TABLE%>').each(function() {
+               $(this).attr('checked', $('input[name=<%TABLE%>_column_hold\[' + $(this).attr('rel') + '\]]', '#columns-container-<%TABLE%>').val());
+            })
+            changeSelectAllHandle('columns-container-<%TABLE%>');
+         }
+		}
+	});
+--></script>

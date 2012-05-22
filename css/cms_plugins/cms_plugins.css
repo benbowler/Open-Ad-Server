@@ -1,0 +1,97 @@
+#step {
+	padding-left: 20px;
+	float: left;
+}
+p {
+	text-indent: 22px;
+	font-size: 14px;
+}
+
+ol {
+	padding: 10px 0 10px 32px;
+	font-size: 14px;
+}
+#user_guide {
+	width: 190px;
+}
+.tabs {
+	background-image: url('../../images/cms_plugins/border.gif');
+	background-position: bottom;
+	background-repeat: repeat-x;
+	background-color: #e7e3e0;
+}
+
+.inactive-tab {
+	padding: 14px 20px 14px 20px;
+	float: left;
+	background-color: #e7e3e0;
+	background-image: url('../../images/cms_plugins/border.gif');
+	background-position: bottom;
+	background-repeat: repeat-x;
+	height: 21px;
+}
+.inactive-tab a {
+	color: #aaaaaa;
+	font-size: 18px;
+}
+.active-tab a {
+	color: #000;
+	font-size: 18px;
+}
+
+.active-tab {
+	background-image: none;
+	background-color: #f6f3f0;
+	padding: 14px 20px 14px 20px;
+	float: left;
+	height: 21px;
+}
+
+.tabs-i-i {
+	background-position: 0px;
+	background-color: #e7e3e0;
+}
+
+.tabs-a-i {
+	background-position: -18px;
+	background-color: #e7e3e0;
+}
+
+.tabs-i-a {
+	background-position: -9px;
+	background-color: #f6f3f0;
+}
+
+.step-delimiter {
+	background-image: url('../../images/cms_plugins/arrow.gif');
+	background-repeat: no-repeat;
+	height: 49px;
+	width: 9px;
+	float: left;
+}
+
+.tiser {
+	background:url("../../images/cms_plugins/tiser.png") no-repeat scroll 0 0 transparent;
+	height:67px;
+	margin:22px 0 0;
+	position:relative;
+	width:335px;
+}
+.tiser h3 {
+	color:#333333;
+	font-family:Tahoma,Sans Serif;
+	font-size:20px;
+	font-weight:normal;
+	line-height:125%;
+	padding: 25px 0px 0px 15px;
+}
+.tiser h3 a {
+	outline:medium none;
+	color:#3774AA;
+	text-decoration:none;
+	text-transform: capitalize;
+}
+
+.guibutton.ico-arrowright-green b b b {
+	background-image:url("../../images/cms_plugins/arrow_right_green.png") !important;
+}

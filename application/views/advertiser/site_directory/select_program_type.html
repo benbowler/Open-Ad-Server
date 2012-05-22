@@ -1,0 +1,87 @@
+<h1><a href="<%SITEURL%><%INDEXPAGE%>advertiser/site_directory">{@Site Directory@}</a>&nbsp;&rarr; {@Site@}: <span class="green i"><%SITE_NAME%> (<%SITE_URL%>)</span></h1>
+<div id="error_div">
+</div>
+<form method="post" action="<%SITEURL%><%INDEXPAGE%>advertiser/buy_site_channel/select_group/<%SITE_CODE%>/<%CHANNEL_CODE%>">
+<input type="hidden" name="site_code" value="<%SITE_CODE%>">
+<input type="hidden" name="channel_code" value="<%CHANNEL_CODE%>">
+<script type="text/javascript">
+	$(function(){
+		var Img =  ('<%CHANNEL_TYPE_CODE%>' == 'image') ? '_1' : '';
+		$('#slots_preview')[0].src = '<%SITEURL%>images/slots_preview/slots_<%ID_DIMENSION%>' + Img + '.gif';
+		$('#program_types select').each(function(){
+	         $(this).show();
+	         //alert($("option",$(this)).length);
+	         if ($("option",$(this)).length == 1) {
+	            $(this).hide();
+	            $('div.selectReplacer', $(this).parent()).text($(this.options[this.options.selectedIndex]).text());
+	            //$(this).after($(this.options[0]).text());
+	            $('div.selectReplacer', $(this).parent()).show();
+	         } else {
+	            $('div.selectReplacer', $(this).parent()).hide();
+	         }
+	         //console.log();
+	      });
+	})
+   
+   function next_button(){
+      program_type = $('select[name=program_type]').val();
+      if (program_type != 'select') {
+         return true;
+      }
+      $('#error_div').html('<div id="error_message_div">Please, fill in all required fields!</div>');
+      $('#select_error').html('<td colspan="2"><p class="errorP">{@Select program type from list.@}</p></td>');
+      $('select[name=program_type]').addClass('invalidfield');
+      replaceErrors(document.body);
+      return false;
+	}
+</script>
+<div class="frame p10">
+<h2>{@Channel information@}</h2>
+
+<div class="inlet p5 w400">
+<table class="smplTable w100p">
+	<tr>
+		<td class="w200"><label>{@Channel Name@}:</label></td>
+		<td class="pl10"><%CHANNEL_NAME%></td>
+	</tr>
+	<tr>
+		<td><label>{@Channel Type@}:</label></td>
+		<td class="pl10"><%CHANNEL_TYPE_TEXT%></td>
+	</tr>
+	<tr>
+		<td><label>{@Format@}:</label></td>
+		<td class="pl10"><%CHANNEL_FORMAT%></td>
+	</tr>
+	<tr>
+		<td class="w200"><label>{@Max Ad Slots@}:</label></td>
+		<td class="pl10">
+		   <%MAX_AD_SLOTS%>  
+			<div class="floatr"><img id='slots_preview'/></div>
+		</td>
+	</tr>
+</table>
+</div>
+
+<div class="w400 mt10 filterBox2 p5">
+<table class="w100p">
+	<tr>
+		<td class="w200"><label><%PROGRAM_TYPES_LABEL%>:</label></td>
+		<td class="pl0" id="program_types">
+         <%PROGRAM_TYPES%><div class="inlet selectReplacer p3"></div>
+         <div id="select_error"></div>
+      </td>
+	</tr>
+</table>
+	</div>
+</div>
+</div>
+
+<div class="left pt10">
+    <button class="button"  type="submit" value="{@Next@}" onclick="return next_button();">
+       <span class="ico ico-next">{@Next@}</span>
+    </button>
+    <button class="button mb10 ml5"  type="button" value="{@Cancel@}" onclick="go('<%SITEURL%><%INDEXPAGE%>advertiser/site_directory')">
+       <span class="ico ico-cancel">{@Cancel@}</span>
+    </button>
+</div>
+</form>
