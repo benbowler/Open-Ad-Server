@@ -37,7 +37,7 @@ $config['use_show_iframe_wrapper'] = true;
 | variable so that it is blank.
 |
 */
-$config['index_page'] = "index.php";
+$config['index_page'] = "";
 
 /*
 |--------------------------------------------------------------------------
