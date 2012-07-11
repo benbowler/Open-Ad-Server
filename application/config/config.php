@@ -1,8 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-header('Location: install/install.php');
-exit;
-
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -14,7 +11,7 @@ exit;
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://example.com/";
+$config['base_url']	= "http://ads.ukfmusic.com/";
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +37,7 @@ $config['use_show_iframe_wrapper'] = true;
 | variable so that it is blank.
 |
 */
-$config['index_page'] = "";
+$config['index_page'] = "index.php";
 
 /*
 |--------------------------------------------------------------------------

@@ -37,10 +37,10 @@
 $active_group = "default";
 $active_record = TRUE;
 
-$db['default']['hostname'] = "127.0.0.1";
-$db['default']['username'] = "root";
-$db['default']['password'] = "scout";
-$db['default']['database'] = "svn_open_ad_server";
+$db['default']['hostname'] = "localhost";
+$db['default']['username'] = "adserver";
+$db['default']['password'] = "MfYe4nA8enrrA6T8";
+$db['default']['database'] = "adserver";
 $db['default']['dbdriver'] = "zend";
 $db['default']['dbprefix'] = "";
 $db['default']['pconnect'] = FALSE;
